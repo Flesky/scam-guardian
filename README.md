@@ -10,10 +10,10 @@ flowchart TD
     B --> C{"Run through heuristics"}
     C -- match --> W["Show warning banner"]
     C -- no match --> D{"Check for keywords"}
-    D -- no --> N["No warning"]
-    D -- yes --> E["Validate using embedding model"]
+    D -- no match --> N["No warning"]
+    D -- match --> E["Validate using embedding model"]
     E -- close to scam data set --> W
-    E -- no --> N
+    E -- no match --> N
 ```
 
 Nothing leaves the phone: the app has no INTERNET permission.
