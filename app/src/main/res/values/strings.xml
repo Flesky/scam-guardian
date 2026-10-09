@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Scam Guardian</string>
-    <string name="toggle_label_on">ON</string>
-    <string name="toggle_label_off">OFF</string>
+    <string name="toggle_turn_on">Turn on</string>
+    <string name="toggle_turn_off">Turn off</string>
     <string name="toggle_state_on">On</string>
     <string name="toggle_state_off">Off</string>
-    <string name="status_secured">You are secured</string>
-    <string name="status_not_secured">You are not secured</string>
+    <string name="status_secured">Actively protecting you</string>
+    <string name="status_not_secured">You are not protected</string>
     <string name="settings">Settings</string>
     <string name="demo_mode">Demo mode</string>
     <string name="switch_to_filipino">Switch to Filipino</string>

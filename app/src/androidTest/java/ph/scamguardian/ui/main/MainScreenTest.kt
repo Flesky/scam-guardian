@@ -89,20 +89,20 @@ class MainScreenTest {
     fun toggle_startsOff_andTurnsOnWhenTapped() {
         show()
 
-        composeTestRule.onNodeWithText("You are not secured").assertExists()
+        composeTestRule.onNodeWithText("You are not protected").assertExists()
         composeTestRule.onNodeWithText("Scroll up for history").assertExists()
-        composeTestRule.onNodeWithText("OFF").assertExists().performClick()
+        composeTestRule.onNodeWithText("Turn on").assertExists().performClick()
 
-        composeTestRule.onNodeWithText("ON").assertExists()
-        composeTestRule.onNodeWithText("You are secured").assertExists()
+        composeTestRule.onNodeWithText("Turn off").assertExists()
+        composeTestRule.onNodeWithText("Actively protecting you").assertExists()
     }
 
     @Test
     fun toggle_staysOffUntilTheServiceIsEnabled() {
         show(MainUiState(isOn = true, serviceEnabled = false))
 
-        composeTestRule.onNodeWithText("OFF").assertExists()
-        composeTestRule.onNodeWithText("You are not secured").assertExists()
+        composeTestRule.onNodeWithText("Turn on").assertExists()
+        composeTestRule.onNodeWithText("You are not protected").assertExists()
         composeTestRule.onNodeWithText("Turn on protection").assertDoesNotExist()
     }
 

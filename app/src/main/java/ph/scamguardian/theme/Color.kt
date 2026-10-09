@@ -29,8 +29,24 @@ val SecuredGreen = Color(0xFF2E7D32)
 private val SecuredGreenOnDark = Color(0xFF81C784)
 private val WarningRedOnDark = Color(0xFFEF9A9A)
 
-/** Text color of "You are secured" on the app background. */
+/**
+ * The mascot's colors. [shell] is the bare body; [armor] is the solid plates on it.
+ */
+data class MascotColors(
+    val shell: Color,
+    val armor: Color,
+    val eye: Color,
+)
+
+private val MascotOnLight = MascotColors(shell = Color(0xFFC9D0D6), armor = Color(0xFF111418), eye = Color(0xFF2BD46B))
+
+// White armor, like the logo on a dark background.
+private val MascotOnDark = MascotColors(shell = Color(0xFF3A4046), armor = Color(0xFFF1F3F4), eye = Color(0xFF18A14B))
+
+fun mascotColors(darkTheme: Boolean): MascotColors = if (darkTheme) MascotOnDark else MascotOnLight
+
+/** Text color of "Actively protecting you" on the app background. */
 fun securedColor(darkTheme: Boolean): Color = if (darkTheme) SecuredGreenOnDark else SecuredGreen
 
-/** Text color of "You are not secured" on the app background. */
+/** Text color of "You are not protected" on the app background. */
 fun unsecuredColor(darkTheme: Boolean): Color = if (darkTheme) WarningRedOnDark else WarningRed

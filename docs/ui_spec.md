@@ -39,10 +39,17 @@ The app has one screen. Everything under the header scrolls as one list.
 - Header: "Scam Guardian", with a gear icon at the top right. It opens the platform's popup menu with two items:
   - "Demo mode", with a check box. In demo mode every warning shows its banner at once, with no 30-second wait between banners in the same app.
   - "Switch to Filipino" or "Switch to English", whichever is not the current language of the warnings.
-- The big on/off button. It shows ON only when the user is really protected: the button is on and the accessibility service is enabled. Tapping it while off turns protection on and, if the service is not enabled, opens the Accessibility settings. There is no other button for this and no instruction text.
-- Status under the button: "You are secured" (green) or "You are not secured" (red).
+- The mascot, a sentinel. It wears its armor, with green eyes, only when the user is really protected: protection is on and the accessibility service is enabled. Otherwise it is a bare shell: one solid gray shape, with nothing drawn on it.
+  - Look: metallic and robotic. The armor is solid, with no lines on it: black in the light theme, white in the dark theme. Flat fills only, no gradients.
+  - Motion: every part is rigid. Plates shoot in on straight lines and stop dead; nothing stretches, squashes or bounces.
+  - Turning on: six armor plates snap onto the shell within about 140 ms (cheeks, jaws, crowns) and the mascot jolts. Then the eyes blink white, switch on green, and a ring spreads out.
+  - Turning off: the eyes switch off, then the plates release, fall and tumble away as solid pieces.
+  - While on: every 3.6 seconds a white scanner line sweeps down both eyes.
+  - Sound: "BOOM-VAH" when the armor assembles (a deep war drum as it locks, then a crowd of low voices shouting) and "pe-room" when it comes off (a tick, then a rolling drum that falls away). The sounds are the files `mascot_on.wav` and `mascot_off.wav`, rendered from sound 1 of the prototype `docs/prototype-mascot-sound-idle.html` on the branch `prototype/mascot-toggle`. They play as interface sounds, so silent and vibrate modes mute them. They play with the animation, whatever caused it: also when the user comes back from the Accessibility settings.
+- The on/off button, under the mascot: "Turn on" (green, filled) or "Turn off" (outlined). Tapping it, or the mascot, while off turns protection on and, if the service is not enabled, opens the Accessibility settings. There is no other button for this and no instruction text.
+- Status under the button: "Actively protecting you" (green) or "You are not protected" (red).
 - Privacy line, English only, with a shield icon: "Uses local engine only. Not connected to the internet."
-- The button, status and privacy line fill the screen. History starts below them, under a "History" title, so it is only seen after scrolling (see below).
+- The mascot, button, status and privacy line fill the screen. History starts below them, under a "History" title, so it is only seen after scrolling (see below).
 - At the bottom of the first screen: "Scroll up for history" under a double-chevron icon that gently moves up and down. Tapping it scrolls to the history.
 
 ## History
