@@ -79,11 +79,28 @@ class BrandDetector(
         }
 
         fun isIn(candidates: List<LabelCandidate>): Boolean =
-            aliasKeys.any { key ->
-                candidates.any { candidate ->
-                    // Very short aliases must be a whole part of the label, or they match almost any host.
-                    if (key.length < MIN_SUBSTRING_ALIAS) key in candidate.tokens else key in candidate.joined
-                }
+            aliasKeys.any { key -> candidates.any { candidate -> isIn(key, candidate.tokens + candidate.joined) } }
+
+        // A name inside a longer word is often a coincidence ("sky" in "flesky"), so how freely an alias
+        // may sit inside a part of a host label depends on how distinctive it is.
+        private fun isIn(
+            key: String,
+            parts: List<String>,
+        ): Boolean =
+            when {
+                key in parts -> true
+
+                // Two letters match almost any host: only as a whole part.
+                key.length < MIN_SUBSTRING_ALIAS -> false
+
+                // A brand named with an ordinary word, the kind that needs context words in text ("sky",
+                // "smart", "globe"): only a longer name, and only at the start of a part.
+                contextPhrases.isNotEmpty() -> key.length >= DISTINCTIVE_ALIAS && parts.any { it.startsWith(key) }
+
+                // A short name: at the start or the end of a part ("bpivipe", "onlinebdo"), not in the middle.
+                key.length < DISTINCTIVE_ALIAS -> parts.any { it.startsWith(key) || it.endsWith(key) }
+
+                else -> parts.any { key in it }
             }
 
         private fun looksLike(
@@ -94,6 +111,7 @@ class BrandDetector(
 
     private companion object {
         const val MIN_SUBSTRING_ALIAS = 3
+        const val DISTINCTIVE_ALIAS = 5
         val words = Regex("[^\\p{L}\\p{N}]+")
     }
 }

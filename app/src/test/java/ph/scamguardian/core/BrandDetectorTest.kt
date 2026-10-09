@@ -64,4 +64,32 @@ class BrandDetectorTest {
         )
         assertEquals("GCash", matches.single().brand.name)
     }
+
+    @Test
+    fun inDomain_aNameInsideALongerWordIsNotThatBrand() {
+        val catalog =
+            parseBrands(
+                """
+                [
+                  { "name": "SKY", "aliases": ["sky", "skycable"], "domains": ["mysky.com.ph"], "contextWords": ["cable", "fiber"] },
+                  { "name": "BDO", "aliases": ["bdo"], "domains": ["bdo.com.ph"] },
+                  { "name": "GCash", "aliases": ["gcash"], "domains": ["gcash.com"] }
+                ]
+                """.trimIndent(),
+            )
+        val detector = BrandDetector(catalog, Fixtures.normalizer(), Confusables())
+        val cases =
+            mapOf(
+                "messages-scam-demo.flesky.chatgpt.site" to emptyList(),
+                "skyscanner.com" to emptyList(),
+                "abdominal-care.com" to emptyList(),
+                "sky-promo.com" to listOf("SKY"),
+                "skycable-bills.com" to listOf("SKY"),
+                "onlinebdo.icu" to listOf("BDO"),
+                "bdorewards.com" to listOf("BDO"),
+                "mygcashwallet.com" to listOf("GCash"),
+            )
+
+        cases.forEach { (host, expected) -> assertEquals(host, expected, detector.inDomain(host).map { it.name }) }
+    }
 }
