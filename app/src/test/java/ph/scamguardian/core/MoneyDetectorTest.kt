@@ -1,6 +1,8 @@
 package ph.scamguardian.core
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class MoneyDetectorTest {
@@ -42,5 +44,13 @@ class MoneyDetectorTest {
             )
 
         cases.forEach { text -> assertEquals(text, emptyList<String>(), MoneyDetector.find(text)) }
+    }
+
+    @Test
+    fun hasAmount_alsoAcceptsPlainNumbersThatReadAsAmounts() {
+        listOf("10k", "Pahiram muna 5,000 urgent lang", "send 500 please", "P1,000 lang", "kahit 10000")
+            .forEach { assertTrue(it, MoneyDetector.hasAmount(it)) }
+        listOf("Pahiram ng charger", "3 pm tayo", "10:30 na", "10-05-26", "0917 kasi", "top 1 sa klase", "v2.5")
+            .forEach { assertFalse(it, MoneyDetector.hasAmount(it)) }
     }
 }

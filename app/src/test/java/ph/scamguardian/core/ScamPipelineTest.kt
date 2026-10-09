@@ -129,10 +129,10 @@ class ScamPipelineTest {
     fun check_moneyRequestWithAnUnrelatedLink_stillWarns() {
         val pipeline = Fixtures.rulesOnlyPipeline()
 
-        assertEquals(WarningType.MONEY_REQUEST, pipeline.check("Pahiram naman kailangan ko agad")?.type)
+        assertEquals(WarningType.MONEY_REQUEST, pipeline.check("Pahiram naman ng 500 kailangan ko agad")?.type)
         assertEquals(
             WarningType.MONEY_REQUEST,
-            pipeline.check("Pahiram naman kailangan ko agad https://example.com")?.type,
+            pipeline.check("Pahiram naman ng 500 kailangan ko agad https://example.com")?.type,
         )
     }
 
@@ -336,7 +336,7 @@ class ScamPipelineTest {
                     WarningType.FAKE_LINK,
                 "Paki-send ng code para sa bonus at jackpot, P500 agad" to WarningType.OTP_REQUEST,
                 "Claim your prize now at https://bit.ly/abc" to WarningType.RISKY_LINK,
-                "Pahiram naman, kailangan ko lang agad" to WarningType.MONEY_REQUEST,
+                "Pahiram naman ng pera, kailangan ko lang agad" to WarningType.MONEY_REQUEST,
             )
 
         cases.forEach { (text, expected) -> assertEquals(text, expected, pipeline.check(text)?.type) }

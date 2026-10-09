@@ -124,6 +124,54 @@ class ScreenBlocksTest {
     }
 
     @Test
+    fun chat_joinsAnAmountSentOnItsOwnToTheMessageBeforeIt() {
+        val nodes =
+            listOf(
+                ScreenNode("Pahiram ako please now na", 300, 1, ScreenRect(40, 800, 560, 880)),
+                ScreenNode("Magkano ba?", 800, 2, ScreenRect(600, 900, 960, 980)),
+                ScreenNode("10k", 150, 3, ScreenRect(40, 1000, 200, 1080)),
+                ScreenNode("Kumusta ka na pala", 300, 4, ScreenRect(40, 1100, 560, 1180)),
+            )
+
+        assertEquals(
+            listOf(
+                ScreenBlock("Pahiram ako please now na\n10k", ScreenRect(40, 800, 560, 1080)),
+                ScreenBlock("Kumusta ka na pala", ScreenRect(40, 1100, 560, 1180)),
+            ),
+            ScreenBlocks.chat(nodes, windowLeft = 0, windowWidth = 1000),
+        )
+    }
+
+    @Test
+    fun chat_anAmountWithNothingBeforeIt_orALongerMessage_isNotJoined() {
+        fun incoming(vararg texts: String) = texts.mapIndexed { index, text -> ScreenNode(text, 100, index) }
+
+        assertEquals(
+            emptyList<String>(),
+            ScreenBlocks.chat(incoming("10k"), windowLeft = 0, windowWidth = 1000).map { it.text },
+        )
+        assertEquals(
+            listOf("Kain na tayo mamaya", "Bayad ko yung 500 kahapon ha"),
+            ScreenBlocks.chat(incoming("Kain na tayo mamaya", "Bayad ko yung 500 kahapon ha"), 0, 1000).map { it.text },
+        )
+    }
+
+    @Test
+    fun chat_dropsMessengersScreenReaderHints() {
+        val hint = ", double tap to see sent/receive date and time, double tap and hold to react on message"
+        val nodes =
+            listOf(
+                ScreenNode("Danward, Pahiram ako please now na$hint", centerX = 300, containerId = 1),
+                ScreenNode("Danward, 10k$hint", centerX = 150, containerId = 2),
+            )
+
+        assertEquals(
+            listOf("Danward, Pahiram ako please now na\nDanward, 10k"),
+            ScreenBlocks.chat(nodes, windowLeft = 0, windowWidth = 1000).map { it.text },
+        )
+    }
+
+    @Test
     fun isWorthChecking_skipsUiTextAndSingleWordsButNotShortMessagesOrLinks() {
         listOf(
             "Seen",

@@ -160,5 +160,23 @@
       "refund_request"
     ],
     "text": "Magandang hapon po. Pasensya na po nagkamali ako send gcash. Pablik na lang poh. Send ko dapat sa 0999 999 9994 eh. Sana maintindihan nyo slamat."
+  },
+  {
+    "types": [
+      "money_request"
+    ],
+    "text": "Pautang nga ko 10k please now na balik ko sa katapusan"
+  },
+  {
+    "types": [
+      "money_request"
+    ],
+    "text": "Pahiram ako 10k please now na"
+  },
+  {
+    "types": [
+      "money_request"
+    ],
+    "text": "Pahiram ako please now na\n10k"
   }
 ]

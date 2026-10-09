@@ -129,10 +129,12 @@ class Rules(
     }
 
     private fun moneyRequest(analysis: MessageAnalysis): RuleMatch? {
-        val asks = matcher.match(analysis.tokens, MONEY_WORDS)
         val urgency = matcher.match(analysis.tokens, URGENCY_WORDS)
-        // Returning somewhere or lending an object is not a promise to repay money.
-        val monetary = analysis.money.isNotEmpty() || matcher.match(analysis.tokens, MONEY_CONTEXT_WORDS).isNotEmpty()
+        val monetary =
+            MoneyDetector.hasAmount(analysis.body) || matcher.match(analysis.tokens, MONEY_CONTEXT_WORDS).isNotEmpty()
+        // Borrowing a thing is not a money request: "pahiram" counts only in a message about money.
+        val asks = matcher.match(analysis.tokens, MONEY_WORDS).filter { monetary || it.keyword !in LENDABLE_WORDS }
+        // Returning somewhere or lending an object is not a promise to repay money either.
         val repayment = if (monetary) matcher.match(analysis.tokens, REPAYMENT_WORDS) else emptyList()
         if (asks.isEmpty() || (urgency.isEmpty() && repayment.isEmpty())) return null
         val pressure =
@@ -181,8 +183,22 @@ class Rules(
                 "sabihin",
             )
         private val MONEY_WORDS =
-            listOf("padala", "padalhan", "pa-gcash", "pagcash", "pahiram", "send", "pasend", "transfer", "utang")
-        private val REPAYMENT_WORDS = listOf("babalik", "ibabalik", "babayaran", "bayaran")
+            listOf(
+                "padala",
+                "padalhan",
+                "pa-gcash",
+                "pagcash",
+                "pahiram",
+                "pahiramin",
+                "send",
+                "pasend",
+                "transfer",
+                "utang",
+                "pautang",
+                "pautangin",
+            )
+        private val REPAYMENT_WORDS =
+            listOf("babalik", "ibabalik", "balik", "ibalik", "isasauli", "isauli", "babayaran", "bayaran")
         private val MISTAKE_WORDS =
             listOf(
                 "nagkamali",
@@ -250,9 +266,24 @@ class Rules(
                 "return",
                 "send back",
             )
-        private val MONEY_CONTEXT_WORDS = listOf("pera", "salapi", "kwarta", "pa-gcash", "pagcash", "utang")
+        private val MONEY_CONTEXT_WORDS =
+            listOf("pera", "salapi", "kwarta", "cash", "gcash", "pa-gcash", "pagcash", "pesos", "piso", "utang")
+
+        // Words for borrowing that are also used for things: a charger, a book.
+        private val LENDABLE_WORDS = setOf("pahiram", "pahiramin")
         private val URGENCY_WORDS =
-            listOf("urgent", "agad", "ngayon na", "emergency", "ospital", "hospital", "kailangan")
+            listOf(
+                "urgent",
+                "agad",
+                "ngayon na",
+                "now na",
+                "asap",
+                "rush",
+                "emergency",
+                "ospital",
+                "hospital",
+                "kailangan",
+            )
 
         private val REASSURANCE_PHRASES =
             listOf(
