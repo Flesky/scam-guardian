@@ -72,7 +72,7 @@ Messages: `app/src/androidTest/assets/benchmark_messages.json`. Raw output of bo
 
 - **Team:** Pure Vibes (Baron Rodrigo, solo)
 - **Models:** EmbeddingGemma 2 (`embeddinggemma-2-740m.litertlm`, Google, from Hugging Face `litert-community`), pre-trained and not fine-tuned. Embeddings are cut to 256 dimensions.
-- **Technologies and frameworks:** Kotlin, Jetpack Compose and LiteRT-LM. Versions are under Development.
+- **Technologies and frameworks:** Kotlin, Jetpack Compose and LiteRT-LM.
 - **APIs and cloud services:** none.
 - **Existing code and assets:** none. Everything was made during the hackathon. The mascot sounds and images were generated with Claude Opus 5.5.
 - **AI development tools:** OpenAI Codex and Claude Code.
