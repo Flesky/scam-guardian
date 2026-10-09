@@ -1,0 +1,4 @@
+{
+  "shorteners": ["bit.ly", "tinyurl.com", "cutt.ly", "is.gd", "rb.gy", "s.id", "t.co", "shorturl.at"],
+  "riskyTlds": ["cc", "icu", "is", "vip", "site", "bio", "mx", "xyz", "top", "online", "click", "link", "shop", "club", "live", "info", "buzz", "cyou"]
+}

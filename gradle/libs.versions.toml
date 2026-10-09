@@ -18,6 +18,11 @@ spotless = "8.10.4"
 ktlint = "1.8.0"
 detekt = "1.23.8"
 composeRules = "0.4.28"
+kotlinxSerializationJson = "1.11.0"
+commonsText = "1.15.0"
+icu4j = "78.3"
+urlDetector = "0.1.24"
+guava = "33.7.2-android"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
@@ -43,6 +48,11 @@ androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", vers
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
 litertlm-android = { module = "com.google.ai.edge.litertlm:litertlm-android", version.ref = "litertlm" }
 compose-rules-detekt = { module = "io.nlopez.compose.rules:detekt", version.ref = "composeRules" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+commons-text = { module = "org.apache.commons:commons-text", version.ref = "commonsText" }
+icu4j = { module = "com.ibm.icu:icu4j", version.ref = "icu4j" }
+url-detector = { module = "io.github.url-detector:url-detector", version.ref = "urlDetector" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

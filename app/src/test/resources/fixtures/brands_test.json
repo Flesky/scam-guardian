@@ -1,0 +1,8 @@
+[
+  { "name": "BDO", "aliases": ["bdo", "banco de oro"], "domains": ["bdo.com.ph"], "contextWords": [] },
+  { "name": "BPI", "aliases": ["bpi"], "domains": ["bpi.com.ph"], "contextWords": [] },
+  { "name": "GCash", "aliases": ["gcash", "g-cash"], "domains": ["gcash.com"], "contextWords": [] },
+  { "name": "SSS", "aliases": ["sss"], "domains": ["sss.gov.ph"], "contextWords": [] },
+  { "name": "Globe", "aliases": ["globe"], "domains": ["globe.com.ph"], "contextWords": ["load", "sim", "promo", "points", "rewards", "prepaid"] },
+  { "name": "Smart", "aliases": ["smart"], "domains": ["smart.com.ph"], "contextWords": ["load", "sim", "promo", "points", "rewards", "prepaid"] }
+]

@@ -91,6 +91,13 @@ dependencies {
     // Static analysis
     detektPlugins(libs.compose.rules.detekt)
 
+    // Scam-detection pipeline (core)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.commons.text)
+    implementation(libs.icu4j)
+    implementation(libs.url.detector)
+    implementation(libs.guava)
+
     // On-device AI
     implementation(libs.litertlm.android)
 }

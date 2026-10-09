@@ -7,6 +7,7 @@ Android app with on-device AI (no INTERNET permission).
 - Kotlin 2.4.21, Jetpack Compose (BOM 2026.09.00)
 - Android Gradle Plugin 9.4.1, Gradle 9.8.1, Kotlin DSL, version catalog
 - LiteRT-LM 0.18.0
+- Detection pipeline: kotlinx-serialization-json 1.11.0, commons-text 1.15.0, ICU4J 78.3, url-detector 0.1.24, Guava 33.7.2-android
 - Spotless 8.10.4 with ktlint 1.8.0
 - detekt 1.23.8 with Compose rules 0.4.28
 - Lefthook 2.2.1
