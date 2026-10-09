@@ -2,13 +2,17 @@
 
 **Scam texts cost Filipinos money every day.** Scam Guardian spots them on your screen and warns you, with AI that never leaves your phone.
 
+There are no accounts, there is nothing to learn, you just switch on a button and that's it.
+
 <img src="docs/readme/warning.webp" width="420" alt="An orange warning, Possible scam detected, shown above a chat message that asks to borrow 5k for an emergency">
 
-[**Watch the demo video**](https://www.linkedin.com/posts/baron-rodrigo_appbuildersph-localai-ugcPost-7514449543350992896-LwGJ/) · [**Download the APK**](https://github.com/Flesky/scam-guardian/releases/latest/download/scam-guardian.apk) for Android 8 or newer. It is large (about 560 MB) because the AI model is inside it: there is nothing else to download.
+[**Watch the demo video**](https://www.linkedin.com/posts/baron-rodrigo_appbuildersph-localai-ugcPost-7514449543350992896-LwGJ/) · [**Download the APK**](https://github.com/Flesky/scam-guardian/releases/latest/download/scam-guardian.apk) for Android 8 or newer. It is large (about 560 MB) because the AI model is inside it.
 
 ## Who it is for
 
-People who are not sure which messages to trust: parents and grandparents who get "your points are expiring" texts, and the family members who worry about them. There is no account and nothing to learn. When a message looks like a scam, a warning appears on top of it and says what to do.
+- For our elderly, who might have just gotten their first smartphone.
+- For our not-so-tech-savvy friends.
+- And for the general public. These days scammers are rampant and it's hard to determine who to trust.
 
 It works in Messenger, WhatsApp, Viber, Telegram, Google Messages and Samsung Messages, and in Chrome, Samsung Internet and Firefox.
 
@@ -62,7 +66,7 @@ Messages: `app/src/androidTest/assets/benchmark_messages.json`. Raw output of bo
 - It misses some kinds of scam: prizes that ask for a fee, task and job offers, loan fees, romance and extortion.
 - It gives false alarms on some normal messages, such as a friend saying a debt is paid.
 - The app uses about 1 GB on the phone. The model is stored twice, in the APK and in app storage, because LiteRT-LM cannot read it from inside the APK.
-- The test messages were written for the test. Real inboxes may give different numbers.
+- The test messages need to be supplied with more realistic data.
 
 ## Disclosures
 
