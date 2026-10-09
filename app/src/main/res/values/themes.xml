@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.ScamGuardian" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.ScamGuardian" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/mascot_icon_background</item>
+    </style>
+
+    <style name="Theme.ScamGuardian.Starting" parent="Theme.ScamGuardian">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">@color/mascot_icon_background</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+        <item name="android:windowLightStatusBar">@bool/splash_light_system_bars</item>
+    </style>
 
     <!-- The system animates the banner window, so it slides even while the app is in the background. -->
     <style name="Animation.ScamGuardian.Banner" parent="android:Animation">

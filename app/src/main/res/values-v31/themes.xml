@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ supplies the splash window; older releases use the starting background. -->
+    <style name="Theme.ScamGuardian.Starting" parent="Theme.ScamGuardian">
+        <item name="android:windowSplashScreenBackground">@color/mascot_icon_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash_mascot</item>
+        <item name="android:statusBarColor">@color/mascot_icon_background</item>
+        <item name="android:navigationBarColor">@color/mascot_icon_background</item>
+        <item name="android:windowLightStatusBar">@bool/splash_light_system_bars</item>
+        <item name="android:windowLightNavigationBar">@bool/splash_light_system_bars</item>
+    </style>
+</resources>

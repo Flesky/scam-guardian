@@ -12,6 +12,8 @@ import ph.scamguardian.theme.ScamGuardianTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Replace the launch theme before drawing Compose; the system owns the splash window.
+        setTheme(R.style.Theme_ScamGuardian)
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()

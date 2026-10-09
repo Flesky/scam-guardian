@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mascot_icon_background">#1C1B1F</color>
+    <color name="mascot_icon_shell">#3A4046</color>
+    <color name="mascot_icon_armor">#F1F3F4</color>
+    <color name="mascot_icon_eye">#18A14B</color>
+</resources>

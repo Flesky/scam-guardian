@@ -6,6 +6,8 @@ Give this file to the agent together with the prompts for the main screen, histo
 
 - Flat style. Compose foundation primitives, no Material components.
 - Icons: vector drawables in res/drawable (for example imported from Material Symbols as XML). No icon library dependency.
+- Launcher icon: the assembled sentinel mascot, with light/dark palettes and a separate monochrome layer with transparent eyes for Android themed icons. Both regular and round icons use the same adaptive layers.
+- Splash screen: the same mascot centered on a light/dark background. Android 12+ uses the system splash; older supported versions use the launch window background. It disappears when the app is ready, without an added delay.
 - Large text for older users: banner and history text at least 18sp, buttons at least 48dp, high contrast.
 - Two colors for warnings:
   - Red: Scam detected (fake_link, otp_request).

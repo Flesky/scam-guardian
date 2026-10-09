@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Geometry matches the assembled mascot in ui/main/Mascot.kt. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Keep the face inside the adaptive icon and splash mask safe zones. -->
+    <group android:translateX="23" android:translateY="22.535"
+        android:scaleX="0.31" android:scaleY="0.31">
+        <group android:pivotX="100" android:scaleX="0.94">
+            <!-- Transparent eyes remain visible when the launcher tints this layer. -->
+            <path android:fillColor="#FF000000" android:fillType="evenOdd"
+                android:pathData="M97,9 L47,31 L47,41 L16,56 L34,63 L93,77 Z M16,56 L19,120 L91.6,150 L93,110 L82,87 L36,73 L34,63 Z M19,120 L32,152 L90,194 L91.6,150 Z M43,87 L66,111 L69,156 L43,122 Z" />
+            <group android:pivotX="100" android:scaleX="-1">
+            <!-- Transparent eyes remain visible when the launcher tints this layer. -->
+            <path android:fillColor="#FF000000" android:fillType="evenOdd"
+                android:pathData="M97,9 L47,31 L47,41 L16,56 L34,63 L93,77 Z M16,56 L19,120 L91.6,150 L93,110 L82,87 L36,73 L34,63 Z M19,120 L32,152 L90,194 L91.6,150 Z M43,87 L66,111 L69,156 L43,122 Z" />
+            </group>
+        </group>
+    </group>
+</vector>
