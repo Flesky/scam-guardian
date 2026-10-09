@@ -1,5 +1,6 @@
 package ph.scamguardian.ui.main
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.view.ContextThemeWrapper
@@ -68,17 +69,9 @@ private fun showSettingsMenu(
     state: MainUiState,
     actions: SettingsActions,
 ) {
-    // Stock Android's Material menu, light or dark with the system, so it looks the same on every phone.
-    val night = anchor.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-    val theme =
-        if (night == Configuration.UI_MODE_NIGHT_YES) {
-            android.R.style.Theme_Material
-        } else {
-            android.R.style.Theme_Material_Light
-        }
     val other = if (state.language == Language.FILIPINO) Language.ENGLISH else Language.FILIPINO
     val switchLabel = if (other == Language.ENGLISH) R.string.switch_to_english else R.string.switch_to_filipino
-    PopupMenu(ContextThemeWrapper(anchor.context, theme), anchor, Gravity.END).apply {
+    PopupMenu(settingsThemeContext(anchor.context), anchor, Gravity.END).apply {
         menu.add(Menu.NONE, DEMO_ITEM, Menu.NONE, R.string.demo_mode).apply {
             isCheckable = true
             isChecked = state.demoMode
@@ -93,4 +86,16 @@ private fun showSettingsMenu(
         }
         show()
     }
+}
+
+/** Shared stock Material theme for the settings menu and setup dialog, following system night mode. */
+internal fun settingsThemeContext(context: Context): ContextThemeWrapper {
+    val night = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+    val theme =
+        if (night == Configuration.UI_MODE_NIGHT_YES) {
+            android.R.style.Theme_Material
+        } else {
+            android.R.style.Theme_Material_Light
+        }
+    return ContextThemeWrapper(context, theme)
 }

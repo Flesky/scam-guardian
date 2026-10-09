@@ -6,6 +6,10 @@
     <string name="toggle_state_off">Off</string>
     <string name="status_secured">Actively protecting you</string>
     <string name="status_not_secured">You are not protected</string>
+    <string name="setup_title">Setup required</string>
+    <string name="setup_message">To use Scam Guardian, you need to enable its accessibility service.</string>
+    <string name="setup_decline">Nevermind</string>
+    <string name="setup_accept">Sure</string>
     <string name="settings">Settings</string>
     <string name="demo_mode">Demo mode</string>
     <string name="switch_to_filipino">Switch to Filipino</string>

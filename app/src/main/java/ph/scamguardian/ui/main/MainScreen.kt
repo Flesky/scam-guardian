@@ -36,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -102,12 +103,9 @@ fun MainScreen(modifier: Modifier = Modifier) {
     val languages = remember { LanguagePreferences(context) }
     val demo = remember { DemoPreferences(context) }
     val scope = rememberCoroutineScope()
-    var state by remember {
-        mutableStateOf(
-            MainUiState(guard.enabled, ScamAccessibilityService.isEnabled(context), languages.language, demo.enabled),
-        )
-    }
+    var state by remember { mutableStateOf(readMainState(context)) }
     var entries by remember { mutableStateOf(emptyList<HistoryEntry>()) }
+    var setupRequired by rememberSaveable { mutableStateOf(false) }
     // While the app was in the background the user may have changed the service in Settings, and new
     // warnings may have been added to the history.
     LifecycleResumeEffect(Unit) {
@@ -117,39 +115,61 @@ fun MainScreen(modifier: Modifier = Modifier) {
         scope.launch { entries = withContext(Dispatchers.IO) { app.history.entriesOrNone() } }
         onPauseOrDispose {}
     }
-    val actions =
-        MainActions(
-            // The button shows whether the user is protected. Turning it on while the service is off
-            // opens the system settings, where the service is switched on.
-            onToggle = {
-                val turnOn = !state.secured
-                guard.enabled = turnOn
-                state = state.copy(isOn = turnOn)
-                if (turnOn && !ScamAccessibilityService.isEnabled(context)) openAccessibilitySettings(context)
-            },
-            onClearHistory = {
-                entries = emptyList()
-                scope.launch { withContext(Dispatchers.IO) { app.history.clearQuietly() } }
-            },
-            settings =
-                SettingsActions(
-                    onDemoModeChange = { enabled ->
-                        demo.enabled = enabled
-                        state = state.copy(demoMode = enabled)
-                    },
-                    onLanguageChange = { language ->
-                        languages.language = language
-                        state = state.copy(language = language)
-                    },
-                ),
-        )
     MainScreen(
         state = state,
         history = HistoryUiState(entries, state.language, app.engine.warnings),
-        actions = actions,
+        actions =
+            MainActions(
+                // The button shows whether the user is protected. Turning it on while the service is off asks
+                // first, then opens the system settings, where the service is switched on.
+                onToggle = {
+                    val turnOn = !state.secured
+                    if (turnOn && !ScamAccessibilityService.isEnabled(context)) {
+                        // Nothing is switched on until the user agrees to go and enable the service.
+                        setupRequired = true
+                    } else {
+                        guard.enabled = turnOn
+                        state = state.copy(isOn = turnOn)
+                    }
+                },
+                onClearHistory = {
+                    entries = emptyList()
+                    scope.launch { withContext(Dispatchers.IO) { app.history.clearQuietly() } }
+                },
+                settings =
+                    SettingsActions(
+                        onDemoModeChange = { enabled ->
+                            demo.enabled = enabled
+                            state = state.copy(demoMode = enabled)
+                        },
+                        onLanguageChange = { language ->
+                            languages.language = language
+                            state = state.copy(language = language)
+                        },
+                    ),
+            ),
         modifier = modifier,
     )
+    if (setupRequired) {
+        SetupDialog(
+            onDismiss = { setupRequired = false },
+            onAccept = {
+                setupRequired = false
+                guard.enabled = true
+                // Resume reloads protection and service status after system setup.
+                openAccessibilitySettings(context)
+            },
+        )
+    }
 }
+
+private fun readMainState(context: Context): MainUiState =
+    MainUiState(
+        isOn = GuardPreferences(context).enabled,
+        serviceEnabled = ScamAccessibilityService.isEnabled(context),
+        language = LanguagePreferences(context).language,
+        demoMode = DemoPreferences(context).enabled,
+    )
 
 private fun openAccessibilitySettings(context: Context) {
     context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
