@@ -23,6 +23,14 @@
       "en": "Be careful. This link looks suspicious."
     }
   },
+  "scam_claim": {
+    "severity": "amber",
+    "title": "Possible scam detected",
+    "message": {
+      "fil": "Mag-ingat. Ang nagsasabing \"hindi ito scam\" ay madalas na scam.",
+      "en": "Be careful. Messages that say \"this is not a scam\" are often scams."
+    }
+  },
   "money_request": {
     "severity": "amber",
     "title": "Possible scam detected",

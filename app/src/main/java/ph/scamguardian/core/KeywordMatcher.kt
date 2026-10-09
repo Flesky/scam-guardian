@@ -18,10 +18,25 @@ class KeywordMatcher(
     fun match(
         tokens: List<String>,
         keywords: Collection<String>,
+    ): List<KeywordMatch> = match(tokens, keywords, ::matches)
+
+    /**
+     * Like [match], but every word must be spelled exactly. For everyday words such as "promise", where a
+     * near miss ("promos") is a different word, not a typo.
+     */
+    fun matchExact(
+        tokens: List<String>,
+        keywords: Collection<String>,
+    ): List<KeywordMatch> = match(tokens, keywords) { token, keyword -> token == keyword }
+
+    private fun match(
+        tokens: List<String>,
+        keywords: Collection<String>,
+        sameWord: (String, String) -> Boolean,
     ): List<KeywordMatch> =
         keywords.mapNotNull { keyword ->
             val phrase = phrases.getOrPut(keyword) { normalizer.tokens(keyword) }
-            find(tokens, phrase)?.let { KeywordMatch(keyword, it) }
+            find(tokens, phrase, sameWord)?.let { KeywordMatch(keyword, it) }
         }
 
     fun matches(
@@ -37,10 +52,11 @@ class KeywordMatcher(
     private fun find(
         tokens: List<String>,
         phrase: List<String>,
+        sameWord: (String, String) -> Boolean,
     ): List<String>? {
         if (phrase.isEmpty()) return null
         return tokens.windowed(phrase.size).firstOrNull { window ->
-            window.indices.all { matches(window[it], phrase[it]) }
+            window.indices.all { sameWord(window[it], phrase[it]) }
         }
     }
 

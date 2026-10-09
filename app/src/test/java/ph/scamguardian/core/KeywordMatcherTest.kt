@@ -31,6 +31,21 @@ class KeywordMatcherTest {
     }
 
     @Test
+    fun matchExact_acceptsOnlyTheExactWords() {
+        val tokens = normalizer.tokens("Great promos, I PROMISE it is not a scam")
+
+        assertEquals(
+            listOf(KeywordMatch("promise", listOf("promise")), KeywordMatch("not a scam", listOf("not", "a", "scam"))),
+            matcher.matchExact(tokens, listOf("promise", "not a scam", "legit")),
+        )
+        assertEquals(
+            emptyList<KeywordMatch>(),
+            matcher.matchExact(normalizer.tokens("great promos"), listOf("promise")),
+        )
+        assertEquals(1, matcher.match(normalizer.tokens("great promos"), listOf("promise")).size)
+    }
+
+    @Test
     fun match_returnsKeywordsWithTheirTokens() {
         val tokens = normalizer.tokens("GCazh top up bonos, ay ganun pala")
 

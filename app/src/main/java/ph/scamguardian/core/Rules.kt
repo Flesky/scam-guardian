@@ -17,6 +17,9 @@ enum class WarningType(
     @SerialName("risky_link")
     RISKY_LINK("risky_link"),
 
+    @SerialName("scam_claim")
+    SCAM_CLAIM("scam_claim"),
+
     @SerialName("money_request")
     MONEY_REQUEST("money_request"),
 
@@ -39,6 +42,7 @@ class Rules(
         fakeLink(analysis)
             ?: otpRequest(analysis)
             ?: riskyLink(analysis)
+            ?: scamClaim(analysis)
             ?: moneyRequest(analysis)
 
     private fun fakeLink(analysis: MessageAnalysis): RuleMatch? {
@@ -84,6 +88,28 @@ class Rules(
             "Link goes to ${link.registrableDomain} ($reasons); words: ${words(analysis.general)}",
         )
     }
+
+    // A message that insists it is not a scam, and is about money. Asking whether something is a scam,
+    // or doubting it, does not count.
+    private fun scamClaim(analysis: MessageAnalysis): RuleMatch? {
+        val claims =
+            sentenceBreak
+                .split(analysis.body)
+                .filterNot { '?' in it }
+                .map { sentence -> normalizer.tokens(sentence).filterNot { it in POLITE_WORDS } }
+                .filterNot(::expressesDoubt)
+                .flatMap { tokens -> matcher.matchExact(tokens, REASSURANCE_PHRASES) }
+        val moneyWords = analysis.general.filter { it.keyword in MONEY_KEYWORDS }
+        if (claims.isEmpty() || (moneyWords.isEmpty() && analysis.money.isEmpty())) return null
+        val money = if (moneyWords.isNotEmpty()) "words: ${words(moneyWords)}" else "amount ${analysis.money.first()}"
+        return RuleMatch(
+            WarningType.SCAM_CLAIM,
+            "Insists it is not a scam (${words(claims)}); talks about money ($money)",
+        )
+    }
+
+    private fun expressesDoubt(tokens: List<String>): Boolean =
+        DOUBT_PHRASES.any { phrase -> tokens.windowed(phrase.size).any { it == phrase } }
 
     private fun moneyRequest(analysis: MessageAnalysis): RuleMatch? {
         val asks = matcher.match(analysis.tokens, MONEY_WORDS)
@@ -138,11 +164,60 @@ class Rules(
                 "sabihin",
             )
         private val MONEY_WORDS =
-            listOf("padala", "padalhan", "pa-gcash", "pagcash", "pahiram", "send", "transfer", "utang")
+            listOf("padala", "padalhan", "pa-gcash", "pagcash", "pahiram", "send", "pasend", "transfer", "utang")
         private val REPAYMENT_WORDS = listOf("babalik", "ibabalik", "babayaran", "bayaran")
         private val MONEY_CONTEXT_WORDS = listOf("pera", "salapi", "kwarta", "pa-gcash", "pagcash", "utang")
         private val URGENCY_WORDS =
             listOf("urgent", "agad", "ngayon na", "emergency", "ospital", "hospital", "kailangan")
+
+        private val REASSURANCE_PHRASES =
+            listOf(
+                "not a scam",
+                "not scam",
+                "its not a scam",
+                "no scam",
+                "hindi scam",
+                "hindi ito scam",
+                "di scam",
+                "walang scam",
+                "legit",
+                "100% legit",
+                "promise",
+                "trust me",
+                "guaranteed",
+                "send first",
+                "i'll send first",
+                "ill send first",
+            )
+
+        // "Hindi po ito scam" is "hindi ito scam" said politely.
+        private val POLITE_WORDS = setOf("po", "ho")
+        private val DOUBT_PHRASES =
+            listOf(listOf("ba"), listOf("baka"), listOf("kaya"), listOf("is", "this"), listOf("is", "it"))
+
+        // The general keywords that are about money.
+        private val MONEY_KEYWORDS =
+            setOf(
+                "send",
+                "padala",
+                "pahiram",
+                "utang",
+                "bayad",
+                "fee",
+                "pesos",
+                "transfer",
+                "deposit",
+                "balance",
+                "loan",
+                "pautang",
+                "sahod",
+                "earn",
+                "prize",
+                "bonus",
+                "rebate",
+                "top up",
+                "withdraw",
+            )
 
         /** Rule words that also send a message to the AI check. Asking words alone are too common. */
         val SIGNAL_WORDS = CODE_WORDS + MONEY_WORDS + URGENCY_WORDS

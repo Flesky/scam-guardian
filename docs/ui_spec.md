@@ -25,6 +25,7 @@ Give this file to the agent together with the prompts for the main screen, histo
 | fake_link | Red | Scam detected | Hindi ito ang tunay na link ng {brand}. Huwag magbigay ng OTP o personal na impormasyon. | Not a real link of {brand}. Do not give your OTP or personal info. |
 | otp_request | Red | Scam detected | Huwag ibigay ang OTP. Hindi kailanman manghihingi ng OTP ang mga bangko o kumpanya. | Do not give your OTP. Banks and companies will never ask for your OTP. |
 | risky_link | Amber | Possible scam detected | Mag-ingat. Kahina-hinala ang link na ito. | Be careful. This link looks suspicious. |
+| scam_claim | Amber | Possible scam detected | Mag-ingat. Ang nagsasabing "hindi ito scam" ay madalas na scam. | Be careful. Messages that say "this is not a scam" are often scams. |
 | money_request | Amber | Possible scam detected | Tawagan muna ang tao at siguraduhing siya talaga ito bago magpadala ng pera. | Call the person first and make sure it is really them before you send money. |
 | ai_scam | Amber | Possible scam detected | Huwag magpadala ng pera, OTP o personal na impormasyon. | Do not send money, OTP, or personal information. |
 

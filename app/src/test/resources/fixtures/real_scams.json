@@ -130,5 +130,29 @@
       "money_request"
     ],
     "text": "anak padalhan mo naman ako\n5kyaw babalik ko rin bukas\nsensya na."
+  },
+  {
+    "types": [
+      "scam_claim"
+    ],
+    "text": "baron send 500 and pero dont worry ITS NOT A SCAM because ill send u 5000 first"
+  },
+  {
+    "types": [
+      "scam_claim"
+    ],
+    "text": "Legit po ito 100%, mag-send lang kayo ng 300 processing fee"
+  },
+  {
+    "types": [
+      "scam_claim"
+    ],
+    "text": "Hindi po ito scam, promise. Padala lang 1k para ma-release ang prize mo"
+  },
+  {
+    "types": [
+      "money_request"
+    ],
+    "text": "Pasend agad ng pera kailangan ko ng tulong"
   }
 ]
