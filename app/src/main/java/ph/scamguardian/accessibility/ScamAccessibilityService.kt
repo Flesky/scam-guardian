@@ -35,7 +35,9 @@ class ScamAccessibilityService : AccessibilityService() {
     private val preferences by lazy { GuardPreferences(this) }
     private val engine by lazy { (application as ScamGuardianApp).engine }
     private val history by lazy { (application as ScamGuardianApp).history }
-    private val notifier by lazy { WarningNotifier(this, scope) }
+
+    // When a banner goes away, the screen is read again: a warning that had to wait can then be shown.
+    private val notifier by lazy { WarningNotifier(this, scope, onBannerGone = { scanIn(AFTER_BANNER_MS) }) }
     private val log = ScanLog()
 
     // Blocks already sent, so the same text is not sent to the model thread on every screen change. Main thread only.
@@ -173,12 +175,15 @@ class ScamAccessibilityService : AccessibilityService() {
                 ?.firstOrNull { it.text == block.text }
         if (current != null && notifier.show(packageName, current, warning)) return
         sent.forget(packageName, block.text)
-        // Held back by the 30-second wait: read the screen again when the wait is over.
-        if (current != null) scanIn(notifier.waitMs(packageName))
+        // Held back by the 30-second wait: read the screen again when the wait is over. Held back by a
+        // banner that is still showing: the screen is read again when that banner goes.
+        val wait = notifier.waitMs(packageName)
+        if (current != null && wait > 0) scanIn(wait)
     }
 
     companion object {
         private const val STATS_INTERVAL_MS = 5 * 60 * 1_000L
+        private const val AFTER_BANNER_MS = 500L
 
         /** True when the user has switched this service on in the system accessibility settings. */
         fun isEnabled(context: Context): Boolean {

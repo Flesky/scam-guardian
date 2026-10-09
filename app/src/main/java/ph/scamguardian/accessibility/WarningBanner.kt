@@ -29,7 +29,10 @@ internal class WarningBanner(
     private val autoHide = Runnable { guarded("hide the banner") { dismiss() } }
     private var view: View? = null
 
-    /** Shows [content] in place of any banner on screen, vibrates once, and hides it after 15 seconds. */
+    /** True while a banner is on screen. Only one is shown at a time. */
+    val isShowing: Boolean get() = view != null
+
+    /** Shows [content], vibrates once, and hides it after 15 seconds. A banner still on screen is replaced. */
     fun show(
         content: BannerContent,
         onNotScam: () -> Unit,

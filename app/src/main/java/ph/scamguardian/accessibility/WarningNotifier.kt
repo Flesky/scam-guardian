@@ -23,13 +23,22 @@ import java.util.UUID
 internal class WarningNotifier(
     service: AccessibilityService,
     private val scope: CoroutineScope,
+    /** Called on the main thread when the banner has gone, so a warning that waited can be shown. */
+    private val onBannerGone: () -> Unit = {},
 ) {
     private val app = service.application as ScamGuardianApp
     private val languages = LanguagePreferences(service)
     private val highlight = MessageHighlight(service)
 
     // The outline goes away with the banner.
-    private val banner = WarningBanner(service, onDismiss = { guarded("remove the outline") { highlight.dismiss() } })
+    private val banner =
+        WarningBanner(
+            service,
+            onDismiss = {
+                guarded("remove the outline") { highlight.dismiss() }
+                onBannerGone()
+            },
+        )
     private val limiter = BannerLimiter()
     private val demo = DemoPreferences(service)
 
@@ -46,14 +55,17 @@ internal class WarningNotifier(
 
     /**
      * Shows the banner for [warning], found in the text [block] of the app [packageName], and adds the
-     * history entry. Returns false, and does nothing, when this app may not show a banner yet.
+     * history entry. Returns false, and does nothing, while another banner is on screen (only one is
+     * shown at a time) or when this app may not show a banner yet.
      */
     fun show(
         packageName: String,
         block: ScreenBlock,
         warning: ScamWarning,
     ): Boolean {
-        if (!limiter.tryShow(packageName, SystemClock.elapsedRealtime(), unlimited = demo.enabled)) return false
+        val allowed =
+            !banner.isShowing && limiter.tryShow(packageName, SystemClock.elapsedRealtime(), unlimited = demo.enabled)
+        if (!allowed) return false
         // Read each time: the user may have changed the language since the last banner.
         val language = languages.language
         val catalog = app.engine.warnings
