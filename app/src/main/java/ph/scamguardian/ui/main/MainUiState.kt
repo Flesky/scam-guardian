@@ -12,6 +12,6 @@ data class MainUiState(
     /** Demo mode: every warning shows its banner at once, with no wait between banners. */
     val demoMode: Boolean = false,
 ) {
-    /** Messages are only read when the button is ON and the service is running. */
+    /** Messages are only read when the button is ON and the service is running. The big button shows this. */
     val secured: Boolean get() = isOn && serviceEnabled
 }

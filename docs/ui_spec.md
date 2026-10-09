@@ -34,27 +34,31 @@ warnings.json format becomes: `{ "<type>": { "severity": "red" | "amber", "title
 
 ## Main screen
 
-- Header: "Scam Guardian", with a small "Demo" switch at the top right. In demo mode every warning shows its banner at once, with no 30-second wait between banners in the same app.
-- The big on/off button (unchanged).
-- Status line under the button:
-  - ON and service enabled: "You are secured" (green).
-  - Otherwise: "You are not secured" (red), plus a button "Turn on protection" that opens the setup steps / Accessibility settings.
-- Language toggle "EN | FIL".
-- Privacy line at the bottom, English only, with a shield icon: "Uses local engine only. Not connected to the internet."
-- Small text link: "History".
+The app has one screen. Everything under the header scrolls as one list.
 
-## History screen
+- Header: "Scam Guardian", with a gear icon at the top right. It opens the platform's popup menu with two items:
+  - "Demo mode", with a check box. In demo mode every warning shows its banner at once, with no 30-second wait between banners in the same app.
+  - "Switch to Filipino" or "Switch to English", whichever is not the current language of the warnings.
+- The big on/off button. It shows ON only when the user is really protected: the button is on and the accessibility service is enabled. Tapping it while off turns protection on and, if the service is not enabled, opens the Accessibility settings. There is no other button for this and no instruction text.
+- Status under the button: "You are secured" (green) or "You are not secured" (red).
+- Privacy line, English only, with a shield icon: "Uses local engine only. Not connected to the internet."
+- The button, status and privacy line fill the screen. History starts below them, under a "History" title, so it is only seen after scrolling (see below).
+- At the bottom of the first screen: "Scroll up for history" under a double-chevron icon that gently moves up and down. Tapping it scrolls to the history.
 
-- A list of past warnings, newest first. Stored locally on the phone (a JSON file in app storage is enough). Keep the last 200 entries.
+## History
+
+- Part of the main screen's list, not a separate screen.
+- Past warnings, newest first. Stored locally on the phone (a JSON file in app storage is enough). Keep the last 200 entries.
 - Each entry shows:
   - Icon in the warning color (red: alert icon; amber: caution icon).
   - Title ("Scam detected" / "Possible scam detected").
   - Message in the selected language (with the brand name filled in).
+  - The message that caused the warning, in quotes, up to four lines.
   - App name where it was seen (for example Messenger) and timestamp (for example "Oct 9, 10:24 PM").
 - If the language setting changes, existing entries show the new language (store the type and brand, not the final text).
 - Empty state: "No warnings yet."
 - A message that already has a history entry does not warn again. Clearing the history resets this.
-- A "Clear history" text button at the bottom.
+- With entries, a "Clear history" button is the last item of the list.
 
 ## Warning banner
 

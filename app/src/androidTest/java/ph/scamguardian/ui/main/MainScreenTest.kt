@@ -5,14 +5,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.test.assertIsNotSelected
-import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.hasScrollAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import org.junit.Before
+import androidx.compose.ui.test.performScrollToNode
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.junit.Rule
 import org.junit.Test
+import ph.scamguardian.core.HistoryEntry
+import ph.scamguardian.core.Language
+import ph.scamguardian.core.Severity
+import ph.scamguardian.core.WarningType
+import ph.scamguardian.core.parseWarnings
 
 /**
  * UI tests for [ph.scamguardian.ui.main.MainScreen].
@@ -22,62 +34,110 @@ import org.junit.Test
 class MainScreenTest {
     @get:Rule val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-    @Before
-    fun setup() {
+    private val catalog by lazy {
+        parseWarnings(
+            composeTestRule.activity.assets
+                .open("warnings.json")
+                .bufferedReader()
+                .use { it.readText() },
+        )
+    }
+
+    private val entries =
+        listOf(
+            HistoryEntry("2", WarningType.FAKE_LINK, Severity.RED, brand = "BDO", app = "Messenger", timeMs = 1_000L),
+            HistoryEntry(
+                "1",
+                WarningType.RISKY_LINK,
+                Severity.AMBER,
+                app = "Viber",
+                timeMs = 500L,
+                markedNotScam = true,
+            ),
+        )
+
+    // Turning the button on switches the service on too, as if the user had finished the setup.
+    private fun show(
+        initial: MainUiState = MainUiState(isOn = false, serviceEnabled = false, language = Language.ENGLISH),
+        history: List<HistoryEntry> = emptyList(),
+    ) {
         composeTestRule.setContent {
-            var state by remember { mutableStateOf(MainUiState(isOn = false, serviceEnabled = false)) }
+            var state by remember { mutableStateOf(initial) }
+            var shown by remember { mutableStateOf(history) }
             MainScreen(
                 state = state,
+                history = HistoryUiState(shown, state.language, catalog),
                 actions =
                     MainActions(
-                        onToggle = { state = state.copy(isOn = !state.isOn) },
-                        onTurnOnProtection = { state = state.copy(isOn = true, serviceEnabled = true) },
-                        onLanguageChange = { state = state.copy(language = it) },
-                        onDemoModeChange = { state = state.copy(demoMode = it) },
+                        onToggle = { state = state.copy(isOn = !state.secured, serviceEnabled = true) },
+                        onClearHistory = { shown = emptyList() },
+                        settings =
+                            SettingsActions(
+                                onDemoModeChange = { state = state.copy(demoMode = it) },
+                                onLanguageChange = { state = state.copy(language = it) },
+                            ),
                     ),
             )
         }
     }
 
-    @Test
-    fun toggle_startsOff_andTurnsOnWhenTapped() {
-        composeTestRule.onNodeWithText("OFF").assertExists().performClick()
-        composeTestRule.onNodeWithText("ON").assertExists()
+    private fun scrollTo(text: String) {
+        composeTestRule.onNode(hasScrollAction()).performScrollToNode(hasText(text, substring = true))
     }
 
     @Test
-    fun status_isNotSecuredUntilProtectionIsTurnedOn() {
-        composeTestRule.onNodeWithText("You are not secured").assertExists()
-        composeTestRule.onNodeWithText("Turn on protection").performClick()
+    fun toggle_startsOff_andTurnsOnWhenTapped() {
+        show()
 
+        composeTestRule.onNodeWithText("You are not secured").assertExists()
+        composeTestRule.onNodeWithText("Scroll up for history").assertExists()
+        composeTestRule.onNodeWithText("OFF").assertExists().performClick()
+
+        composeTestRule.onNodeWithText("ON").assertExists()
         composeTestRule.onNodeWithText("You are secured").assertExists()
+    }
+
+    @Test
+    fun toggle_staysOffUntilTheServiceIsEnabled() {
+        show(MainUiState(isOn = true, serviceEnabled = false))
+
+        composeTestRule.onNodeWithText("OFF").assertExists()
+        composeTestRule.onNodeWithText("You are not secured").assertExists()
         composeTestRule.onNodeWithText("Turn on protection").assertDoesNotExist()
     }
 
     @Test
-    fun status_buttonOnButServiceOff_isNotSecured() {
-        composeTestRule.onNodeWithText("OFF").performClick()
+    fun history_empty_showsTheEmptyStateOnTheSameScreen() {
+        show()
 
-        composeTestRule.onNodeWithText("You are not secured").assertExists()
-        composeTestRule.onNodeWithText("Turn on protection").assertExists()
+        scrollTo("No warnings yet.")
+        composeTestRule.onNodeWithText("No warnings yet.").assertExists()
+        composeTestRule.onNodeWithText("Clear history").assertDoesNotExist()
     }
 
     @Test
-    fun languageToggle_startsOnFilipino_andSwitchesToEnglish() {
-        composeTestRule.onNodeWithText("FIL").assertIsSelected()
-        composeTestRule.onNodeWithText("EN").performClick().assertIsSelected()
-        composeTestRule.onNodeWithText("FIL").assertIsNotSelected()
+    fun history_entries_areListedAndCanBeCleared() {
+        show(history = entries)
+
+        scrollTo("Not a real link of BDO")
+        composeTestRule.onNodeWithText("Not a real link of BDO. Do not give your OTP or personal info.").assertExists()
+        scrollTo("Marked not a scam")
+        composeTestRule.onNodeWithText("Marked not a scam").assertExists()
+        scrollTo("Clear history")
+        composeTestRule.onNodeWithText("Clear history").performClick()
+
+        composeTestRule.onNodeWithText("No warnings yet.").assertExists()
     }
 
     @Test
-    fun screen_showsThePrivacyLineAndTheHistoryLink() {
-        composeTestRule.onNodeWithText("Uses local engine only. Not connected to the internet.").assertExists()
-        composeTestRule.onNodeWithText("History").assertExists()
-    }
+    fun settings_gearOpensAMenuWithDemoModeAndTheOtherLanguage() {
+        show(history = entries)
 
-    @Test
-    fun demoSwitch_isInTheHeaderAndCanBeTapped() {
-        composeTestRule.onNodeWithText("Demo").assertExists().performClick()
-        composeTestRule.onNodeWithText("Demo").assertExists()
+        onView(withContentDescription("Settings")).perform(click())
+        onView(withText("Demo mode")).inRoot(isPlatformPopup()).check(matches(isDisplayed()))
+        onView(withText("Switch to Filipino")).inRoot(isPlatformPopup()).perform(click())
+
+        scrollTo("Hindi ito ang tunay na link ng BDO")
+        composeTestRule.onNodeWithText("Hindi ito ang tunay na link ng BDO", substring = true).assertExists()
     }
 }

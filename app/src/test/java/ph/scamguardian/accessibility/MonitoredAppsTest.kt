@@ -45,4 +45,12 @@ class MonitoredAppsTest {
         assertEquals("ph.scamguardian", MonitoredApps.nameOf("ph.scamguardian"))
         (MonitoredApps.chat + MonitoredApps.browser).forEach { assertTrue(it, MonitoredApps.nameOf(it) != it) }
     }
+
+    @Test
+    fun scamGuardianItself_isNeverRead() {
+        val config = File("src/main/res/xml/scam_accessibility_service.xml").readText()
+
+        assertNull(MonitoredApps.kindOf("ph.scamguardian"))
+        assertTrue("ph.scamguardian" !in config)
+    }
 }

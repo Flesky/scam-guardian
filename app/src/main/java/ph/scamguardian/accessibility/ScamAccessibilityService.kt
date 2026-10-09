@@ -58,6 +58,7 @@ class ScamAccessibilityService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
+        OpenWarning.dismiss = { handler.post { guarded("remove the banner") { notifier.dismiss() } } }
         if (BuildConfig.DEBUG) handler.postDelayed(logTotals, STATS_INTERVAL_MS)
     }
 
@@ -78,6 +79,7 @@ class ScamAccessibilityService : AccessibilityService() {
     override fun onInterrupt() = Unit
 
     override fun onDestroy() {
+        OpenWarning.dismiss = null
         guarded("remove the banner") { notifier.dismiss() }
         handler.removeCallbacksAndMessages(null)
         scope.cancel()
@@ -165,7 +167,10 @@ class ScamAccessibilityService : AccessibilityService() {
         warning: ScamWarning,
         pipeline: ScamPipeline,
     ) {
-        if (preferences.enabled && notifier.show(packageName, block, warning)) return
+        // The check takes a moment. If the user has left that app since, for Scam Guardian or any other,
+        // the warning is not shown over the wrong app.
+        val stillThere = rootInActiveWindow?.packageName?.toString() == packageName
+        if (preferences.enabled && stillThere && notifier.show(packageName, block, warning)) return
         sent.forget(packageName, block.text)
         scope.launch(engine.modelDispatcher) { guarded("forget a block") { pipeline.forget(block.text) } }
     }
