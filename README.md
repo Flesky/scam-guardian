@@ -6,7 +6,7 @@ There are no accounts, there is nothing to learn, you just switch on a button an
 
 <img src="docs/readme/warning.webp" width="420" alt="An orange warning, Possible scam detected, shown above a chat message that asks to borrow 5k for an emergency">
 
-[**Watch the demo video**](https://www.linkedin.com/posts/baron-rodrigo_appbuildersph-localai-ugcPost-7514449543350992896-LwGJ/) · [**Download the APK**](https://github.com/Flesky/scam-guardian/releases/latest/download/scam-guardian.apk) for Android 8 or newer. It is large (about 560 MB) because the AI model is inside it.
+[**Watch the demo video**](https://www.linkedin.com/posts/baron-rodrigo_appbuildersph-localai-ugcPost-7514449543350992896-LwGJ/) · [**Download the APK**](https://drive.google.com/file/d/1cpYWF2utA2lghGcmWP1DTqY1zIlzmBhD/view) for Android 8 or newer. It is large (about 560 MB) because the AI model is inside it.
 
 ## Who it is for
 
