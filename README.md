@@ -4,7 +4,7 @@
 
 <img src="docs/readme/warning.webp" width="420" alt="An orange warning, Possible scam detected, shown above a chat message that asks to borrow 5k for an emergency">
 
-[**Download the APK**](https://github.com/Flesky/scam-guardian/releases/latest/download/scam-guardian.apk) for Android 8 or newer. It is large (about 560 MB) because the AI model is inside it: there is nothing else to download.
+[**Watch the demo video**](https://www.linkedin.com/posts/baron-rodrigo_appbuildersph-localai-ugcPost-7514449543350992896-LwGJ/) · [**Download the APK**](https://github.com/Flesky/scam-guardian/releases/latest/download/scam-guardian.apk) for Android 8 or newer. It is large (about 560 MB) because the AI model is inside it: there is nothing else to download.
 
 ## Who it is for
 
@@ -72,7 +72,7 @@ Messages: `app/src/androidTest/assets/benchmark_messages.json`. Raw output of bo
 - **APIs and cloud services:** none.
 - **Existing code and assets:** none. Everything was made during the hackathon. The mascot sounds and images were generated with Claude Opus 5.5.
 - **AI development tools:** OpenAI Codex and Claude Code.
-- **Demo video:** TODO
+- **Demo video:** [LinkedIn post](https://www.linkedin.com/posts/baron-rodrigo_appbuildersph-localai-ugcPost-7514449543350992896-LwGJ/)
 
 ## Development
 
