@@ -1,4 +1,4 @@
-# Scam Guardian
+![Scam Guardian](docs/readme-banners/dark-minimal.png)
 
 Android app with on-device AI (no INTERNET permission).
 
@@ -41,32 +41,6 @@ Nothing leaves the phone: the app has no INTERNET permission.
    adb shell mkdir -p /sdcard/Android/data/ph.scamguardian/files/models
    adb push embeddinggemma-2-740m.litertlm /sdcard/Android/data/ph.scamguardian/files/models/embeddinggemma-2-740m.litertlm
    ```
-
-Gradle needs a JDK to start. If `java` is not on your PATH, use the one bundled with Android Studio:
-
-```bash
-export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
-```
-
-If Git hooks report “Unable to locate a Java Runtime” (for example, when pushing
-from a GUI), create an ignored `lefthook-local.yml` so both hooks can find your JDK:
-
-```yaml
-pre-commit:
-  commands:
-    check:
-      env:
-        JAVA_HOME: /Applications/Android Studio.app/Contents/jbr/Contents/Home
-
-pre-push:
-  commands:
-    check:
-      env:
-        JAVA_HOME: /Applications/Android Studio.app/Contents/jbr/Contents/Home
-```
-
-Use your installed JDK's path if it differs from this macOS example. Lefthook
-merges this local configuration with the shared checks; all checks still run.
 
 ## Commands
 
