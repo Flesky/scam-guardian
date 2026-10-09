@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Scam Guardian</string>
+    <string name="toggle_label_on">ON</string>
+    <string name="toggle_label_off">OFF</string>
+    <string name="toggle_state_on">On</string>
+    <string name="toggle_state_off">Off</string>
 </resources>
