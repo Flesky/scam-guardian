@@ -154,5 +154,11 @@
       "money_request"
     ],
     "text": "Pasend agad ng pera kailangan ko ng tulong"
+  },
+  {
+    "types": [
+      "refund_request"
+    ],
+    "text": "Magandang hapon po. Pasensya na po nagkamali ako send gcash. Pablik na lang poh. Send ko dapat sa 0999 999 9994 eh. Sana maintindihan nyo slamat."
   }
 ]

@@ -18,6 +18,7 @@ class WarningCatalogTest {
                 WarningType.OTP_REQUEST to Severity.RED,
                 WarningType.RISKY_LINK to Severity.AMBER,
                 WarningType.SCAM_CLAIM to Severity.AMBER,
+                WarningType.REFUND_REQUEST to Severity.AMBER,
                 WarningType.MONEY_REQUEST to Severity.AMBER,
                 WarningType.AI_SCAM to Severity.AMBER,
             ),

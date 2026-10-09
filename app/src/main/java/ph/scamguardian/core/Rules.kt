@@ -20,6 +20,9 @@ enum class WarningType(
     @SerialName("scam_claim")
     SCAM_CLAIM("scam_claim"),
 
+    @SerialName("refund_request")
+    REFUND_REQUEST("refund_request"),
+
     @SerialName("money_request")
     MONEY_REQUEST("money_request"),
 
@@ -43,6 +46,7 @@ class Rules(
             ?: otpRequest(analysis)
             ?: riskyLink(analysis)
             ?: scamClaim(analysis)
+            ?: refundRequest(analysis)
             ?: moneyRequest(analysis)
 
     private fun fakeLink(analysis: MessageAnalysis): RuleMatch? {
@@ -111,6 +115,19 @@ class Rules(
     private fun expressesDoubt(tokens: List<String>): Boolean =
         DOUBT_PHRASES.any { phrase -> tokens.windowed(phrase.size).any { it == phrase } }
 
+    // "I sent it to you by mistake, please send it back": a sending, a mistake and a return are all needed.
+    private fun refundRequest(analysis: MessageAnalysis): RuleMatch? {
+        val tokens = analysis.tokens
+        val sent = matcher.match(tokens, MONEY_WORDS) + matcher.matchExact(tokens, SENT_WORDS)
+        val mistake = matcher.match(tokens, MISTAKE_WORDS) + matcher.matchExact(tokens, EXACT_MISTAKE_WORDS)
+        val giveBack = matcher.match(tokens, RETURN_WORDS)
+        if (sent.isEmpty() || mistake.isEmpty() || giveBack.isEmpty()) return null
+        return RuleMatch(
+            WarningType.REFUND_REQUEST,
+            "Says money was sent by mistake (${words(mistake)}); asks you to send it back (${words(giveBack)})",
+        )
+    }
+
     private fun moneyRequest(analysis: MessageAnalysis): RuleMatch? {
         val asks = matcher.match(analysis.tokens, MONEY_WORDS)
         val urgency = matcher.match(analysis.tokens, URGENCY_WORDS)
@@ -166,6 +183,73 @@ class Rules(
         private val MONEY_WORDS =
             listOf("padala", "padalhan", "pa-gcash", "pagcash", "pahiram", "send", "pasend", "transfer", "utang")
         private val REPAYMENT_WORDS = listOf("babalik", "ibabalik", "babayaran", "bayaran")
+        private val MISTAKE_WORDS =
+            listOf(
+                "nagkamali",
+                "namali",
+                "pagkakamali",
+                "mistake",
+                "mistakenly",
+                "accident",
+                "accidentally",
+                "aksidente",
+                "hindi sinasadya",
+                "di sinasadya",
+                "wrong number",
+                "maling number",
+            )
+
+        // Short words and slang for a wrong send. They must be spelled exactly: "send" is not "xsend".
+        private val EXACT_MISTAKE_WORDS =
+            listOf(
+                "mali",
+                "xsend",
+                "x send",
+                "xsent",
+                "wrongsend",
+                "wrongsent",
+                "wrong send",
+                "wrong sent",
+                "wrong sent",
+                "missend",
+                "missent",
+                "mis send",
+                "mis sent",
+            ).distinct()
+
+        // Ways of saying the money was already sent, besides the money words.
+        private val SENT_WORDS =
+            listOf(
+                "sent",
+                "nasend",
+                "naisend",
+                "napasend",
+                "sinend",
+                "napadala",
+                "naipadala",
+                "pinadala",
+                "natransfer",
+                "naitransfer",
+                "xsend",
+                "xsent",
+                "wrongsend",
+                "wrongsent",
+                "missend",
+                "missent",
+            )
+        private val RETURN_WORDS =
+            listOf(
+                "pabalik",
+                "ibalik",
+                "pakibalik",
+                "balik",
+                "isauli",
+                "pasauli",
+                "pakisauli",
+                "refund",
+                "return",
+                "send back",
+            )
         private val MONEY_CONTEXT_WORDS = listOf("pera", "salapi", "kwarta", "pa-gcash", "pagcash", "utang")
         private val URGENCY_WORDS =
             listOf("urgent", "agad", "ngayon na", "emergency", "ospital", "hospital", "kailangan")

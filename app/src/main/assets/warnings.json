@@ -31,6 +31,14 @@
       "en": "Be careful. Messages that say \"this is not a scam\" are often scams."
     }
   },
+  "refund_request": {
+    "severity": "amber",
+    "title": "Possible scam detected",
+    "message": {
+      "fil": "Wag i-entertain ang mga nagpapabalik ng pera. Hayaan silang mag-reach out sa customer service para maibalik ang pera nila.",
+      "en": "Do not entertain people who ask you to send money back. Let them contact customer service to get their money back."
+    }
+  },
   "money_request": {
     "severity": "amber",
     "title": "Possible scam detected",
