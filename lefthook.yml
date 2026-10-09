@@ -1,0 +1,9 @@
+pre-commit:
+  commands:
+    check:
+      run: ./gradlew spotlessCheck detekt
+
+pre-push:
+  commands:
+    check:
+      run: ./gradlew lintDebug testDebugUnitTest

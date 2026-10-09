@@ -18,3 +18,6 @@ local.properties
 # On-device models
 *.litertlm
 models/
+
+# Node (Lefthook)
+node_modules/
