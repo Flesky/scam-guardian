@@ -68,7 +68,7 @@ class LiteRtEmbedder(
     private fun loadedEngine(): EmbeddingEngine {
         engine?.let { return it }
         check(File(modelPath).isFile) {
-            "EmbeddingGemma model file is missing. Expected it at $modelPath (see README, Setup step 4)."
+            "EmbeddingGemma model file is missing. Expected it at $modelPath."
         }
         val created = EmbeddingEngine(EmbeddingEngineConfig(modelPath = modelPath, backend = Backend.GPU()))
         try {

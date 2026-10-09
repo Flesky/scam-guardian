@@ -18,6 +18,7 @@ import ph.scamguardian.core.ScamPipeline
 import ph.scamguardian.core.WarningCatalog
 import ph.scamguardian.core.parseWarnings
 import ph.scamguardian.embedding.LiteRtEmbedder
+import ph.scamguardian.storage.BundledFile
 import ph.scamguardian.storage.SafeTextStore
 import java.io.File
 import java.io.IOException
@@ -46,14 +47,23 @@ enum class EngineState {
  * Nothing is loaded until [start] is first called. Loading happens off the main thread, in two steps.
  * First the data files, which is quick: from then on [loadedPipeline] checks messages with the rules.
  * Then the model and the anchors: from then on the AI check works too. If the second step fails, for
- * example because the model file is missing, the rules keep working and [start] tries again.
+ * example because there is no space to copy the model, the rules keep working and [start] tries again.
  */
 class ScamEngine(
     context: Context,
 ) {
     private val appContext = context.applicationContext
     private val assets = DataFiles(appContext)
-    private val embedder = LiteRtEmbedder(File(appContext.getExternalFilesDir(null), MODEL_PATH).path)
+
+    // The model is packaged with the app. It is copied to app storage once, because LiteRT-LM needs a file.
+    private val modelFile = File(appContext.noBackupFilesDir, MODEL_PATH)
+    private val model =
+        BundledFile(
+            target = modelFile,
+            size = { appContext.assets.openFd(MODEL_ASSET).use { it.length } },
+            open = { appContext.assets.open(MODEL_ASSET) },
+        )
+    private val embedder = LiteRtEmbedder(modelFile.path)
 
     // In the no-backup folder: the messages the user marked "Not a scam" never leave this phone.
     private val safeTexts = SafeTextStore(File(appContext.noBackupFilesDir, SAFE_TEXTS_FILE))
@@ -119,12 +129,20 @@ class ScamEngine(
         failure = null
         val pipeline = loadedPipeline ?: rulesPipeline() ?: return EngineState.FAILED
         return try {
-            val loadMs = timeMs { embedder.load() }
+            val loadMs =
+                timeMs {
+                    model.install()
+                    embedder.load()
+                }
             val anchorsMs = timeMs { pipeline.loadAi() }
             if (BuildConfig.DEBUG) logTimings(loadMs, anchorsMs)
             EngineState.READY
         } catch (e: IllegalStateException) {
             Log.e(TAG, "Could not load the model; only the rules are working", e)
+            failure = e.message
+            EngineState.LIMITED
+        } catch (e: IOException) {
+            Log.e(TAG, "Could not copy the model to app storage; only the rules are working", e)
             failure = e.message
             EngineState.LIMITED
         }
@@ -196,7 +214,8 @@ class ScamEngine(
 
     private companion object {
         const val TAG = "SG"
-        const val MODEL_PATH = "models/embeddinggemma-2-740m.litertlm"
+        const val MODEL_ASSET = "embeddinggemma-2-740m.litertlm"
+        const val MODEL_PATH = "models/$MODEL_ASSET"
         const val DEBUG_TEXT = "Hello world"
         const val WARNINGS_FILE = "warnings.json"
         const val SAFE_TEXTS_FILE = "safe_anchors.json"
