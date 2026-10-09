@@ -6,14 +6,14 @@ Android app with on-device AI (no INTERNET permission).
 
 ```mermaid
 flowchart TD
-    A["Message on screen<br/>(messaging app or browser)"] --> B["Accessibility service<br/>reads incoming text"]
-    B --> C{"Rules<br/>fake link, OTP request, risky link,<br/>scam claim, refund request, money request"}
-    C -- match --> W["Warning banner<br/>+ History entry"]
-    C -- no match --> D{"6+ words and a link,<br/>amount or keyword?"}
+    A["Accessibility service reads user's screen"] --> B["Preprocess text"]
+    B --> C{"Run through heuristics"}
+    C -- match --> W["Show warning banner"]
+    C -- no match --> D{"Check for keywords"}
     D -- no --> N["No warning"]
-    D -- yes --> E["AI check on the phone<br/>(EmbeddingGemma 2, LiteRT-LM)"]
-    E -- closer to scam examples --> W
-    E -- otherwise --> N
+    D -- yes --> E["Validate using embedding model"]
+    E -- close to scam data set --> W
+    E -- no --> N
 ```
 
 Nothing leaves the phone: the app has no INTERNET permission.
