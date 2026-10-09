@@ -42,8 +42,6 @@ internal class WarningBanner(
             BannerActions(
                 onClose = { guarded("close the banner") { dismiss() } },
                 onNotScam = { guarded("mark a message as not a scam") { onNotScam() } },
-                // Opening the evidence gives the user the full 15 seconds again to read it.
-                onWhy = { guarded("keep the banner open") { hideLater() } },
             )
         val banner = BannerViews(context).build(content, actions)
         windowManager.addView(banner, windowParams())

@@ -85,7 +85,6 @@ internal class WarningNotifier(
                 title = catalog.title(warning.type),
                 message = catalog.message(warning.type, language, warning.brand),
                 brandRange = catalog.brandRange(warning.type, language, warning.brand),
-                evidence = warning.evidence,
             )
         banner.show(content, onNotScam = { markNotScam(block.text, entry.id) })
         block.bounds?.let { highlight.show(it, warning.severity.color.toArgb()) }

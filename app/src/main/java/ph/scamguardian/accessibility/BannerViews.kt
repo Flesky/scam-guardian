@@ -2,7 +2,6 @@ package ph.scamguardian.accessibility
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.text.SpannableString
@@ -20,7 +19,6 @@ import android.widget.TextView
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import ph.scamguardian.R
 import ph.scamguardian.core.Severity
 import ph.scamguardian.theme.color
@@ -35,15 +33,12 @@ internal data class BannerContent(
     val message: String,
     /** Where the brand is in [message], or null when there is none. */
     val brandRange: IntRange?,
-    val evidence: String,
 )
 
 /** What the taps on a banner do. */
 internal class BannerActions(
     val onClose: () -> Unit,
     val onNotScam: () -> Unit,
-    /** Called after "Why?" opened or closed the evidence line. */
-    val onWhy: () -> Unit,
 )
 
 private const val DARKEN = 0.65f
@@ -82,12 +77,13 @@ internal class BannerViews(
             LinearLayout(context).apply {
                 orientation = LinearLayout.VERTICAL
                 background = filled(cardColor, dp(CARD_CORNER_DP))
-                setPadding(dp(PADDING_DP), dp(SPACE_DP), dp(PADDING_DP), dp(PADDING_DP))
+                setPadding(dp(PADDING_DP), dp(PADDING_DP), dp(PADDING_DP), dp(PADDING_DP))
             }
-        val evidence = text(content.evidence, size = SMALL_SP).apply { isVisible = false }
-        card.addView(header(content, evidence, actions.onWhy))
-        card.addView(text(messageText(content)))
-        card.addView(evidence)
+        card.addView(header(content))
+        card.addView(
+            text(messageText(content)),
+            LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = dp(SPACE_DP / 2) },
+        )
         card.addView(
             buttons(actions, cardColor),
             LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = dp(SPACE_DP) },
@@ -98,12 +94,8 @@ internal class BannerViews(
         }
     }
 
-    // One line: the icon, the title, and "Why?" at the end.
-    private fun header(
-        content: BannerContent,
-        evidence: View,
-        onWhy: () -> Unit,
-    ): View {
+    // One line: the icon and the title.
+    private fun header(content: BannerContent): View {
         val icon =
             ImageView(context).apply {
                 setImageResource(content.severity.icon)
@@ -115,7 +107,6 @@ internal class BannerViews(
             gravity = Gravity.CENTER_VERTICAL
             addView(icon, LinearLayout.LayoutParams(dp(ICON_DP), dp(ICON_DP)))
             addView(title, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
-            addView(whyLink(evidence, onWhy))
         }
     }
 
@@ -126,22 +117,6 @@ internal class BannerViews(
             setSpan(StyleSpan(Typeface.BOLD), range.first, range.last + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
     }
-
-    // "Why?" opens and closes the evidence line.
-    private fun whyLink(
-        evidence: View,
-        onWhy: () -> Unit,
-    ): View =
-        text(context.getString(R.string.banner_why), size = SMALL_SP).apply {
-            paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
-            minHeight = dp(BUTTON_DP)
-            gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(PADDING_DP), 0, 0, 0)
-            setOnClickListener {
-                evidence.isVisible = !evidence.isVisible
-                onWhy()
-            }
-        }
 
     // Two solid buttons at the end of the card: "Not a scam" in a darker shade, "Close" in white.
     private fun buttons(

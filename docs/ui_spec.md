@@ -70,9 +70,8 @@ The app has one screen. Everything under the header scrolls as one list.
 ## Warning banner
 
 - Banner at the top of the screen, slides down. Not a blocking dialog.
-- Card color by severity (red or amber), white text, warning icon.
-- Title, message in the selected language, brand name in bold.
-- A small "Why?" link that expands the evidence line (for example "BDO mentioned; link goes to bdo-bd0.cc").
-- Buttons: "Close" and "Not a scam".
+- A compact card in the severity color (red or amber) with white text: the warning icon and title on one line, then the message in the selected language with the brand name in bold.
+- Two solid buttons at the end: "Not a scam" (a darker shade of the card color, white text) and "Close" (white, text in the card color).
+- Only one banner is on screen at a time. A warning found meanwhile is shown after the first one closes.
 - Short vibration when it appears. Auto-hide after 15 seconds.
 - Every banner also creates a history entry.

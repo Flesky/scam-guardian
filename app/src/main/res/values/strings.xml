@@ -16,7 +16,6 @@
     <string name="history_empty">No warnings yet.</string>
     <string name="history_clear">Clear history</string>
     <string name="history_marked_not_scam">Marked not a scam</string>
-    <string name="banner_why">Why?</string>
     <string name="banner_close">Close</string>
     <string name="banner_not_scam">Not a scam</string>
     <string name="accessibility_service_description">Scam Guardian reads text on screen in selected apps to warn you about scams. Everything stays on your phone.</string>
