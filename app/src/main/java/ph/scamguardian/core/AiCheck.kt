@@ -14,10 +14,19 @@ class AiCheck(
 ) {
     // Anchors are embedded once, here.
     private val scamAnchors = anchors.scam.map(::embedAnchor)
-    private val safeAnchors = if (scamAnchors.isEmpty()) emptyList() else anchors.safe.map(::embedAnchor)
+    private val safeAnchors =
+        (if (scamAnchors.isEmpty()) emptyList() else anchors.safe.map(::embedAnchor)).toMutableList()
 
     /** False when there are no scam anchors; the AI check is then skipped. */
     val enabled: Boolean get() = scamAnchors.isNotEmpty()
+
+    /**
+     * Adds [text] to the safe anchors, for a message the user marked "Not a scam". This calls the model
+     * once. It does nothing when the AI check is skipped.
+     */
+    fun addSafeAnchor(text: String) {
+        if (enabled) safeAnchors += embedAnchor(text)
+    }
 
     /** The text that is embedded: cleaned, with every link replaced by "[link]". */
     fun embeddingText(text: String): String =

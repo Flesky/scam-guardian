@@ -54,14 +54,44 @@ class ScamPipeline(
                 size > CACHE_SIZE
         }
 
+    // Texts the user marked "Not a scam". Unlike the cache, these are never dropped.
+    private val markedSafe = HashSet<String>()
+
     @Synchronized
     fun check(text: String): ScamWarning? {
-        val prepared = Sanitizer.prepare(text)
-        // The hosts are part of the key: two messages can clean to the same words yet link elsewhere.
-        val hosts = linkAnalyzer.analyze(prepared).joinToString(" ") { it.host }
-        val key = hash("${Sanitizer.clean(prepared)}\n$hosts")
-        if (key in cache) return cache[key]
-        return inspect(text).warning.also { cache[key] = it }
+        val key = keyOf(text)
+        return when (key) {
+            in markedSafe -> null
+            in cache -> cache[key]
+            else -> inspect(text).warning.also { cache[key] = it }
+        }
+    }
+
+    /**
+     * Checks [text] only if it is new, and reports each step like [inspect]. Returns null when the text
+     * is already in the cache or was marked "Not a scam", so a text is reported at most once.
+     */
+    @Synchronized
+    fun inspectNew(text: String): PipelineReport? {
+        val key = keyOf(text)
+        if (key in markedSafe || key in cache) return null
+        return inspect(text).also { cache[key] = it.warning }
+    }
+
+    /** Removes [text] from the cache, so [inspectNew] reports it again the next time it is seen. */
+    @Synchronized
+    fun forget(text: String) {
+        cache.remove(keyOf(text))
+    }
+
+    /**
+     * The user said [text] is not a scam: it never gives a warning again, and it becomes a safe anchor
+     * so similar messages score as safe in the AI check. This calls the model once.
+     */
+    @Synchronized
+    fun markSafe(text: String) {
+        markedSafe += keyOf(text)
+        aiCheck.addSafeAnchor(text)
     }
 
     /** Checks [text] without the cache and reports each step: the rule, the AI gate and the AI scores. */
@@ -94,6 +124,13 @@ class ScamPipeline(
             brand = match.brand,
             evidence = match.evidence,
         )
+
+    private fun keyOf(text: String): String {
+        val prepared = Sanitizer.prepare(text)
+        // The hosts are part of the key: two messages can clean to the same words yet link elsewhere.
+        val hosts = linkAnalyzer.analyze(prepared).joinToString(" ") { it.host }
+        return hash("${Sanitizer.clean(prepared)}\n$hosts")
+    }
 
     private fun hash(text: String): String =
         MessageDigest.getInstance("SHA-256").digest(text.toByteArray()).joinToString("") { "%02x".format(it) }

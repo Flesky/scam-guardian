@@ -217,6 +217,77 @@ class ScamPipelineTest {
     }
 
     @Test
+    fun inspectNew_reportsATextOnlyTheFirstTime() {
+        val embedder = FakeEmbedder()
+        val pipeline = ScamPipeline(Fixtures.data(anchorsJson), embedder)
+
+        val first = pipeline.inspectNew(anchors.scam.first())
+        val callsAfterFirst = embedder.calls
+
+        assertEquals(WarningType.AI_SCAM, first?.warning?.type)
+        assertNull(pipeline.inspectNew(anchors.scam.first()))
+        assertNull(pipeline.inspectNew("  " + anchors.scam.first() + " 🙂"))
+        assertEquals(callsAfterFirst, embedder.calls)
+        assertEquals(WarningType.AI_SCAM, pipeline.check(anchors.scam.first())?.type)
+    }
+
+    @Test
+    fun inspectNew_textWithoutAWarning_isAlsoReportedOnce() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+
+        assertNull(checkNotNull(pipeline.inspectNew("Kain na tayo")).warning)
+        assertNull(pipeline.inspectNew("Kain na tayo"))
+    }
+
+    @Test
+    fun inspectNew_sameWordsWithAnotherLink_isANewText() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+
+        assertEquals(WarningType.FAKE_LINK, pipeline.inspectNew("GCash verify https://gcash-win.cc")?.warning?.type)
+        assertNull(checkNotNull(pipeline.inspectNew("GCash verify https://gcash.com")).warning)
+    }
+
+    @Test
+    fun forget_letsInspectNewReportTheTextAgain() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+        val text = "[BDO] Last chance to redeem. Click now:https://bdo-bd0.cc/ph"
+        pipeline.inspectNew(text)
+
+        pipeline.forget(text)
+
+        assertEquals(WarningType.FAKE_LINK, pipeline.inspectNew(text)?.warning?.type)
+        assertNull(pipeline.inspectNew(text))
+    }
+
+    @Test
+    fun markSafe_ruleWarning_neverWarnsForThatTextAgain() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+        val text = "[BDO] Last chance to redeem. Click now:https://bdo-bd0.cc/ph"
+        assertEquals(WarningType.FAKE_LINK, pipeline.check(text)?.type)
+
+        pipeline.markSafe(text)
+        pipeline.forget(text)
+
+        assertNull(pipeline.check(text))
+        assertNull(pipeline.inspectNew(text))
+        assertEquals(WarningType.FAKE_LINK, pipeline.check("[BDO] Click now:https://bdo-bd0.cc/ph")?.type)
+    }
+
+    @Test
+    fun markSafe_aiWarning_addsASafeAnchor() {
+        val pipeline = ScamPipeline(Fixtures.data(anchorsJson), FakeEmbedder())
+        val text = anchors.scam.first()
+        assertEquals(WarningType.AI_SCAM, pipeline.inspect(text).warning?.type)
+
+        pipeline.markSafe(text)
+
+        val report = pipeline.inspect(text)
+        assertNull(report.warning)
+        assertEquals(1f, checkNotNull(report.aiScore).safe, 1e-5f)
+        assertEquals(WarningType.AI_SCAM, pipeline.inspect(anchors.scam.last()).warning?.type)
+    }
+
+    @Test
     fun check_rulesAreTriedInOrder() {
         val pipeline = Fixtures.rulesOnlyPipeline()
         val cases =

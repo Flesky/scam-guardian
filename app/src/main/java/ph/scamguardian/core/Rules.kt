@@ -1,12 +1,26 @@
 package ph.scamguardian.core
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+/** [key] is the name of the type in warnings.json and in the saved history. */
+@Serializable
 enum class WarningType(
     val key: String,
 ) {
+    @SerialName("fake_link")
     FAKE_LINK("fake_link"),
+
+    @SerialName("otp_request")
     OTP_REQUEST("otp_request"),
+
+    @SerialName("risky_link")
     RISKY_LINK("risky_link"),
+
+    @SerialName("money_request")
     MONEY_REQUEST("money_request"),
+
+    @SerialName("ai_scam")
     AI_SCAM("ai_scam"),
 }
 

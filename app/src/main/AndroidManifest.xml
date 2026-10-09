@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- No INTERNET permission: all inference runs on-device. -->
+    <!-- For the short vibration when a warning banner appears. -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name=".ScamGuardianApp"
         android:allowBackup="true"

@@ -75,6 +75,21 @@ class WarningCatalog(
             .inLanguage(language)
             .replace(BRAND_PLACEHOLDER, brand.orEmpty())
 
+    /** Where [brand] is in the text of [message], so the UI can show it in bold. Null when it is not there. */
+    fun brandRange(
+        type: WarningType,
+        language: Language,
+        brand: String?,
+    ): IntRange? {
+        val start =
+            texts
+                .getValue(type)
+                .message
+                .inLanguage(language)
+                .indexOf(BRAND_PLACEHOLDER)
+        return if (brand.isNullOrEmpty() || start < 0) null else start until start + brand.length
+    }
+
     companion object {
         const val BRAND_PLACEHOLDER = "{brand}"
     }

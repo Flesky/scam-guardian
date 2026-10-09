@@ -13,6 +13,11 @@
     <string name="privacy_line">Uses local engine only. Not connected to the internet.</string>
     <string name="history_title">History</string>
     <string name="history_empty">No warnings yet.</string>
+    <string name="history_clear">Clear history</string>
+    <string name="history_marked_not_scam">Marked not a scam</string>
+    <string name="banner_why">Why?</string>
+    <string name="banner_close">Close</string>
+    <string name="banner_not_scam">Not a scam</string>
     <string name="test_message_title">Test a message</string>
     <string name="test_message_back">Back</string>
     <string name="test_message_hint">Paste or type a message</string>

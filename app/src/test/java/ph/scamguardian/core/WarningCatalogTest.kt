@@ -3,6 +3,7 @@ package ph.scamguardian.core
 import kotlinx.serialization.SerializationException
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
 import org.junit.Test
 
@@ -41,6 +42,23 @@ class WarningCatalogTest {
             "Not a real link of BDO. Do not give your OTP or personal info.",
             catalog.message(WarningType.FAKE_LINK, Language.ENGLISH, "BDO"),
         )
+    }
+
+    @Test
+    fun brandRange_pointsAtTheBrandInTheMessage() {
+        Language.entries.forEach { language ->
+            val message = catalog.message(WarningType.FAKE_LINK, language, "BDO Unibank")
+            val range = checkNotNull(catalog.brandRange(WarningType.FAKE_LINK, language, "BDO Unibank"))
+
+            assertEquals("BDO Unibank", message.substring(range))
+        }
+    }
+
+    @Test
+    fun brandRange_withoutABrandOrAPlaceholder_isNull() {
+        assertNull(catalog.brandRange(WarningType.FAKE_LINK, Language.ENGLISH, null))
+        assertNull(catalog.brandRange(WarningType.FAKE_LINK, Language.ENGLISH, ""))
+        assertNull(catalog.brandRange(WarningType.OTP_REQUEST, Language.ENGLISH, "BDO"))
     }
 
     @Test

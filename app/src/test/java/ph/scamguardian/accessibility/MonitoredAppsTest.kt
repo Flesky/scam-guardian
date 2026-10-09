@@ -20,7 +20,7 @@ class MonitoredAppsTest {
     fun serviceConfig_readsWindowContentAndIsNotAnAccessibilityTool() {
         val config = File("src/main/res/xml/scam_accessibility_service.xml").readText()
 
-        assertTrue("typeWindowContentChanged|typeWindowStateChanged" in config)
+        assertTrue("typeWindowContentChanged|typeWindowStateChanged|typeViewScrolled" in config)
         assertTrue("""android:canRetrieveWindowContent="true"""" in config)
         assertTrue("""android:isAccessibilityTool="false"""" in config)
     }
@@ -33,5 +33,13 @@ class MonitoredAppsTest {
         assertEquals(AppKind.FEED, MonitoredApps.kindOf("com.facebook.katana"))
         assertNull(MonitoredApps.kindOf("ph.scamguardian"))
         assertTrue(MonitoredApps.chat.intersect(MonitoredApps.feed).isEmpty())
+    }
+
+    @Test
+    fun nameOf_givesTheAppNameForEveryMonitoredApp() {
+        assertEquals("Messenger", MonitoredApps.nameOf("com.facebook.orca"))
+        assertEquals("Chrome", MonitoredApps.nameOf("com.android.chrome"))
+        assertEquals("ph.scamguardian", MonitoredApps.nameOf("ph.scamguardian"))
+        (MonitoredApps.chat + MonitoredApps.feed).forEach { assertTrue(it, MonitoredApps.nameOf(it) != it) }
     }
 }

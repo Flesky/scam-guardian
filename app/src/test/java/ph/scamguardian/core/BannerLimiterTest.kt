@@ -1,0 +1,46 @@
+package ph.scamguardian.core
+
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
+class BannerLimiterTest {
+    @Test
+    fun tryShow_allowsOneBannerPer30SecondsPerApp() {
+        val limiter = BannerLimiter()
+
+        assertTrue(limiter.tryShow("com.whatsapp", 1_000))
+        assertFalse(limiter.tryShow("com.whatsapp", 1_001))
+        assertFalse(limiter.tryShow("com.whatsapp", 30_999))
+        assertTrue(limiter.tryShow("com.whatsapp", 31_000))
+        assertFalse(limiter.tryShow("com.whatsapp", 60_999))
+    }
+
+    @Test
+    fun tryShow_countsEachAppOnItsOwn() {
+        val limiter = BannerLimiter()
+
+        assertTrue(limiter.tryShow("com.whatsapp", 1_000))
+        assertTrue(limiter.tryShow("com.viber.voip", 1_001))
+        assertFalse(limiter.tryShow("com.viber.voip", 2_000))
+    }
+
+    @Test
+    fun tryShow_aRefusedBannerDoesNotRestartTheWait() {
+        val limiter = BannerLimiter(intervalMs = 100)
+
+        assertTrue(limiter.tryShow("app", 0))
+        assertFalse(limiter.tryShow("app", 99))
+        assertTrue(limiter.tryShow("app", 100))
+    }
+
+    @Test
+    fun isOpen_doesNotUseUpTheTurn() {
+        val limiter = BannerLimiter(intervalMs = 100)
+
+        assertTrue(limiter.isOpen("app", 0))
+        assertTrue(limiter.tryShow("app", 0))
+        assertFalse(limiter.isOpen("app", 50))
+        assertTrue(limiter.isOpen("app", 100))
+    }
+}

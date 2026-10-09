@@ -68,6 +68,30 @@ class AiCheckTest {
     }
 
     @Test
+    fun addSafeAnchor_makesAScamLikeMessageSafe() {
+        val check = aiCheck()
+        val text = anchors.scam.first()
+        val callsBefore = embedder.calls
+
+        check.addSafeAnchor(text)
+
+        val score = checkNotNull(check.score(text))
+        assertEquals(callsBefore + 2, embedder.calls)
+        assertEquals(1f, score.safe, TOLERANCE)
+        assertFalse(check.isScam(score))
+        assertTrue(check.isScam(checkNotNull(check.score(anchors.scam.last()))))
+    }
+
+    @Test
+    fun addSafeAnchor_withoutScamAnchors_doesNotCallTheModel() {
+        val check = aiCheck(Anchors(scam = emptyList(), safe = anchors.safe))
+
+        check.addSafeAnchor("Nanalo ka ng 50,000 pesos")
+
+        assertEquals(0, embedder.calls)
+    }
+
+    @Test
     fun embeddingText_replacesLinksWithAPlaceholder() {
         assertEquals("Click now: [link]", aiCheck().embeddingText("Click  now:https://bdo-bd0.cc/ph 🙂"))
     }

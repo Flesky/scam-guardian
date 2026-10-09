@@ -18,6 +18,7 @@ import ph.scamguardian.core.ScamPipeline
 import ph.scamguardian.core.WarningCatalog
 import ph.scamguardian.core.parseWarnings
 import ph.scamguardian.embedding.LiteRtEmbedder
+import ph.scamguardian.storage.SafeTextStore
 import java.io.File
 import java.io.IOException
 
@@ -25,13 +26,17 @@ import java.io.IOException
  * The one app-wide owner of the embedder, the data files from assets and the scam pipeline.
  *
  * Nothing is loaded until [start] or [pipeline] is first called. Loading happens off the main thread:
- * the model first, then the pipeline, whose anchors are embedded once as it is created.
+ * the model first, then the pipeline, whose anchors are embedded once as it is created, then the
+ * messages the user marked "Not a scam" earlier, which become safe anchors too.
  */
 class ScamEngine(
     context: Context,
 ) {
     private val appContext = context.applicationContext
     private val embedder = LiteRtEmbedder(File(appContext.getExternalFilesDir(null), MODEL_PATH).path)
+
+    // In the no-backup folder: the messages the user marked "Not a scam" never leave this phone.
+    private val safeTexts = SafeTextStore(File(appContext.noBackupFilesDir, SAFE_TEXTS_FILE))
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val loading: Deferred<ScamPipeline> = scope.async(start = CoroutineStart.LAZY) { load() }
 
@@ -60,11 +65,22 @@ class ScamEngine(
         return withContext(embedder.dispatcher) { pipeline.inspect(text) }
     }
 
+    /**
+     * "Not a scam": saves [text] in app storage, then makes it a safe anchor on the model thread. From
+     * then on this text gives no warning, and similar messages score as safe in the AI check.
+     */
+    suspend fun markNotScam(text: String) {
+        withContext(Dispatchers.IO) { safeTexts.add(text) }
+        val pipeline = pipeline()
+        withContext(embedder.dispatcher) { pipeline.markSafe(text) }
+    }
+
     private fun load(): ScamPipeline =
         try {
             val loadMs = timeMs { embedder.load() }
             val timed = TimedEmbedder(embedder)
             val pipeline = ScamPipeline(readData(), timed)
+            savedSafeTexts().forEach(pipeline::markSafe)
             if (BuildConfig.DEBUG) logTimings(loadMs, anchorsMs = timed.totalMs, anchors = timed.calls)
             loadedPipeline = pipeline
             pipeline
@@ -74,6 +90,15 @@ class ScamEngine(
         } catch (e: IOException) {
             Log.e(TAG, "Could not read the data files", e)
             throw e
+        }
+
+    // The messages the user marked "Not a scam" earlier. The engine still loads when they cannot be read.
+    private fun savedSafeTexts(): List<String> =
+        try {
+            safeTexts.texts()
+        } catch (e: IOException) {
+            Log.e(TAG, "Could not read the saved safe messages", e)
+            emptyList()
         }
 
     private fun readData() =
@@ -134,5 +159,6 @@ class ScamEngine(
         const val MODEL_PATH = "models/embeddinggemma-2-740m.litertlm"
         const val DEBUG_TEXT = "Hello world"
         const val WARNINGS_FILE = "warnings.json"
+        const val SAFE_TEXTS_FILE = "safe_anchors.json"
     }
 }

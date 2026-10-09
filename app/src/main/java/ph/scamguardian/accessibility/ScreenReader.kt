@@ -3,6 +3,7 @@ package ph.scamguardian.accessibility
 import android.graphics.Rect
 import android.view.accessibility.AccessibilityNodeInfo
 import ph.scamguardian.core.ScreenNode
+import ph.scamguardian.core.ScreenRect
 
 /** Reads the visible, non-editable text nodes of a window. */
 object ScreenReader {
@@ -22,7 +23,8 @@ object ScreenReader {
             if (node.isVisibleToUser) {
                 textOf(node)?.let { text ->
                     node.getBoundsInScreen(bounds)
-                    result += ScreenNode(text, bounds.centerX(), containerId)
+                    val place = ScreenRect(bounds.left, bounds.top, bounds.right, bounds.bottom)
+                    result += ScreenNode(text, bounds.centerX(), containerId, place)
                 }
                 // Pushed in reverse so nodes come out in reading order.
                 pending.addAll(childrenOf(node).reversed().map { it to id })

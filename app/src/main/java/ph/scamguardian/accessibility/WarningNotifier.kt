@@ -1,0 +1,91 @@
+package ph.scamguardian.accessibility
+
+import android.accessibilityservice.AccessibilityService
+import android.os.SystemClock
+import androidx.compose.ui.graphics.toArgb
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import ph.scamguardian.ScamGuardianApp
+import ph.scamguardian.core.BannerLimiter
+import ph.scamguardian.core.HistoryEntry
+import ph.scamguardian.core.ScamWarning
+import ph.scamguardian.core.ScreenBlock
+import ph.scamguardian.settings.LanguagePreferences
+import ph.scamguardian.theme.color
+import java.util.UUID
+
+/**
+ * Tells the user about a warning: the banner, its history entry, and what "Not a scam" does.
+ * An app gets at most one banner every 30 seconds. Use it on the main thread only.
+ */
+internal class WarningNotifier(
+    service: AccessibilityService,
+    private val scope: CoroutineScope,
+) {
+    private val app = service.application as ScamGuardianApp
+    private val languages = LanguagePreferences(service)
+    private val highlight = MessageHighlight(service)
+
+    // The outline goes away with the banner.
+    private val banner = WarningBanner(service, onDismiss = { guarded("remove the outline") { highlight.dismiss() } })
+    private val limiter = BannerLimiter()
+
+    // History writes run one at a time and in order, off the main thread.
+    private val files = Dispatchers.IO.limitedParallelism(1)
+
+    /** False while [packageName] had a banner less than 30 seconds ago. */
+    fun mayShow(packageName: String): Boolean = limiter.isOpen(packageName, SystemClock.elapsedRealtime())
+
+    /**
+     * Shows the banner for [warning], found in the text [block] of the app [packageName], and adds the
+     * history entry. Returns false, and does nothing, when this app may not show a banner yet.
+     */
+    fun show(
+        packageName: String,
+        block: ScreenBlock,
+        warning: ScamWarning,
+    ): Boolean {
+        if (!limiter.tryShow(packageName, SystemClock.elapsedRealtime())) return false
+        // Read each time: the user may have changed the language since the last banner.
+        val language = languages.language
+        val catalog = app.engine.warnings
+        val entry =
+            HistoryEntry(
+                id = UUID.randomUUID().toString(),
+                type = warning.type,
+                severity = warning.severity,
+                brand = warning.brand,
+                app = MonitoredApps.nameOf(packageName),
+                timeMs = System.currentTimeMillis(),
+                text = block.text,
+            )
+        val content =
+            BannerContent(
+                severity = warning.severity,
+                title = catalog.title(warning.type),
+                message = catalog.message(warning.type, language, warning.brand),
+                brandRange = catalog.brandRange(warning.type, language, warning.brand),
+                evidence = warning.evidence,
+            )
+        banner.show(content, onNotScam = { markNotScam(block.text, entry.id) })
+        block.bounds?.let { highlight.show(it, warning.severity.color.toArgb()) }
+        scope.launch(files) { guarded("save the history entry") { app.history.add(entry) } }
+        return true
+    }
+
+    fun dismiss() = banner.dismiss()
+
+    /** The screen scrolled or changed window: the outline no longer sits on the message. */
+    fun hideHighlight() = highlight.dismiss()
+
+    // "Not a scam": the banner closes, the history entry is marked, and the text becomes a saved safe anchor.
+    private fun markNotScam(
+        block: String,
+        entryId: String,
+    ) {
+        banner.dismiss()
+        scope.launch(files) { guarded("mark the history entry") { app.history.markNotScam(entryId) } }
+        scope.launch { guarded("save a safe message") { app.engine.markNotScam(block) } }
+    }
+}

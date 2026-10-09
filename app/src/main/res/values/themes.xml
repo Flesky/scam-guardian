@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.ScamGuardian" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- The system animates the banner window, so it slides even while the app is in the background. -->
+    <style name="Animation.ScamGuardian.Banner" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/banner_slide_down</item>
+        <item name="android:windowExitAnimation">@anim/banner_slide_up</item>
+    </style>
 </resources>
