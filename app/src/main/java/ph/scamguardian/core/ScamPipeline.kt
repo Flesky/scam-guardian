@@ -107,7 +107,9 @@ class ScamPipeline(
         val analysis = analyzer.analyze(prepared)
         val rule = rules.evaluate(analysis)
         val gate = prefilter.explain(analysis)
-        val runsAi = rule == null && gate.passes && aiCheck.enabled
+        // A few words are too little to compare with the anchors: short text is left to the rules.
+        val longEnough = analysis.tokens.size >= AiCheck.MIN_WORDS
+        val runsAi = rule == null && gate.passes && longEnough && aiCheck.enabled
         val score = if (runsAi) aiCheck.score(prepared) else null
         val match = rule ?: score?.takeIf(aiCheck::isScam)?.let(::aiMatch)
         return PipelineReport(

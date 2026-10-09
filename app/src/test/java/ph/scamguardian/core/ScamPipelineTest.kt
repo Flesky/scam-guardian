@@ -3,6 +3,7 @@ package ph.scamguardian.core
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ScamPipelineTest {
@@ -297,6 +298,27 @@ class ScamPipelineTest {
         pipeline.forgetAll()
 
         assertEquals(WarningType.FAKE_LINK, pipeline.inspectNew(text)?.warning?.type)
+    }
+
+    @Test
+    fun inspect_shortMessage_isNotGivenToTheAi() {
+        val shortScam = "Earn exclusive rewards."
+        val longScam = "Earn exclusive rewards when you join now"
+        val shortAnchors = """{ "scam": ["$shortScam", "$longScam"], "safe": [] }"""
+        val embedder = FakeEmbedder()
+        val pipeline = ScamPipeline(Fixtures.data(shortAnchors), embedder)
+        val callsForAnchors = embedder.calls
+
+        // Even the exact text of a scam anchor: three words are too few to judge by similarity.
+        val short = pipeline.inspect(shortScam)
+
+        assertTrue(short.gate.passes)
+        assertNull(short.aiScore)
+        assertNull(short.warning)
+        assertEquals(0, short.modelCalls)
+        assertEquals(callsForAnchors, embedder.calls)
+        // Six words are enough.
+        assertEquals(WarningType.AI_SCAM, pipeline.inspect(longScam).warning?.type)
     }
 
     @Test

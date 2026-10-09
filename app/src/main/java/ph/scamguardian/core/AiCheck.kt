@@ -68,6 +68,9 @@ class AiCheck(
 
     companion object {
         const val DEFAULT_THRESHOLD = 0.6f
+
+        /** Messages with fewer words than this are not given to the AI check. */
+        const val MIN_WORDS = 6
         const val CHUNK_LENGTH = 1000
         const val MAX_CHUNKS = 4
         private const val CHUNK_STEP = 800
