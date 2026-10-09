@@ -68,14 +68,56 @@ class AiCheckTest {
     }
 
     @Test
-    fun embeddingText_replacesLinksAndLimitsLength() {
-        val check = aiCheck()
+    fun embeddingText_replacesLinksWithAPlaceholder() {
+        assertEquals("Click now: [link]", aiCheck().embeddingText("Click  now:https://bdo-bd0.cc/ph 🙂"))
+    }
 
-        assertEquals("Click now: [link]", check.embeddingText("Click  now:https://bdo-bd0.cc/ph 🙂"))
-        assertEquals(1000, check.embeddingText("padala ".repeat(500)).length)
+    @Test
+    fun chunks_shortText_isOnePiece() {
+        assertEquals(listOf("padala na"), aiCheck().chunks("padala  na"))
+    }
+
+    @Test
+    fun chunks_longText_overlapAndAlwaysIncludeTheEnd() {
+        val check = aiCheck()
+        val text = (1..700).joinToString(" ") { "word$it" }
+        val full = check.embeddingText(text)
+
+        val chunks = check.chunks(text)
+
+        assertEquals(AiCheck.MAX_CHUNKS, chunks.size)
+        assertTrue(chunks.all { it.length == AiCheck.CHUNK_LENGTH })
+        assertEquals(full.take(AiCheck.CHUNK_LENGTH), chunks.first())
+        assertEquals(full.takeLast(AiCheck.CHUNK_LENGTH), chunks.last())
+        assertEquals(chunks[0].takeLast(200), chunks[1].take(200))
+    }
+
+    @Test
+    fun score_scamAfterLongPadding_isStillFound() {
+        val padding = "Kumusta ka na, matagal na tayong hindi nagkita. ".repeat(30)
+        val check = AiCheck(MarkerEmbedder("remote access"), Fixtures.linkAnalyzer(), markerAnchors)
+
+        assertTrue(padding.length > AiCheck.CHUNK_LENGTH)
+        assertTrue(check.isScam(checkNotNull(check.score(padding + "Install the remote access app now."))))
+        assertFalse(check.isScam(checkNotNull(check.score(padding + "Ingat ka palagi."))))
+    }
+
+    /** Points one way for text that contains [marker] and the other way for everything else. */
+    private class MarkerEmbedder(
+        private val marker: String,
+    ) : Embedder {
+        override fun embed(text: String): FloatArray =
+            if (marker in
+                text
+            ) {
+                floatArrayOf(1f, 0f)
+            } else {
+                floatArrayOf(0f, 1f)
+            }
     }
 
     private companion object {
         const val TOLERANCE = 1e-5f
+        val markerAnchors = Anchors(scam = listOf("Install this remote access app"), safe = listOf("Kumusta ka"))
     }
 }

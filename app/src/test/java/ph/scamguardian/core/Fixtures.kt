@@ -37,7 +37,7 @@ object Fixtures {
             anchors = anchors,
         ).parse()
 
-    fun normalizer(): Normalizer = Normalizer(data().shortcuts)
+    fun normalizer(): Normalizer = Normalizer(data().shortcuts, Confusables())
 
     fun linkAnalyzer(): LinkAnalyzer = LinkAnalyzer(data().urlRules, data().brands)
 
@@ -45,7 +45,7 @@ object Fixtures {
 
     fun analyzer(): MessageAnalyzer {
         val normalizer = normalizer()
-        return MessageAnalyzer(data(), normalizer, KeywordMatcher(normalizer), linkAnalyzer())
+        return MessageAnalyzer(data(), normalizer, KeywordMatcher(normalizer), linkAnalyzer(), Confusables())
     }
 
     /** A pipeline without anchors, so only the rules can warn. */

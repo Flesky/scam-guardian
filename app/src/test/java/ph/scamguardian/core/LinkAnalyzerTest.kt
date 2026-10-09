@@ -35,8 +35,7 @@ class LinkAnalyzerTest {
                     Expected("smart.txlgv.icu", "txlgv.icu", riskyTld = true),
                 "favorite gift: https://globece-ph.com" to Expected("globece-ph.com", "globece-ph.com"),
                 "Good Luck: tableph111.com" to Expected("tableph111.com", "tableph111.com", numericHost = true),
-                "Good Luck: luckysaya.com" to Expected("luckysaya.com", "luckysaya.com"),
-                "Good luck and enjoy: tbplus99.com" to Expected("tbplus99.com", "tbplus99.com"),
+                "Order na dito: tindahan24.com" to Expected("tindahan24.com", "tindahan24.com"),
                 "handog na P888: www005.eightvvvipb.mx" to
                     Expected("www005.eightvvvipb.mx", "eightvvvipb.mx", riskyTld = true, numericHost = true),
                 "initial bonus. https://evojili.bio/l26" to Expected("evojili.bio", "evojili.bio", riskyTld = true),
@@ -95,8 +94,57 @@ class LinkAnalyzerTest {
     }
 
     @Test
+    fun analyze_readsTheHostABrowserWouldOpen() {
+        val gcash = Fixtures.data().brands.first { it.name == "GCash" }
+        val genuine =
+            analyzer
+                .analyze(
+                    Sanitizer.prepare("GCash verify https://gcash.com/login"),
+                    listOf(gcash),
+                ).single()
+        val splitByDot =
+            analyzer.analyze(
+                Sanitizer.prepare("GCash verify https://gca\u3002sh.com/login"),
+                listOf(gcash),
+            )
+        val splitByEmoji = analyzer.analyze(Sanitizer.prepare("GCash verify https://gca🙂sh.com/login"), listOf(gcash))
+
+        assertTrue(genuine.official)
+        assertEquals("gca.sh.com", splitByDot.single().host)
+        assertTrue(splitByDot.none { it.official })
+        assertTrue(splitByEmoji.none { it.host == "gcash.com" || it.official })
+    }
+
+    @Test
+    fun analyze_decodesPunycodeForTheVisibleHost() {
+        val link = analyzer.analyze("Verify at https://xn--gcsh-63d.com/login").single()
+
+        assertEquals("xn--gcsh-63d.com", link.host)
+        assertEquals("gc\u0430sh.com", link.unicodeHost)
+        assertEquals(emptyList<String>(), link.owners)
+    }
+
+    @Test
+    fun analyze_flagsIpAddressesInEverySpelling() {
+        val cases =
+            listOf(
+                "Claim your prize at http://11.22.33.44",
+                "Claim your prize at http://111.22.33.44/win",
+                "Claim your prize at 11.22.33.44/win",
+                "Claim your prize at http://0x0b.0x16.0x21.0x2c",
+                "Claim your prize at http://185999660/",
+            )
+
+        cases.forEach { text ->
+            val link = analyzer.analyze(text).single()
+            assertTrue(text, link.numericHost)
+            assertEquals(text, emptyList<String>(), link.owners)
+        }
+    }
+
+    @Test
     fun replaceLinks_swapsEveryLinkForThePlaceholder() {
-        val text = "Click now:https://bdo-bd0.cc/ph or luckysaya.com"
+        val text = "Click now:https://bdo-bd0.cc/ph or tindahan24.com"
 
         assertEquals("Click now: [link] or [link]", analyzer.replaceLinks(text, "[link]"))
     }

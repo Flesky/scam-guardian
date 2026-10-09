@@ -93,6 +93,65 @@ class ScamPipelineTest {
     }
 
     @Test
+    fun check_hostSplitByAUnicodeDot_isNotTheOfficialDomain() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+
+        assertNull(pipeline.check("GCash verify https://gcash.com/login"))
+        assertEquals(WarningType.FAKE_LINK, pipeline.check("GCash verify https://gca\u3002sh.com/login")?.type)
+        assertEquals(WarningType.FAKE_LINK, pipeline.check("GCash verify https://gca🙂sh.com/login")?.type)
+    }
+
+    @Test
+    fun check_rulesRunEvenWhenThePrefilterWouldSkipTheMessage() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+        val cases =
+            mapOf(
+                "Please give passcode" to WarningType.OTP_REQUEST,
+                "Please tell me the one time password" to WarningType.OTP_REQUEST,
+                "Please s\u0435nd your \u041ETP to me" to WarningType.OTP_REQUEST,
+                "Visit https://gcash-win.cc" to WarningType.FAKE_LINK,
+            )
+
+        cases.forEach { (text, expected) -> assertEquals(text, expected, pipeline.check(text)?.type) }
+    }
+
+    @Test
+    fun check_punycodeLookAlikeHost_isAFakeLink() {
+        val warning = Fixtures.rulesOnlyPipeline().check("Verify your account at https://xn--gcsh-63d.com/login")
+
+        assertEquals(WarningType.FAKE_LINK, warning?.type)
+        assertEquals("GCash name used in the link; link goes to xn--gcsh-63d.com", warning?.evidence)
+    }
+
+    @Test
+    fun check_moneyRequestWithAnUnrelatedLink_stillWarns() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+
+        assertEquals(WarningType.MONEY_REQUEST, pipeline.check("Pahiram naman kailangan ko agad")?.type)
+        assertEquals(
+            WarningType.MONEY_REQUEST,
+            pipeline.check("Pahiram naman kailangan ko agad https://example.com")?.type,
+        )
+    }
+
+    @Test
+    fun check_ipAddressLink_isARiskyLink() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+
+        assertEquals(WarningType.RISKY_LINK, pipeline.check("Claim your prize at http://11.22.33.44")?.type)
+        assertEquals(WarningType.RISKY_LINK, pipeline.check("Claim your prize at 11.22.33.44/win")?.type)
+    }
+
+    @Test
+    fun check_riskyLink_needsAGeneralKeywordToo() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+
+        assertNull(pipeline.check("Tingnan mo ito https://bit.ly/abc"))
+        assertNull(pipeline.check("Ito yung picture natin kahapon: tableph111.com"))
+        assertEquals(WarningType.RISKY_LINK, pipeline.check("Tingnan mo ito, may prize https://bit.ly/abc")?.type)
+    }
+
+    @Test
     fun check_rulesAreTriedInOrder() {
         val pipeline = Fixtures.rulesOnlyPipeline()
         val cases =

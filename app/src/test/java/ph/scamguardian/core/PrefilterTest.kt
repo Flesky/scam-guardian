@@ -9,7 +9,7 @@ class PrefilterTest {
     private val analyzer = Fixtures.analyzer()
     private val prefilter = Prefilter()
 
-    private fun passes(text: String): Boolean = prefilter.passes(analyzer.analyze(Sanitizer.sanitize(text)))
+    private fun passes(text: String): Boolean = prefilter.passes(analyzer.analyze(Sanitizer.prepare(text)))
 
     @Test
     fun passes_messagesWithScamSignals() {

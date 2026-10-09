@@ -15,6 +15,8 @@ class SanitizerTest {
                 "  line one\n\nline   two\t" to "line one line two",
                 "₱10,000 or \$5 @juan 50% (promo) a-b" to "₱10,000 or \$5 @juan 50% (promo) a-b",
                 "Don’t share “this”" to "Don't share \"this\"",
+                "pa🙂da★la" to "padala",
+                "gca\u3002sh.com" to "gca.sh.com",
             )
 
         cases.forEach { (input, expected) -> assertEquals(input, expected, Sanitizer.sanitize(input)) }

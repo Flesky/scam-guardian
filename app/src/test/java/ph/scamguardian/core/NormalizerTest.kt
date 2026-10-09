@@ -22,6 +22,8 @@ class NormalizerTest {
                 "SSS www" to listOf("sss", "www"),
                 "aq pls d2 nmn" to listOf("ako", "please", "dito", "naman"),
                 "mag-login, now!" to listOf("mag", "login", "now"),
+                "s\u0435nd your \u041ETP" to listOf("send", "your", "otp"),
+                "gc\u0430sh" to listOf("gcash"),
             )
 
         cases.forEach { (input, expected) -> assertEquals(input, expected, normalizer.tokens(input)) }

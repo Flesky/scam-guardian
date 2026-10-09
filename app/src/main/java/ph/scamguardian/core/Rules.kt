@@ -31,7 +31,7 @@ class Rules(
         val link = analysis.links.firstOrNull { !it.official }
         if (link == null || analysis.brands.isEmpty()) return null
         val match =
-            analysis.brands.firstOrNull { link.host in it.hosts }
+            analysis.brands.firstOrNull { link.unicodeHost in it.hosts }
                 ?: analysis.brands.firstOrNull { it.inText }
                 ?: analysis.brands.first()
         val source = if (match.inText) "${match.brand.name} mentioned" else "${match.brand.name} name used in the link"
@@ -71,10 +71,10 @@ class Rules(
     private fun moneyRequest(analysis: MessageAnalysis): RuleMatch? {
         val asks = matcher.match(analysis.tokens, MONEY_WORDS)
         val urgency = matcher.match(analysis.tokens, URGENCY_WORDS)
-        if (analysis.links.isNotEmpty() || asks.isEmpty() || urgency.isEmpty()) return null
+        if (asks.isEmpty() || urgency.isEmpty()) return null
         return RuleMatch(
             WarningType.MONEY_REQUEST,
-            "Asks for money (${words(asks)}) and says it is urgent (${words(urgency)}); no link",
+            "Asks for money (${words(asks)}) and says it is urgent (${words(urgency)})",
         )
     }
 
@@ -82,25 +82,25 @@ class Rules(
     private fun words(matches: List<KeywordMatch>): String =
         matches.distinctBy { it.tokens }.joinToString(", ") { it.keyword }
 
-    private companion object {
+    companion object {
         private const val CODE = "(?:otp|code|pin|password|passcode)"
-        val sentenceBreak = Regex("(?<=[.!?])\\s+")
+        private val sentenceBreak = Regex("(?<=[.!?])\\s+")
 
         // "Your OTP is 482913", "code: 482913", "482913 is your BDO OTP".
-        val codeDelivery =
+        private val codeDelivery =
             Regex(
                 "\\b$CODE\\b(?:\\s+(?:is|ay))?\\s*:?\\s*\\d{4,8}\\b|\\b\\d{4,8}\\s+is\\s+your\\b[^.]{0,30}\\b$CODE\\b",
             )
 
         // "Do not share this code", "Don't enter your OTP on any site", "Huwag ibigay ang code".
-        val codeWarning =
+        private val codeWarning =
             Regex(
                 "\\b(?:do not|don't|dont|never|huwag|wag)\\b[^.!?]{0,40}" +
                     "\\b(?:share|send|enter|give|forward|ibigay|ibahagi|i-share|ilagay|sabihin)\\b",
             )
-        val CODE_WORDS =
+        private val CODE_WORDS =
             listOf("otp", "code", "pin", "passcode", "verification code", "one time pin", "one time password")
-        val ASK_WORDS =
+        private val ASK_WORDS =
             listOf(
                 "send",
                 "isend",
@@ -115,7 +115,11 @@ class Rules(
                 "tell",
                 "sabihin",
             )
-        val MONEY_WORDS = listOf("padala", "pa-gcash", "pagcash", "pahiram", "send", "transfer", "utang")
-        val URGENCY_WORDS = listOf("urgent", "agad", "ngayon na", "emergency", "ospital", "hospital", "kailangan")
+        private val MONEY_WORDS = listOf("padala", "pa-gcash", "pagcash", "pahiram", "send", "transfer", "utang")
+        private val URGENCY_WORDS =
+            listOf("urgent", "agad", "ngayon na", "emergency", "ospital", "hospital", "kailangan")
+
+        /** Rule words that also send a message to the AI check. Asking words alone are too common. */
+        val SIGNAL_WORDS = CODE_WORDS + MONEY_WORDS + URGENCY_WORDS
     }
 }
