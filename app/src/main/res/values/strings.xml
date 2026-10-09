@@ -4,4 +4,10 @@
     <string name="toggle_label_off">OFF</string>
     <string name="toggle_state_on">On</string>
     <string name="toggle_state_off">Off</string>
+    <string name="test_message_title">Test a message</string>
+    <string name="test_message_back">Back</string>
+    <string name="test_message_hint">Paste or type a message</string>
+    <string name="test_message_check">Check</string>
+    <string name="test_message_loading">Loading model…</string>
+    <string name="test_message_checking">Checking…</string>
 </resources>

@@ -43,18 +43,32 @@ class MessageAnalyzer(
     }
 }
 
+/** Whether a message goes on to the AI check, and why. */
+data class GateResult(
+    val passes: Boolean,
+    val reasons: List<String>,
+)
+
 /** Cheap gate before the AI check: enough words, and something worth checking. The rules run without it. */
 class Prefilter(
     private val minTokens: Int = DEFAULT_MIN_TOKENS,
 ) {
-    fun passes(analysis: MessageAnalysis): Boolean =
-        analysis.tokens.size >= minTokens &&
-            (
-                analysis.links.isNotEmpty() ||
-                    analysis.money.isNotEmpty() ||
-                    analysis.general.isNotEmpty() ||
-                    analysis.ruleWords.isNotEmpty()
+    fun passes(analysis: MessageAnalysis): Boolean = explain(analysis).passes
+
+    fun explain(analysis: MessageAnalysis): GateResult {
+        val keywords = (analysis.general + analysis.ruleWords).distinctBy { it.tokens }.map { it.keyword }
+        val reasons =
+            listOfNotNull(
+                analysis.links.takeIf { it.isNotEmpty() }?.let { links -> "link: ${links.joinToString { it.host }}" },
+                analysis.money.takeIf { it.isNotEmpty() }?.let { "money: ${it.joinToString()}" },
+                keywords.takeIf { it.isNotEmpty() }?.let { "keywords: ${it.joinToString()}" },
             )
+        return when {
+            analysis.tokens.size < minTokens -> GateResult(false, listOf("fewer than $minTokens words"))
+            reasons.isEmpty() -> GateResult(false, listOf("no link, money or keywords"))
+            else -> GateResult(true, reasons)
+        }
+    }
 
     companion object {
         const val DEFAULT_MIN_TOKENS = 2

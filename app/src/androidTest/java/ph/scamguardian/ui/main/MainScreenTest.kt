@@ -14,7 +14,7 @@ class MainScreenTest {
 
     @Before
     fun setup() {
-        composeTestRule.setContent { MainScreen() }
+        composeTestRule.setContent { MainScreen(onTestMessageClick = {}) }
     }
 
     @Test

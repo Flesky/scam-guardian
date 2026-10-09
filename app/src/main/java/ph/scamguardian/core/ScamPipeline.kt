@@ -9,6 +9,20 @@ data class ScamWarning(
     val evidence: String,
 )
 
+/** What the pipeline did with one message, step by step. */
+data class PipelineReport(
+    val warning: ScamWarning?,
+    /** The rule that matched, or null. */
+    val rule: RuleMatch?,
+    /** Whether the message qualifies for the AI check. The AI check is skipped anyway when a rule matched. */
+    val gate: GateResult,
+    /** The AI scores, or null when the AI check did not run. */
+    val aiScore: AiScore?,
+    val aiThreshold: Float,
+    /** How many times the model was called for this message. */
+    val modelCalls: Int,
+)
+
 /**
  * Checks one message: the rules first, then the AI check for messages that pass the prefilter.
  * Returns null when nothing is wrong.
@@ -45,19 +59,31 @@ class ScamPipeline(
         val hosts = linkAnalyzer.analyze(prepared).joinToString(" ") { it.host }
         val key = hash("${Sanitizer.clean(prepared)}\n$hosts")
         if (key in cache) return cache[key]
-        return evaluate(prepared).also { cache[key] = it }
+        return inspect(text).warning.also { cache[key] = it }
     }
 
-    private fun evaluate(prepared: String): ScamWarning? {
+    /** Checks [text] without the cache and reports each step: the rule, the AI gate and the AI scores. */
+    @Synchronized
+    fun inspect(text: String): PipelineReport {
+        val prepared = Sanitizer.prepare(text)
         val analysis = analyzer.analyze(prepared)
-        val match = rules.evaluate(analysis) ?: if (prefilter.passes(analysis)) aiMatch(prepared) else null
-        return match?.let(::toWarning)
+        val rule = rules.evaluate(analysis)
+        val gate = prefilter.explain(analysis)
+        val runsAi = rule == null && gate.passes && aiCheck.enabled
+        val score = if (runsAi) aiCheck.score(prepared) else null
+        val match = rule ?: score?.takeIf(aiCheck::isScam)?.let(::aiMatch)
+        return PipelineReport(
+            warning = match?.let(::toWarning),
+            rule = rule,
+            gate = gate,
+            aiScore = score,
+            aiThreshold = aiCheck.threshold,
+            modelCalls = if (runsAi) aiCheck.chunks(prepared).size else 0,
+        )
     }
 
-    private fun aiMatch(prepared: String): RuleMatch? =
-        aiCheck.score(prepared)?.takeIf(aiCheck::isScam)?.let { score ->
-            RuleMatch(WarningType.AI_SCAM, "Similar to known scam messages (score %.2f)".format(score.scam))
-        }
+    private fun aiMatch(score: AiScore): RuleMatch =
+        RuleMatch(WarningType.AI_SCAM, "Similar to known scam messages (score %.2f)".format(score.scam))
 
     private fun toWarning(match: RuleMatch): ScamWarning {
         val text = warnings.getValue(match.type)

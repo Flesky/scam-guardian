@@ -10,7 +10,7 @@ class AiCheck(
     private val embedder: Embedder,
     private val linkAnalyzer: LinkAnalyzer,
     anchors: Anchors,
-    private val threshold: Float = DEFAULT_THRESHOLD,
+    val threshold: Float = DEFAULT_THRESHOLD,
 ) {
     // Anchors are embedded once, here.
     private val scamAnchors = anchors.scam.map(::embedAnchor)

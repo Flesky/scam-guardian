@@ -45,7 +45,10 @@ class Rules(
         val codes = matcher.match(tokens, CODE_WORDS)
         val asks = matcher.match(tokens, ASK_WORDS)
         if (codes.isEmpty() || asks.isEmpty()) return null
-        return RuleMatch(WarningType.OTP_REQUEST, "Asks you to give a code (${words(codes)}; ${words(asks)})")
+        return RuleMatch(
+            WarningType.OTP_REQUEST,
+            "Mentions a code (${words(codes)}); asks you to give it (${words(asks)})",
+        )
     }
 
     private fun givesOrProtectsCode(sentence: String): Boolean {
@@ -71,11 +74,16 @@ class Rules(
     private fun moneyRequest(analysis: MessageAnalysis): RuleMatch? {
         val asks = matcher.match(analysis.tokens, MONEY_WORDS)
         val urgency = matcher.match(analysis.tokens, URGENCY_WORDS)
-        if (asks.isEmpty() || urgency.isEmpty()) return null
-        return RuleMatch(
-            WarningType.MONEY_REQUEST,
-            "Asks for money (${words(asks)}) and says it is urgent (${words(urgency)})",
-        )
+        // Returning somewhere or lending an object is not a promise to repay money.
+        val monetary = analysis.money.isNotEmpty() || matcher.match(analysis.tokens, MONEY_CONTEXT_WORDS).isNotEmpty()
+        val repayment = if (monetary) matcher.match(analysis.tokens, REPAYMENT_WORDS) else emptyList()
+        if (asks.isEmpty() || (urgency.isEmpty() && repayment.isEmpty())) return null
+        val pressure =
+            listOfNotNull(
+                "says it is urgent (${words(urgency)})".takeIf { urgency.isNotEmpty() },
+                "promises to pay it back (${words(repayment)})".takeIf { repayment.isNotEmpty() },
+            ).joinToString(" and ")
+        return RuleMatch(WarningType.MONEY_REQUEST, "Asks for money (${words(asks)}) and $pressure")
     }
 
     // One word can match two keywords ("ospital", "hospital"); name it once.
@@ -115,7 +123,10 @@ class Rules(
                 "tell",
                 "sabihin",
             )
-        private val MONEY_WORDS = listOf("padala", "pa-gcash", "pagcash", "pahiram", "send", "transfer", "utang")
+        private val MONEY_WORDS =
+            listOf("padala", "padalhan", "pa-gcash", "pagcash", "pahiram", "send", "transfer", "utang")
+        private val REPAYMENT_WORDS = listOf("babalik", "ibabalik", "babayaran", "bayaran")
+        private val MONEY_CONTEXT_WORDS = listOf("pera", "salapi", "kwarta", "pa-gcash", "pagcash", "utang")
         private val URGENCY_WORDS =
             listOf("urgent", "agad", "ngayon na", "emergency", "ospital", "hospital", "kailangan")
 

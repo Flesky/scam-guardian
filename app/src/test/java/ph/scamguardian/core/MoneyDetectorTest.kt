@@ -16,6 +16,8 @@ class MoneyDetectorTest {
                 "redeemed for 3,000 pesos." to listOf("3,000 pesos"),
                 "Big winner of 865.3K on Pinata" to listOf("865.3k"),
                 "our 30K top up gift" to listOf("30k"),
+                "padalhan mo ako 5kyaw" to listOf("5kyaw"),
+                "pahiram 5 kyaw" to listOf("5 kyaw"),
                 "get 18P bonos" to listOf("18p"),
                 "your 6,225 points will expire" to listOf("6,225 points"),
                 "6,552 pts will clear" to listOf("6,552 pts"),
@@ -35,6 +37,8 @@ class MoneyDetectorTest {
                 "p4dala na po agad",
                 "arriving in 3 minutes",
                 "Your OTP is 482913",
+                "filename 5kyawphoto",
+                "filename abc5kyaw",
             )
 
         cases.forEach { text -> assertEquals(text, emptyList<String>(), MoneyDetector.find(text)) }

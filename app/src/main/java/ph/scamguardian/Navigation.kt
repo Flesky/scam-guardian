@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import ph.scamguardian.ui.main.MainScreen
+import ph.scamguardian.ui.testmessage.TestMessageScreen
 
 @Composable
 fun MainNavigation(modifier: Modifier = Modifier) {
@@ -15,6 +16,10 @@ fun MainNavigation(modifier: Modifier = Modifier) {
         backStack = backStack,
         modifier = modifier,
         onBack = { backStack.removeLastOrNull() },
-        entryProvider = entryProvider { entry<Main> { MainScreen() } },
+        entryProvider =
+            entryProvider {
+                entry<Main> { MainScreen(onTestMessageClick = { backStack.add(TestMessage) }) }
+                entry<TestMessage> { TestMessageScreen(onBack = { backStack.removeLastOrNull() }) }
+            },
     )
 }

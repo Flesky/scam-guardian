@@ -6,6 +6,7 @@ import com.google.ai.edge.litertlm.EmbeddingEngine
 import com.google.ai.edge.litertlm.EmbeddingEngineConfig
 import com.google.ai.edge.litertlm.InputData
 import com.google.ai.edge.litertlm.LiteRtLmJniException
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import ph.scamguardian.core.Embedder
@@ -25,10 +26,12 @@ class LiteRtEmbedder(
     AutoCloseable {
     @Volatile
     private var modelThread: Thread? = null
-    private val dispatcher =
-        Executors
-            .newSingleThreadExecutor { task -> Thread(task, THREAD_NAME).also { modelThread = it } }
-            .asCoroutineDispatcher()
+
+    private val executor =
+        Executors.newSingleThreadExecutor { task -> Thread(task, THREAD_NAME).also { modelThread = it } }
+
+    /** The single thread every model call runs on. Work dispatched here may call [embed] directly. */
+    val dispatcher: CoroutineDispatcher = executor.asCoroutineDispatcher()
 
     // Only read and written on the model thread.
     private var engine: EmbeddingEngine? = null
@@ -45,7 +48,7 @@ class LiteRtEmbedder(
             engine?.close()
             engine = null
         }
-        dispatcher.close()
+        executor.shutdown()
     }
 
     private fun <T> onModelThread(block: () -> T): T {

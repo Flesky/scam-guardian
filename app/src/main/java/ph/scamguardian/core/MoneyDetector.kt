@@ -13,8 +13,8 @@ object MoneyDetector {
             Regex("""(?<![a-z0-9])(?:₱|php|p)\s?${NUMBER}k?(?![a-z0-9])"""),
             // 3,000 pesos
             Regex("""$START$NUMBER\s?pesos?\b"""),
-            // 865.3K, 30K
-            Regex("""(?<![a-z0-9.,])\d+(?:\.\d+)?k(?![a-z0-9])"""),
+            // 865.3K, 30K, 5kyaw (slang for five thousand)
+            Regex("""(?<![a-z0-9.,])\d+(?:\.\d+)?(?:k|\s?kyaw)(?![a-z0-9])"""),
             // 18P
             Regex("""(?<![a-z0-9.,])\d+p(?![a-z0-9])"""),
             // 6,552 pts, 6,225 points, points (5,980)

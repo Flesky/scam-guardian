@@ -152,6 +152,71 @@ class ScamPipelineTest {
     }
 
     @Test
+    fun check_moneyRequest_acceptsAPromiseToPayBackAsPressure() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+
+        val warning = pipeline.check("anak padalhan mo naman ako\n5kyaw babalik ko rin bukas\nsensya na.")
+
+        assertEquals(WarningType.MONEY_REQUEST, warning?.type)
+        assertEquals("Asks for money (padalhan) and promises to pay it back (babalik)", warning?.evidence)
+        assertNull(pipeline.check("anak padalhan mo naman ako ng picture"))
+        assertNull(pipeline.check("babalik ako bukas, hintayin mo ako"))
+    }
+
+    @Test
+    fun inspect_ruleMatch_reportsTheRuleAndSkipsTheAi() {
+        val embedder = FakeEmbedder()
+        val pipeline = ScamPipeline(Fixtures.data(anchorsJson), embedder)
+        val callsForAnchors = embedder.calls
+
+        val report = pipeline.inspect("[BDO] Last chance to redeem. Click now:https://bdo-bd0.cc/ph")
+
+        assertEquals(WarningType.FAKE_LINK, report.rule?.type)
+        assertEquals(WarningType.FAKE_LINK, report.warning?.type)
+        assertEquals(GateResult(true, listOf("link: bdo-bd0.cc", "keywords: last chance, redeem")), report.gate)
+        assertNull(report.aiScore)
+        assertEquals(0, report.modelCalls)
+        assertEquals(callsForAnchors, embedder.calls)
+    }
+
+    @Test
+    fun inspect_noRule_reportsTheAiScoresAndModelCalls() {
+        val pipeline = ScamPipeline(Fixtures.data(anchorsJson), FakeEmbedder())
+
+        val short = pipeline.inspect(anchors.scam.first())
+        val long = pipeline.inspect("Balance mo sa load ay 5 pesos na lang. ".repeat(100))
+
+        assertNull(short.rule)
+        assertEquals(WarningType.AI_SCAM, short.warning?.type)
+        assertEquals(1f, checkNotNull(short.aiScore).scam, 1e-5f)
+        assertEquals(AiCheck.DEFAULT_THRESHOLD, short.aiThreshold)
+        assertEquals(1, short.modelCalls)
+        assertNull(long.warning)
+        assertEquals(AiCheck.MAX_CHUNKS, long.modelCalls)
+    }
+
+    @Test
+    fun inspect_messageThatFailsThePrefilter_saysWhy() {
+        val pipeline = ScamPipeline(Fixtures.data(anchorsJson), FakeEmbedder())
+
+        assertEquals(GateResult(false, listOf("no link, money or keywords")), pipeline.inspect("Kain na tayo").gate)
+        assertEquals(GateResult(false, listOf("fewer than 2 words")), pipeline.inspect("ok").gate)
+        assertEquals(0, pipeline.inspect("Kain na tayo").modelCalls)
+    }
+
+    @Test
+    fun inspect_doesNotUseTheCache() {
+        val embedder = FakeEmbedder()
+        val pipeline = ScamPipeline(Fixtures.data(anchorsJson), embedder)
+
+        pipeline.inspect(anchors.scam.first())
+        val callsAfterFirst = embedder.calls
+        pipeline.inspect(anchors.scam.first())
+
+        assertEquals(callsAfterFirst + 1, embedder.calls)
+    }
+
+    @Test
     fun check_rulesAreTriedInOrder() {
         val pipeline = Fixtures.rulesOnlyPipeline()
         val cases =

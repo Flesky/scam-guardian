@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -41,15 +42,24 @@ private val OffColor = Color(0xFFC62828)
 private val ToggleSize = 220.dp
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(
+    onTestMessageClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     var isOn by rememberSaveable { mutableStateOf(false) }
-    MainScreen(isOn = isOn, onToggle = { isOn = !isOn }, modifier = modifier)
+    MainScreen(
+        isOn = isOn,
+        onToggle = { isOn = !isOn },
+        onTestMessageClick = onTestMessageClick,
+        modifier = modifier,
+    )
 }
 
 @Composable
 internal fun MainScreen(
     isOn: Boolean,
     onToggle: () -> Unit,
+    onTestMessageClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
@@ -64,7 +74,20 @@ internal fun MainScreen(
             modifier = Modifier.fillMaxWidth().weight(1f).padding(48.dp),
             contentAlignment = Alignment.Center,
         ) {
-            PowerToggle(isOn = isOn, onToggle = onToggle)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                PowerToggle(isOn = isOn, onToggle = onToggle)
+                Box(
+                    modifier =
+                        Modifier
+                            .padding(top = 24.dp)
+                            .clickable(role = Role.Button, onClick = onTestMessageClick)
+                            .defaultMinSize(minWidth = 48.dp, minHeight = 48.dp)
+                            .padding(horizontal = 16.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(text = stringResource(R.string.test_message_title), fontSize = 16.sp)
+                }
+            }
         }
     }
 }
@@ -98,11 +121,11 @@ private fun PowerToggle(
 @Preview(showBackground = true)
 @Composable
 private fun MainScreenOnPreview() {
-    ScamGuardianTheme { MainScreen(isOn = true, onToggle = {}) }
+    ScamGuardianTheme { MainScreen(isOn = true, onToggle = {}, onTestMessageClick = {}) }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun MainScreenOffPreview() {
-    ScamGuardianTheme { MainScreen(isOn = false, onToggle = {}) }
+    ScamGuardianTheme { MainScreen(isOn = false, onToggle = {}, onTestMessageClick = {}) }
 }
