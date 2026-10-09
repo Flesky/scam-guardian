@@ -13,6 +13,16 @@ class BannerLimiter(
         unlimited: Boolean = false,
     ): Boolean = unlimited || lastShown[app]?.let { nowMs - it >= intervalMs } ?: true
 
+    /** How long until [app] may show a banner again; 0 when it may show one now. */
+    fun remainingMs(
+        app: String,
+        nowMs: Long,
+        unlimited: Boolean = false,
+    ): Long {
+        val last = lastShown[app]
+        return if (unlimited || last == null) 0 else (intervalMs - (nowMs - last)).coerceAtLeast(0)
+    }
+
     /** True when [app] may show a banner at [nowMs]; the next one is then allowed [intervalMs] later. */
     fun tryShow(
         app: String,

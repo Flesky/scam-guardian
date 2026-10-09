@@ -37,6 +37,7 @@ class ScamPipeline(
     embedder: Embedder,
     aiThreshold: Float = AiCheck.DEFAULT_THRESHOLD,
     private val prefilter: Prefilter = Prefilter(),
+    loadAi: Boolean = true,
 ) {
     private val warnings = data.warnings
     private val confusables = Confusables()
@@ -45,49 +46,43 @@ class ScamPipeline(
     private val linkAnalyzer = LinkAnalyzer(data.urlRules, data.brands)
     private val analyzer = MessageAnalyzer(data, normalizer, matcher, linkAnalyzer, confusables)
     private val rules = Rules(normalizer, matcher)
-    private val aiCheck = AiCheck(embedder, linkAnalyzer, data.anchors, aiThreshold)
+    private val aiCheck = AiCheck(embedder, linkAnalyzer, data.anchors, aiThreshold, loadNow = loadAi)
 
-    // Results by hash of the cleaned text and its link hosts, so a repeated message is not checked again.
+    // Reports by hash of the cleaned text and its link hosts, so a repeated message is not analyzed again.
+    // The cache only saves work: whether a warning was already shown is for the caller to remember.
     private val cache =
-        object : LinkedHashMap<String, ScamWarning?>(CACHE_SIZE, LOAD_FACTOR, true) {
-            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, ScamWarning?>): Boolean =
+        object : LinkedHashMap<String, PipelineReport>(CACHE_SIZE, LOAD_FACTOR, true) {
+            override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, PipelineReport>): Boolean =
                 size > CACHE_SIZE
         }
 
     // Texts the user marked "Not a scam". Unlike the cache, these are never dropped.
     private val markedSafe = HashSet<String>()
 
-    @Synchronized
-    fun check(text: String): ScamWarning? {
-        val key = keyOf(text)
-        return when (key) {
-            in markedSafe -> null
-            in cache -> cache[key]
-            else -> inspect(text).warning.also { cache[key] = it }
-        }
-    }
+    /** True once the AI check has its anchors. Until then only the rules warn. */
+    val aiLoaded: Boolean get() = aiCheck.loaded
 
     /**
-     * Checks [text] only if it is new, and reports each step like [inspect]. Returns null when the text
-     * is already in the cache or was marked "Not a scam", so a text is reported at most once.
+     * Embeds the anchors for the AI check, when the pipeline was created without them. This calls the
+     * model for every anchor. Reports made before, by the rules alone, are dropped.
      */
     @Synchronized
-    fun inspectNew(text: String): PipelineReport? {
-        val key = keyOf(text)
-        if (key in markedSafe || key in cache) return null
-        return inspect(text).also { cache[key] = it.warning }
-    }
-
-    /** Removes [text] from the cache, so [inspectNew] reports it again the next time it is seen. */
-    @Synchronized
-    fun forget(text: String) {
-        cache.remove(keyOf(text))
-    }
-
-    /** Empties the cache, so every text is new to [inspectNew] again. Texts marked safe stay safe. */
-    @Synchronized
-    fun forgetAll() {
+    fun loadAi() {
+        aiCheck.load()
         cache.clear()
+    }
+
+    @Synchronized
+    fun check(text: String): ScamWarning? = inspectCached(text)?.warning
+
+    /**
+     * The report for [text], like [inspect], but an earlier report for the same text is used again
+     * instead of analyzing it twice. Returns null for a text marked "Not a scam".
+     */
+    @Synchronized
+    fun inspectCached(text: String): PipelineReport? {
+        val key = keyOf(text)
+        return if (key in markedSafe) null else cache.getOrPut(key) { inspect(text) }
     }
 
     /**

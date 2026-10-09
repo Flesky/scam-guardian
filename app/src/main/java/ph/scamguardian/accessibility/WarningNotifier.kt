@@ -40,6 +40,10 @@ internal class WarningNotifier(
     fun mayShow(packageName: String): Boolean =
         limiter.isOpen(packageName, SystemClock.elapsedRealtime(), unlimited = demo.enabled)
 
+    /** How long until [packageName] may show a banner again; 0 when it may show one now. */
+    fun waitMs(packageName: String): Long =
+        limiter.remainingMs(packageName, SystemClock.elapsedRealtime(), unlimited = demo.enabled)
+
     /**
      * Shows the banner for [warning], found in the text [block] of the app [packageName], and adds the
      * history entry. Returns false, and does nothing, when this app may not show a banner yet.

@@ -34,7 +34,7 @@ data class ScreenBlock(
 /** Turns the text nodes of a screen into blocks worth sending to the pipeline. */
 object ScreenBlocks {
     private const val MAX_BLOCK_LENGTH = 1000
-    private const val MIN_WORDS = 3
+    private const val MIN_WORDS = 2
 
     // Incoming chat messages sit in the left 60% of the window.
     private const val INCOMING_NUMERATOR = 6
@@ -43,6 +43,7 @@ object ScreenBlocks {
     private val uiTexts = setOf("seen", "active now", "like", "comment", "share", "reply")
     private val time = Regex("""\d{1,2}:\d{2}(\s?[ap]\.?m\.?)?""", RegexOption.IGNORE_CASE)
     private val whitespace = Regex("\\s+")
+    private val link = Regex("""[^\s.]+(\.[^\s.]+)*\.\p{L}{2,}(/\S*)?""")
 
     /**
      * Chat apps: one block per incoming message. A message is incoming when its center is in the left 60%
@@ -69,9 +70,16 @@ object ScreenBlocks {
             .filter { isWorthChecking(it.text) }
             .distinctBy { it.text }
 
-    /** False for buttons, status labels, times and anything of two words or fewer. */
-    fun isWorthChecking(text: String): Boolean =
-        !isUiText(text) && text.trim().split(whitespace).count(String::isNotEmpty) >= MIN_WORDS
+    /**
+     * False for buttons, status labels, times and single words. A single link counts: the rules can
+     * judge "gcash-win.cc" on its own, as they can a two-word "Send OTP".
+     */
+    fun isWorthChecking(text: String): Boolean {
+        val words = text.trim().split(whitespace).filter(String::isNotEmpty)
+        return !isUiText(text) && (words.size >= MIN_WORDS || words.singleOrNull()?.let(::looksLikeLink) == true)
+    }
+
+    private fun looksLikeLink(word: String): Boolean = "://" in word || link.matches(word)
 
     private fun isUiText(text: String): Boolean {
         val trimmed = text.trim()

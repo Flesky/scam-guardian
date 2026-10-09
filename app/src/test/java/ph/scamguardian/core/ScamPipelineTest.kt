@@ -1,6 +1,7 @@
 package ph.scamguardian.core
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
@@ -218,46 +219,30 @@ class ScamPipelineTest {
     }
 
     @Test
-    fun inspectNew_reportsATextOnlyTheFirstTime() {
+    fun inspectCached_usesTheEarlierReportForTheSameText() {
         val embedder = FakeEmbedder()
         val pipeline = ScamPipeline(Fixtures.data(anchorsJson), embedder)
 
-        val first = pipeline.inspectNew(anchors.scam.first())
+        val first = pipeline.inspectCached(anchors.scam.first())
         val callsAfterFirst = embedder.calls
 
         assertEquals(WarningType.AI_SCAM, first?.warning?.type)
-        assertNull(pipeline.inspectNew(anchors.scam.first()))
-        assertNull(pipeline.inspectNew("  " + anchors.scam.first() + " 🙂"))
+        // The same report comes back, also for another app, without a new model call.
+        assertSame(first, pipeline.inspectCached(anchors.scam.first()))
+        assertSame(first, pipeline.inspectCached("  " + anchors.scam.first() + " 🙂"))
         assertEquals(callsAfterFirst, embedder.calls)
         assertEquals(WarningType.AI_SCAM, pipeline.check(anchors.scam.first())?.type)
     }
 
     @Test
-    fun inspectNew_textWithoutAWarning_isAlsoReportedOnce() {
+    fun inspectCached_sameWordsWithAnotherLink_isAnotherText() {
         val pipeline = Fixtures.rulesOnlyPipeline()
 
-        assertNull(checkNotNull(pipeline.inspectNew("Kain na tayo")).warning)
-        assertNull(pipeline.inspectNew("Kain na tayo"))
-    }
-
-    @Test
-    fun inspectNew_sameWordsWithAnotherLink_isANewText() {
-        val pipeline = Fixtures.rulesOnlyPipeline()
-
-        assertEquals(WarningType.FAKE_LINK, pipeline.inspectNew("GCash verify https://gcash-win.cc")?.warning?.type)
-        assertNull(checkNotNull(pipeline.inspectNew("GCash verify https://gcash.com")).warning)
-    }
-
-    @Test
-    fun forget_letsInspectNewReportTheTextAgain() {
-        val pipeline = Fixtures.rulesOnlyPipeline()
-        val text = "[BDO] Last chance to redeem. Click now:https://bdo-bd0.cc/ph"
-        pipeline.inspectNew(text)
-
-        pipeline.forget(text)
-
-        assertEquals(WarningType.FAKE_LINK, pipeline.inspectNew(text)?.warning?.type)
-        assertNull(pipeline.inspectNew(text))
+        assertEquals(
+            WarningType.FAKE_LINK,
+            pipeline.inspectCached("GCash verify https://gcash-win.cc")?.warning?.type,
+        )
+        assertNull(checkNotNull(pipeline.inspectCached("GCash verify https://gcash.com")).warning)
     }
 
     @Test
@@ -267,10 +252,9 @@ class ScamPipelineTest {
         assertEquals(WarningType.FAKE_LINK, pipeline.check(text)?.type)
 
         pipeline.markSafe(text)
-        pipeline.forget(text)
 
         assertNull(pipeline.check(text))
-        assertNull(pipeline.inspectNew(text))
+        assertNull(pipeline.inspectCached(text))
         assertEquals(WarningType.FAKE_LINK, pipeline.check("[BDO] Click now:https://bdo-bd0.cc/ph")?.type)
     }
 
@@ -289,15 +273,37 @@ class ScamPipelineTest {
     }
 
     @Test
-    fun forgetAll_makesEveryTextNewAgain() {
-        val pipeline = Fixtures.rulesOnlyPipeline()
-        val text = "[BDO] Last chance to redeem. Click now:https://bdo-bd0.cc/ph"
+    fun loadAi_later_rulesWorkFirstAndTheAiJoinsIn() {
+        val embedder = FakeEmbedder()
+        val pipeline = ScamPipeline(Fixtures.data(anchorsJson), embedder, loadAi = false)
+        val ruleScam = "[BDO] Last chance to redeem. Click now:https://bdo-bd0.cc/ph"
+        val aiScam = anchors.scam.first()
 
-        assertEquals(WarningType.FAKE_LINK, pipeline.inspectNew(text)?.warning?.type)
-        assertNull(pipeline.inspectNew(text))
-        pipeline.forgetAll()
+        // Before the model is ready: no model call, the rules still warn, the AI check is skipped.
+        assertFalse(pipeline.aiLoaded)
+        assertEquals(WarningType.FAKE_LINK, pipeline.inspectCached(ruleScam)?.warning?.type)
+        assertNull(pipeline.inspectCached(aiScam)?.warning)
+        assertEquals(0, embedder.calls)
 
-        assertEquals(WarningType.FAKE_LINK, pipeline.inspectNew(text)?.warning?.type)
+        pipeline.loadAi()
+
+        // The report made without the AI check is not kept.
+        assertTrue(pipeline.aiLoaded)
+        assertEquals(anchors.scam.size + anchors.safe.size, embedder.calls)
+        assertEquals(WarningType.AI_SCAM, pipeline.inspectCached(aiScam)?.warning?.type)
+    }
+
+    @Test
+    fun loadAi_keepsMessagesMarkedSafeBeforeIt() {
+        val pipeline = ScamPipeline(Fixtures.data(anchorsJson), FakeEmbedder(), loadAi = false)
+        val text = anchors.scam.first()
+        pipeline.markSafe(text)
+
+        pipeline.loadAi()
+
+        assertNull(pipeline.inspectCached(text))
+        // It became a safe anchor when the anchors were loaded.
+        assertEquals(1f, checkNotNull(pipeline.inspect(text).aiScore).safe, 1e-5f)
     }
 
     @Test

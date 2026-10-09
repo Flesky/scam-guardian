@@ -3,7 +3,6 @@ package ph.scamguardian.accessibility
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
-import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -20,7 +19,6 @@ import ph.scamguardian.core.ScamPipeline
 import ph.scamguardian.core.ScamWarning
 import ph.scamguardian.core.ScanTiming
 import ph.scamguardian.core.ScreenBlock
-import ph.scamguardian.core.ScreenBlocks
 
 /**
  * Reads incoming messages in chat apps and the page text in browsers, sends them to the scam
@@ -59,6 +57,17 @@ class ScamAccessibilityService : AccessibilityService() {
     override fun onServiceConnected() {
         super.onServiceConnected()
         OpenWarning.dismiss = { handler.post { guarded("remove the banner") { notifier.dismiss() } } }
+        // When the engine finishes loading, or fails, the screen is read again with what works now.
+        scope.launch {
+            engine.state.collect {
+                handler.post {
+                    guarded("read the screen again") {
+                        sent.clear()
+                        scanIn(0)
+                    }
+                }
+            }
+        }
         if (BuildConfig.DEBUG) handler.postDelayed(logTotals, STATS_INTERVAL_MS)
     }
 
@@ -87,42 +96,43 @@ class ScamAccessibilityService : AccessibilityService() {
     }
 
     private fun processActiveWindow() {
-        val root = rootInActiveWindow?.takeIf { preferences.enabled } ?: return
-        val packageName = root.packageName?.toString().orEmpty()
-        val kind = MonitoredApps.kindOf(packageName) ?: return
-        val nodes = ScreenReader.textNodes(root)
-        val blocks =
-            when (kind) {
-                AppKind.CHAT -> {
-                    // Measured against the app's own window, which is not the whole screen in split-screen.
-                    val window = Rect().also(root::getBoundsInScreen)
-                    ScreenBlocks.chat(nodes, windowLeft = window.left, windowWidth = window.width())
-                }
-
-                AppKind.BROWSER -> {
-                    ScreenBlocks.page(nodes)
-                }
-            }
-        send(packageName, blocks)
+        val screen = readScreen() ?: return
+        engine.startIfNeeded()
+        // With no pipeline yet nothing can be checked; the screen is read again when the engine has loaded.
+        val pipeline = engine.loadedPipeline ?: return
+        if (notifier.mayShow(screen.packageName)) {
+            send(screen, pipeline)
+        } else {
+            // This app had a banner less than 30 seconds ago: read the screen again when it may show one.
+            scanIn(notifier.waitMs(screen.packageName))
+        }
     }
+
+    /** The blocks of text on screen now, or null when protection is off or the app in front is not watched. */
+    private fun readScreen(): Screen? = rootInActiveWindow?.takeIf { preferences.enabled }?.let(ScreenReader::read)
 
     private fun send(
-        packageName: String,
-        blocks: List<ScreenBlock>,
+        screen: Screen,
+        pipeline: ScamPipeline,
     ) {
-        val pipeline = engine.loadedPipeline
-        if (pipeline == null) {
-            // Until the model is loaded, blocks are dropped, not queued. They are read again on a later change.
-            engine.start()
-        } else if (notifier.mayShow(packageName)) {
-            forgetIfHistoryWasCleared(pipeline)
-            blocks.filter { sent.add(packageName, it.text) }.forEach { check(packageName, it, pipeline) }
+        // Clearing the history lets old messages warn again, so they are sent again.
+        val clears = history.clears
+        if (clears != historyClears) {
+            historyClears = clears
+            sent.clear()
         }
-        // Otherwise this app had a banner less than 30 seconds ago. Its blocks are left for a later
-        // change of the screen, so a warning found now is not lost.
+        screen.blocks
+            .filter { sent.add(screen.packageName, it.text) }
+            .forEach { check(screen.packageName, it, pipeline) }
     }
 
-    // The pipeline cache decides if a text is new: the same text never gives a second banner, in any app.
+    private fun scanIn(delayMs: Long) {
+        handler.removeCallbacks(processWindow)
+        handler.postDelayed(processWindow, delayMs)
+    }
+
+    // The pipeline reuses its analysis of a text it has seen. Whether a warning was shown is remembered
+    // here, in the sent blocks, and across restarts in the history.
     private fun check(
         packageName: String,
         block: ScreenBlock,
@@ -132,47 +142,39 @@ class ScamAccessibilityService : AccessibilityService() {
             guarded("check a block") {
                 // Protection may have been switched OFF while this block waited for the model thread.
                 // A message that already has a history entry does not warn again.
-                val isNew = preferences.enabled && !history.hasText(block.text)
-                val report = if (isNew) pipeline.inspectNew(block.text) else null
+                val wanted = preferences.enabled && !history.hasText(block.text)
+                val report = if (wanted) pipeline.inspectCached(block.text) else null
                 if (!preferences.enabled) {
-                    // Not checked, or checked too late to act on: forget it so it is read again when ON.
+                    // Not checked: forget it so it is read again when protection is back ON.
                     handler.post { sent.forget(packageName, block.text) }
-                    if (report != null) pipeline.forget(block.text)
                 } else if (report != null) {
                     log.record(report)
                     if (BuildConfig.DEBUG) log.logBlock(packageName, block.text, report)
                     report.warning?.let { warning ->
-                        handler.post { guarded("show a warning") { raise(packageName, block, warning, pipeline) } }
+                        handler.post { guarded("show a warning") { raise(packageName, block, warning) } }
                     }
                 }
             }
         }
     }
 
-    // Clearing the history lets old messages warn again, so what was remembered about them goes too.
-    private fun forgetIfHistoryWasCleared(pipeline: ScamPipeline) {
-        val clears = history.clears
-        if (clears != historyClears) {
-            historyClears = clears
-            sent.clear()
-            scope.launch(engine.modelDispatcher) { guarded("forget checked messages") { pipeline.forgetAll() } }
-        }
-    }
-
-    // Main thread. A block whose banner cannot be shown now is forgotten, so it is checked again the next
-    // time it is read.
+    // Main thread. The check took a moment, so the screen is read again: the warning is shown only if
+    // the message is still there, and the outline goes where the message is now. Otherwise the block is
+    // forgotten and checked again the next time it is read.
     private fun raise(
         packageName: String,
         block: ScreenBlock,
         warning: ScamWarning,
-        pipeline: ScamPipeline,
     ) {
-        // The check takes a moment. If the user has left that app since, for Scam Guardian or any other,
-        // the warning is not shown over the wrong app.
-        val stillThere = rootInActiveWindow?.packageName?.toString() == packageName
-        if (preferences.enabled && stillThere && notifier.show(packageName, block, warning)) return
+        val current =
+            readScreen()
+                ?.takeIf { it.packageName == packageName }
+                ?.blocks
+                ?.firstOrNull { it.text == block.text }
+        if (current != null && notifier.show(packageName, current, warning)) return
         sent.forget(packageName, block.text)
-        scope.launch(engine.modelDispatcher) { guarded("forget a block") { pipeline.forget(block.text) } }
+        // Held back by the 30-second wait: read the screen again when the wait is over.
+        if (current != null) scanIn(notifier.waitMs(packageName))
     }
 
     companion object {

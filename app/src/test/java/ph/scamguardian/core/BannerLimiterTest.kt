@@ -1,5 +1,6 @@
 package ph.scamguardian.core
 
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -53,5 +54,19 @@ class BannerLimiterTest {
         assertTrue(limiter.isOpen("com.whatsapp", nowMs = 1_002, unlimited = true))
         // Back in normal mode the last demo banner still counts.
         assertFalse(limiter.tryShow("com.whatsapp", nowMs = 2_000))
+    }
+
+    @Test
+    fun remainingMs_countsDownToTheNextAllowedBanner() {
+        val limiter = BannerLimiter(intervalMs = 30_000)
+
+        assertEquals(0, limiter.remainingMs("com.whatsapp", nowMs = 1_000))
+        limiter.tryShow("com.whatsapp", nowMs = 1_000)
+
+        assertEquals(30_000, limiter.remainingMs("com.whatsapp", nowMs = 1_000))
+        assertEquals(10_000, limiter.remainingMs("com.whatsapp", nowMs = 21_000))
+        assertEquals(0, limiter.remainingMs("com.whatsapp", nowMs = 40_000))
+        assertEquals(0, limiter.remainingMs("com.viber.voip", nowMs = 2_000))
+        assertEquals(0, limiter.remainingMs("com.whatsapp", nowMs = 2_000, unlimited = true))
     }
 }

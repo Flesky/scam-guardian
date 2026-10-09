@@ -9,23 +9,50 @@ data class AiScore(
 class AiCheck(
     private val embedder: Embedder,
     private val linkAnalyzer: LinkAnalyzer,
-    anchors: Anchors,
+    private val anchors: Anchors,
     val threshold: Float = DEFAULT_THRESHOLD,
+    loadNow: Boolean = true,
 ) {
-    // Anchors are embedded once, here.
-    private val scamAnchors = anchors.scam.map(::embedAnchor)
-    private val safeAnchors =
-        (if (scamAnchors.isEmpty()) emptyList() else anchors.safe.map(::embedAnchor)).toMutableList()
+    private var scamAnchors: List<FloatArray> = emptyList()
+    private val safeAnchors = mutableListOf<FloatArray>()
 
-    /** False when there are no scam anchors; the AI check is then skipped. */
+    // Messages marked "Not a scam" before the anchors were loaded; they are embedded with them.
+    private val waitingSafeTexts = mutableListOf<String>()
+
+    /** True once [load] has embedded the anchors. Until then the AI check is skipped. */
+    var loaded = false
+        private set
+
+    init {
+        if (loadNow) load()
+    }
+
+    /** False when the anchors are not loaded yet, or there are no scam anchors; the AI check is then skipped. */
     val enabled: Boolean get() = scamAnchors.isNotEmpty()
 
     /**
+     * Embeds the anchors, once. This calls the model for every anchor. If the model fails, nothing is
+     * kept and it can be tried again.
+     */
+    fun load() {
+        if (loaded) return
+        val scam = anchors.scam.map(::embedAnchor)
+        val safe = if (scam.isEmpty()) emptyList() else (anchors.safe + waitingSafeTexts).map(::embedAnchor)
+        scamAnchors = scam
+        safeAnchors += safe
+        waitingSafeTexts.clear()
+        loaded = true
+    }
+
+    /**
      * Adds [text] to the safe anchors, for a message the user marked "Not a scam". This calls the model
-     * once. It does nothing when the AI check is skipped.
+     * once; before the anchors are loaded the text waits and is embedded with them.
      */
     fun addSafeAnchor(text: String) {
-        if (enabled) safeAnchors += embedAnchor(text)
+        when {
+            !loaded -> waitingSafeTexts += text
+            enabled -> safeAnchors += embedAnchor(text)
+        }
     }
 
     /** The text that is embedded: cleaned, with every link replaced by "[link]". */

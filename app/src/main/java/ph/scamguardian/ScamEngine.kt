@@ -5,13 +5,14 @@ import android.os.SystemClock
 import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ph.scamguardian.core.Embedder
 import ph.scamguardian.core.PipelineJson
 import ph.scamguardian.core.ScamPipeline
 import ph.scamguardian.core.WarningCatalog
@@ -21,42 +22,88 @@ import ph.scamguardian.storage.SafeTextStore
 import java.io.File
 import java.io.IOException
 
+/** How much of the scam detection is working. */
+enum class EngineState {
+    /** Nothing was loaded yet. */
+    IDLE,
+
+    /** The data or the model is loading. */
+    LOADING,
+
+    /** The rules and the AI check both work. */
+    READY,
+
+    /** Only the rules work: the model could not be loaded. */
+    LIMITED,
+
+    /** Nothing works: the data files could not be read. */
+    FAILED,
+}
+
 /**
  * The one app-wide owner of the embedder, the data files from assets and the scam pipeline.
  *
- * Nothing is loaded until [start] or [pipeline] is first called. Loading happens off the main thread:
- * the model first, then the pipeline, whose anchors are embedded once as it is created, then the
- * messages the user marked "Not a scam" earlier, which become safe anchors too.
+ * Nothing is loaded until [start] is first called. Loading happens off the main thread, in two steps.
+ * First the data files, which is quick: from then on [loadedPipeline] checks messages with the rules.
+ * Then the model and the anchors: from then on the AI check works too. If the second step fails, for
+ * example because the model file is missing, the rules keep working and [start] tries again.
  */
 class ScamEngine(
     context: Context,
 ) {
     private val appContext = context.applicationContext
+    private val assets = DataFiles(appContext)
     private val embedder = LiteRtEmbedder(File(appContext.getExternalFilesDir(null), MODEL_PATH).path)
 
     // In the no-backup folder: the messages the user marked "Not a scam" never leave this phone.
     private val safeTexts = SafeTextStore(File(appContext.noBackupFilesDir, SAFE_TEXTS_FILE))
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    private val loading: Deferred<ScamPipeline> = scope.async(start = CoroutineStart.LAZY) { load() }
+    private val mutableState = MutableStateFlow(EngineState.IDLE)
+    private var loading: Job? = null
+    private var lastStart = 0L
 
-    /** The pipeline once it is loaded, or null while it is loading or if loading failed. Never waits. */
+    /** How much of the detection works right now. */
+    val state: StateFlow<EngineState> = mutableState.asStateFlow()
+
+    /** Why the state is [EngineState.LIMITED] or [EngineState.FAILED]; null otherwise. */
+    @Volatile
+    var failure: String? = null
+        private set
+
+    /** The pipeline once the data files are read, or null before that. Never waits. */
     @Volatile
     var loadedPipeline: ScamPipeline? = null
         private set
 
     /** The warning texts. Read from assets on first use, without waiting for the model. */
-    val warnings: WarningCatalog by lazy { parseWarnings(asset(WARNINGS_FILE)) }
+    val warnings: WarningCatalog by lazy { parseWarnings(assets.text(WARNINGS_FILE)) }
 
     /** The single thread every model call runs on. */
     val modelDispatcher: CoroutineDispatcher get() = embedder.dispatcher
 
-    /** Starts loading in the background, if it has not started yet. */
+    /**
+     * Starts loading in the background. It does nothing while loading or once everything works; after
+     * a failure it tries again, so it also serves as "retry".
+     */
+    @Synchronized
     fun start() {
-        loading.start()
+        if (loading?.isActive == true || state.value == EngineState.READY) return
+        lastStart = SystemClock.elapsedRealtime()
+        mutableState.value = EngineState.LOADING
+        loading = scope.launch { mutableState.value = load() }
     }
 
-    /** The loaded pipeline. Suspends until loading is done; throws if the model or data could not be loaded. */
-    suspend fun pipeline(): ScamPipeline = loading.await()
+    /**
+     * For the accessibility service, each time it reads a screen: loads the engine if nothing was loaded
+     * yet, and while only the rules work it tries the model again about once a minute, in case its file
+     * has arrived.
+     */
+    @Synchronized
+    fun startIfNeeded() {
+        val now = SystemClock.elapsedRealtime()
+        val retryDue = state.value == EngineState.LIMITED && now - lastStart >= MODEL_RETRY_MS
+        if (state.value == EngineState.IDLE || retryDue) start()
+    }
 
     /**
      * "Not a scam": saves [text] in app storage, then makes it a safe anchor on the model thread. From
@@ -64,26 +111,43 @@ class ScamEngine(
      */
     suspend fun markNotScam(text: String) {
         withContext(Dispatchers.IO) { safeTexts.add(text) }
-        val pipeline = pipeline()
+        val pipeline = loadedPipeline ?: return
         withContext(embedder.dispatcher) { pipeline.markSafe(text) }
     }
 
-    private fun load(): ScamPipeline =
-        try {
+    private fun load(): EngineState {
+        failure = null
+        val pipeline = loadedPipeline ?: rulesPipeline() ?: return EngineState.FAILED
+        return try {
             val loadMs = timeMs { embedder.load() }
-            val timed = TimedEmbedder(embedder)
-            val pipeline = ScamPipeline(readData(), timed)
-            savedSafeTexts().forEach(pipeline::markSafe)
-            if (BuildConfig.DEBUG) logTimings(loadMs, anchorsMs = timed.totalMs, anchors = timed.calls)
-            loadedPipeline = pipeline
-            pipeline
+            val anchorsMs = timeMs { pipeline.loadAi() }
+            if (BuildConfig.DEBUG) logTimings(loadMs, anchorsMs)
+            EngineState.READY
         } catch (e: IllegalStateException) {
-            Log.e(TAG, "Could not load the scam engine", e)
-            throw e
-        } catch (e: IOException) {
-            Log.e(TAG, "Could not read the data files", e)
-            throw e
+            Log.e(TAG, "Could not load the model; only the rules are working", e)
+            failure = e.message
+            EngineState.LIMITED
         }
+    }
+
+    // The pipeline without the AI check. It needs only the data files, so the rules work at once.
+    private fun rulesPipeline(): ScamPipeline? =
+        try {
+            ScamPipeline(assets.pipelineData(), embedder, loadAi = false).also { pipeline ->
+                savedSafeTexts().forEach(pipeline::markSafe)
+                loadedPipeline = pipeline
+            }
+        } catch (e: IOException) {
+            failed(e)
+        } catch (e: IllegalArgumentException) {
+            failed(e)
+        }
+
+    private fun failed(e: Exception): ScamPipeline? {
+        Log.e(TAG, "Could not read the data files", e)
+        failure = e.message
+        return null
+    }
 
     // The messages the user marked "Not a scam" earlier. The engine still loads when they cannot be read.
     private fun savedSafeTexts(): List<String> =
@@ -94,33 +158,13 @@ class ScamEngine(
             emptyList()
         }
 
-    private fun readData() =
-        PipelineJson(
-            brands = asset("brands.json"),
-            keywords = asset("keywords.json"),
-            shortcuts = asset("shortcuts.json"),
-            urlRules = asset("url_rules.json"),
-            warnings = asset(WARNINGS_FILE),
-            anchors = asset("anchors.json"),
-        ).parse()
-
-    private fun asset(name: String): String =
-        appContext.assets
-            .open(name)
-            .bufferedReader()
-            .use { it.readText() }
-
     private fun logTimings(
         loadMs: Long,
         anchorsMs: Long,
-        anchors: Int,
     ) {
         var size = 0
         val embedMs = timeMs { size = embedder.embed(DEBUG_TEXT).size }
-        Log.d(
-            TAG,
-            "vector size=$size, model load=$loadMs ms, one embedding=$embedMs ms, $anchors anchors=$anchorsMs ms",
-        )
+        Log.d(TAG, "vector size=$size, model load=$loadMs ms, one embedding=$embedMs ms, anchors=$anchorsMs ms")
     }
 
     private inline fun timeMs(block: () -> Unit): Long {
@@ -129,22 +173,25 @@ class ScamEngine(
         return SystemClock.elapsedRealtime() - start
     }
 
-    /** Adds up the time spent embedding, to report how long the anchors took. */
-    private class TimedEmbedder(
-        private val delegate: Embedder,
-    ) : Embedder {
-        var totalMs = 0L
-            private set
-        var calls = 0
-            private set
+    /** The data files packaged with the app. */
+    private class DataFiles(
+        private val context: Context,
+    ) {
+        fun text(name: String): String =
+            context.assets
+                .open(name)
+                .bufferedReader()
+                .use { it.readText() }
 
-        override fun embed(text: String): FloatArray {
-            val start = SystemClock.elapsedRealtime()
-            return delegate.embed(text).also {
-                totalMs += SystemClock.elapsedRealtime() - start
-                calls++
-            }
-        }
+        fun pipelineData() =
+            PipelineJson(
+                brands = text("brands.json"),
+                keywords = text("keywords.json"),
+                shortcuts = text("shortcuts.json"),
+                urlRules = text("url_rules.json"),
+                warnings = text(WARNINGS_FILE),
+                anchors = text("anchors.json"),
+            ).parse()
     }
 
     private companion object {
@@ -153,5 +200,6 @@ class ScamEngine(
         const val DEBUG_TEXT = "Hello world"
         const val WARNINGS_FILE = "warnings.json"
         const val SAFE_TEXTS_FILE = "safe_anchors.json"
+        const val MODEL_RETRY_MS = 60_000L
     }
 }

@@ -2,8 +2,16 @@ package ph.scamguardian.accessibility
 
 import android.graphics.Rect
 import android.view.accessibility.AccessibilityNodeInfo
+import ph.scamguardian.core.ScreenBlock
+import ph.scamguardian.core.ScreenBlocks
 import ph.scamguardian.core.ScreenNode
 import ph.scamguardian.core.ScreenRect
+
+/** What is on screen in a watched app. */
+class Screen(
+    val packageName: String,
+    val blocks: List<ScreenBlock>,
+)
 
 /** Reads the visible, non-editable text nodes of a window. */
 object ScreenReader {
@@ -31,6 +39,28 @@ object ScreenReader {
             }
         }
         return result
+    }
+
+    /** The blocks of text worth checking in the window under [root], or null when its app is not watched. */
+    fun read(root: AccessibilityNodeInfo): Screen? {
+        val packageName = root.packageName?.toString().orEmpty()
+        val blocks =
+            when (MonitoredApps.kindOf(packageName)) {
+                AppKind.CHAT -> {
+                    // Measured against the app's own window, which is not the whole screen in split-screen.
+                    val window = Rect().also(root::getBoundsInScreen)
+                    ScreenBlocks.chat(textNodes(root), windowLeft = window.left, windowWidth = window.width())
+                }
+
+                AppKind.BROWSER -> {
+                    ScreenBlocks.page(textNodes(root))
+                }
+
+                null -> {
+                    null
+                }
+            }
+        return blocks?.let { Screen(packageName, it) }
     }
 
     private fun textOf(node: AccessibilityNodeInfo): String? =

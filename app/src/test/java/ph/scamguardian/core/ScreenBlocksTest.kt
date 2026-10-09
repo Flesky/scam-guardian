@@ -55,7 +55,7 @@ class ScreenBlocksTest {
                 "Seen",
                 "Active now",
                 "3:05 PM",
-                "ok po",
+                "ok",
                 "Juan dela Cruz",
                 "  Bes emergency lang talaga  ",
                 "Bes emergency lang talaga",
@@ -124,10 +124,29 @@ class ScreenBlocksTest {
     }
 
     @Test
-    fun isWorthChecking_needsThreeWordsAndNoUiText() {
-        listOf("Seen", "ACTIVE NOW", "Like", "Comment", "Share", "Reply", "3:05 PM", "12:30", "9:41am", "hello po", "")
-            .forEach { assertFalse(it, ScreenBlocks.isWorthChecking(it)) }
-        listOf("hello po kuya", "Like and share this", "Meet at 3:05 PM today")
-            .forEach { assertTrue(it, ScreenBlocks.isWorthChecking(it)) }
+    fun isWorthChecking_skipsUiTextAndSingleWordsButNotShortMessagesOrLinks() {
+        listOf(
+            "Seen",
+            "ACTIVE NOW",
+            "Like",
+            "Comment",
+            "Share",
+            "Reply",
+            "3:05 PM",
+            "12:30",
+            "9:41am",
+            "hello",
+            "ok.",
+            "",
+        ).forEach { assertFalse(it, ScreenBlocks.isWorthChecking(it)) }
+        listOf(
+            "Send OTP",
+            "GCash https://gcash-login.xyz",
+            "gcash-win.cc",
+            "https://bit.ly/abc",
+            "bdo-bd0.cc/ph",
+            "hello po kuya",
+            "Meet at 3:05 PM today",
+        ).forEach { assertTrue(it, ScreenBlocks.isWorthChecking(it)) }
     }
 }
