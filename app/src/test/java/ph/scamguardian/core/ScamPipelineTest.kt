@@ -40,6 +40,59 @@ class ScamPipelineTest {
     }
 
     @Test
+    fun check_linkOwnedByAnotherBrandThanTheOneNamed_isAFakeLink() {
+        val pipeline = ScamPipeline(Fixtures.data(brands = "brands_ownership_test.json"), FakeEmbedder())
+
+        val warning = pipeline.check("Please verify your BPI account at https://docs.google.com/forms/d/attacker")
+
+        assertEquals(WarningType.FAKE_LINK, warning?.type)
+        assertEquals("BPI mentioned; link goes to google.com", warning?.evidence)
+    }
+
+    @Test
+    fun check_linkOnACatalogDomain_isNotAnImitationOfAnotherBrand() {
+        val pipeline = ScamPipeline(Fixtures.data(brands = "brands_ownership_test.json"), FakeEmbedder())
+        val cases =
+            listOf(
+                "Please visit https://tiktokglobalshop.com to update your account",
+                "TikTok Shop: Please visit https://tiktokglobalshop.com to update your account",
+                "Open the form at https://docs.google.com/forms/d/abc to update your account",
+                "Google: review your account at https://docs.google.com/settings",
+                "BPI and Google Pay: verify your account at https://docs.google.com/help",
+            )
+
+        cases.forEach { text -> assertNull(text, pipeline.check(text)) }
+    }
+
+    @Test
+    fun check_otpRequest_firesOnRequestsEvenNextToNumbersOrWarnings() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+        val cases =
+            listOf(
+                "Please send your OTP to 12345",
+                "Your OTP is required. Please send it to our support agent.",
+                "Please send the code we sent you. Do not share it with anyone else.",
+                "Paki-send po ng verification code, 5 minutes lang po ito",
+            )
+
+        cases.forEach { text -> assertEquals(text, WarningType.OTP_REQUEST, pipeline.check(text)?.type) }
+    }
+
+    @Test
+    fun check_otpRequest_ignoresCodeDeliveryAndWarnings() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+        val cases =
+            listOf(
+                "Use code 482913 to log in. Never share it with anyone.",
+                "482913 is your BDO OTP. Do not give it to anyone, even bank staff.",
+                "Not you? Don't enter your OTP on any site or send it to anyone. Your OTP is 204816.",
+                "Your code: 7719. Huwag ibigay ang code kahit kanino.",
+            )
+
+        cases.forEach { text -> assertNull(text, pipeline.check(text)) }
+    }
+
+    @Test
     fun check_rulesAreTriedInOrder() {
         val pipeline = Fixtures.rulesOnlyPipeline()
         val cases =

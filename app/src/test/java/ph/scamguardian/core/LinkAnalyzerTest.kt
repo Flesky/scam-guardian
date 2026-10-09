@@ -73,13 +73,25 @@ class LinkAnalyzerTest {
     }
 
     @Test
-    fun analyze_marksLinksOnADetectedBrandsDomainAsOfficial() {
-        val bdo = Fixtures.data().brands.first { it.name == "BDO" }
+    fun analyze_findsTheOwnerOfALinkInTheWholeCatalog() {
+        val owned = analyzer.analyze("Log in at https://online.bdo.com.ph/login").single()
+        val lookAlike = analyzer.analyze("Visit https://bdo.com.ph.evil.cc").single()
 
-        assertTrue(analyzer.analyze("Log in at https://online.bdo.com.ph/login", listOf(bdo)).single().official)
-        assertTrue(analyzer.analyze("Visit bdo.com.ph today", listOf(bdo)).single().official)
-        assertFalse(analyzer.analyze("Visit https://bdo.com.ph.evil.cc", listOf(bdo)).single().official)
-        assertFalse(analyzer.analyze("Log in at https://online.bdo.com.ph/login").single().official)
+        assertEquals(listOf("BDO"), owned.owners)
+        assertEquals(listOf("BDO"), analyzer.analyze("Visit bdo.com.ph today").single().owners)
+        assertEquals(emptyList<String>(), lookAlike.owners)
+        assertFalse(lookAlike.official)
+    }
+
+    @Test
+    fun analyze_ownedLinkIsOfficialOnlyForTheBrandTheMessageNames() {
+        val brands = Fixtures.data().brands.associateBy { it.name }
+        val text = "Log in at https://online.bdo.com.ph/login"
+
+        assertTrue(analyzer.analyze(text).single().official)
+        assertTrue(analyzer.analyze(text, listOf(brands.getValue("BDO"))).single().official)
+        assertTrue(analyzer.analyze(text, listOf(brands.getValue("BPI"), brands.getValue("BDO"))).single().official)
+        assertFalse(analyzer.analyze(text, listOf(brands.getValue("BPI"))).single().official)
     }
 
     @Test

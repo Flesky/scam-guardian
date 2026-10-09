@@ -22,9 +22,9 @@ class ScamPipeline(
         }
     private val normalizer = Normalizer(data.shortcuts)
     private val matcher = KeywordMatcher(normalizer)
-    private val linkAnalyzer = LinkAnalyzer(data.urlRules)
+    private val linkAnalyzer = LinkAnalyzer(data.urlRules, data.brands)
     private val analyzer = MessageAnalyzer(data, normalizer, matcher, linkAnalyzer)
-    private val rules = Rules(matcher)
+    private val rules = Rules(normalizer, matcher)
     private val aiCheck = AiCheck(embedder, linkAnalyzer, data.anchors, aiThreshold)
 
     // Results by hash of the sanitized text, so a repeated message is not checked again.

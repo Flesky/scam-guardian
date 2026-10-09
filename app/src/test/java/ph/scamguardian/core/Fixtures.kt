@@ -24,9 +24,12 @@ object Fixtures {
     fun text(name: String): String =
         checkNotNull(Fixtures::class.java.getResource("/fixtures/$name")) { "Missing fixture $name" }.readText()
 
-    fun data(anchors: String = NO_ANCHORS): PipelineData =
+    fun data(
+        anchors: String = NO_ANCHORS,
+        brands: String = "brands_test.json",
+    ): PipelineData =
         PipelineJson(
-            brands = text("brands_test.json"),
+            brands = text(brands),
             keywords = text("keywords_test.json"),
             shortcuts = text("shortcuts_test.json"),
             urlRules = text("url_rules_test.json"),
@@ -36,7 +39,7 @@ object Fixtures {
 
     fun normalizer(): Normalizer = Normalizer(data().shortcuts)
 
-    fun linkAnalyzer(): LinkAnalyzer = LinkAnalyzer(data().urlRules)
+    fun linkAnalyzer(): LinkAnalyzer = LinkAnalyzer(data().urlRules, data().brands)
 
     fun brandDetector(): BrandDetector = BrandDetector(data().brands, normalizer(), Confusables())
 

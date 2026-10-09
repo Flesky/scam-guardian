@@ -13,6 +13,8 @@ data class Link(
     val shortener: Boolean,
     val riskyTld: Boolean,
     val numericHost: Boolean,
+    /** Names of the catalog brands that own this link's domain. */
+    val owners: List<String> = emptyList(),
     val official: Boolean = false,
 ) {
     val risky: Boolean get() = shortener || riskyTld || numericHost
@@ -25,18 +27,22 @@ data class Link(
 /** Finds links in text, with or without a scheme, and flags the risky ones. */
 class LinkAnalyzer(
     rules: UrlRules,
+    private val catalog: List<Brand> = emptyList(),
 ) {
     private val shorteners = rules.shorteners.map(String::lowercase).toSet()
     private val riskyTlds = rules.riskyTlds.map(String::lowercase).toSet()
 
-    /** Links in [text]. A link is official when it is on a domain of one of the detected [brands]. */
+    /**
+     * Links in [text]. Each link knows which catalog brands own its domain. It is official when one of
+     * its owners is among the brands [named] in the message, or when the message names no brand at all.
+     */
     fun analyze(
         text: String,
-        brands: List<Brand> = emptyList(),
+        named: List<Brand> = emptyList(),
     ): List<Link> =
         detect(text)
             .distinctBy { it.originalUrl }
-            .map { url -> toLink(url, brands) }
+            .map { url -> toLink(url, named) }
 
     /** Returns [text] with every link replaced by [replacement]. */
     fun replaceLinks(
@@ -67,7 +73,7 @@ class LinkAnalyzer(
 
     private fun toLink(
         url: Url,
-        brands: List<Brand>,
+        named: List<Brand>,
     ): Link {
         val host = hostOf(url)
         val labels = host.split('.')
@@ -85,9 +91,11 @@ class LinkAnalyzer(
                             wwwVariant.containsMatchIn(label)
                     },
             )
+        val owners = catalog.filter { link.isOn(it.domains) }.map { it.name }
         return link.copy(
             shortener = link.registrableDomain in shorteners,
-            official = brands.any { link.isOn(it.domains) },
+            owners = owners,
+            official = owners.isNotEmpty() && (named.isEmpty() || named.any { it.name in owners }),
         )
     }
 

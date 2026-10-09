@@ -3,6 +3,8 @@ package ph.scamguardian.core
 /** Everything the prefilter and the rules need to know about one sanitized message. */
 data class MessageAnalysis(
     val sanitized: String,
+    /** The sanitized text with the links taken out. */
+    val body: String,
     val tokens: List<String>,
     val links: List<Link>,
     val brands: List<BrandMatch>,
@@ -23,13 +25,15 @@ class MessageAnalyzer(
     fun analyze(sanitized: String): MessageAnalysis {
         // Words are read from the text around the links; the links are judged on their own.
         val body = linkAnalyzer.replaceLinks(sanitized, " ")
-        val hosts = linkAnalyzer.analyze(sanitized).map { it.host }
-        val brands = brandDetector.detect(body, hosts)
+        // A host that a catalog brand owns is never an imitation of another brand.
+        val unownedHosts = linkAnalyzer.analyze(sanitized).filter { it.owners.isEmpty() }.map { it.host }
+        val brands = brandDetector.detect(body, unownedHosts)
         val tokens = normalizer.tokens(body)
         return MessageAnalysis(
             sanitized = sanitized,
+            body = body,
             tokens = tokens,
-            links = linkAnalyzer.analyze(sanitized, brands.map { it.brand }),
+            links = linkAnalyzer.analyze(sanitized, brands.filter { it.inText }.map { it.brand }),
             brands = brands,
             money = MoneyDetector.find(body),
             general = matcher.match(tokens, keywords.general),

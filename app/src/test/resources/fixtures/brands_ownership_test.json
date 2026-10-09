@@ -1,0 +1,6 @@
+[
+  { "name": "BPI", "aliases": ["bpi"], "domains": ["bpi.com.ph"], "contextWords": [] },
+  { "name": "Google", "aliases": ["google", "gmail"], "domains": ["google.com", "gmail.com"], "contextWords": [] },
+  { "name": "TikTok", "aliases": ["tiktok", "tik tok"], "domains": ["tiktok.com"], "contextWords": [] },
+  { "name": "TikTok Shop", "aliases": ["tiktok shop", "tiktokshop"], "domains": ["tiktok.com", "tiktokshop.com", "tiktokglobalshop.com"], "contextWords": [] }
+]

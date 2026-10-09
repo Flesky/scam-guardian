@@ -16,6 +16,13 @@ android {
         versionName = "1.0"
     }
 
+    // data/brands.json is the only copy of the brand catalog; it is packaged as an asset from there.
+    sourceSets {
+        getByName("main") {
+            assets.directories.add(rootProject.file("data").path)
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

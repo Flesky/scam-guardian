@@ -50,6 +50,7 @@ app/                                  Android app module (:app)
   src/main/java/ph/scamguardian/      Activity, navigation, theme, UI
   src/main/java/ph/scamguardian/core/ Business logic, no Android imports
   src/test/java/ph/scamguardian/core/ Unit tests and fakes
+data/                                 Brand catalog, packaged as an app asset
 config/detekt/                        detekt configuration
 gradle/libs.versions.toml             Pinned versions
 .agents/skills/                       Android agent skills (universal)
