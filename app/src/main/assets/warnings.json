@@ -1,7 +1,42 @@
 {
-  "fake_link": { "title": "Scam detected", "message": "Hindi ito tunay na link ng {brand}. Huwag maglagay ng OTP o personal na impormasyon." },
-  "otp_request": { "title": "Huwag ibigay ang OTP", "message": "Walang bangko o kumpanya na humihingi ng OTP." },
-  "risky_link": { "title": "Mag-ingat", "message": "Kahina-hinala ang link na ito. Huwag itong i-click." },
-  "money_request": { "title": "Tawagan muna ang tao", "message": "Siguraduhin muna na siya talaga bago magpadala ng pera." },
-  "ai_scam": { "title": "Mukhang scam", "message": "Huwag magpadala ng pera, OTP o personal na impormasyon." }
+  "fake_link": {
+    "severity": "red",
+    "title": "Scam detected",
+    "message": {
+      "fil": "Hindi ito ang tunay na link ng {brand}. Huwag magbigay ng OTP o personal na impormasyon.",
+      "en": "Not a real link of {brand}. Do not give your OTP or personal info."
+    }
+  },
+  "otp_request": {
+    "severity": "red",
+    "title": "Scam detected",
+    "message": {
+      "fil": "Huwag ibigay ang OTP. Hindi kailanman manghihingi ng OTP ang mga bangko o kumpanya.",
+      "en": "Do not give your OTP. Banks and companies will never ask for your OTP."
+    }
+  },
+  "risky_link": {
+    "severity": "amber",
+    "title": "Possible scam detected",
+    "message": {
+      "fil": "Mag-ingat. Kahina-hinala ang link na ito.",
+      "en": "Be careful. This link looks suspicious."
+    }
+  },
+  "money_request": {
+    "severity": "amber",
+    "title": "Possible scam detected",
+    "message": {
+      "fil": "Tawagan muna ang tao at siguraduhing siya talaga ito bago magpadala ng pera.",
+      "en": "Call the person first and make sure it is really them before you send money."
+    }
+  },
+  "ai_scam": {
+    "severity": "amber",
+    "title": "Possible scam detected",
+    "message": {
+      "fil": "Huwag magpadala ng pera, OTP o personal na impormasyon.",
+      "en": "Do not send money, OTP, or personal information."
+    }
+  }
 }

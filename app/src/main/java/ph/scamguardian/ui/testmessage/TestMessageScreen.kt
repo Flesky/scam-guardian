@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -37,8 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ph.scamguardian.R
 import ph.scamguardian.ScamGuardianApp
-import ph.scamguardian.core.GateResult
-import ph.scamguardian.core.PipelineReport
+import ph.scamguardian.settings.LanguagePreferences
 import ph.scamguardian.theme.ScamGuardianTheme
 
 private val CheckColor = Color(0xFF2E7D32)
@@ -52,11 +52,14 @@ fun TestMessageScreen(
     viewModel: TestMessageViewModel = testMessageViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    // The language can only change on the main screen, so reading it once per visit is enough.
+    val language = remember { LanguagePreferences(context).language }
+    val warnings = remember { (context.applicationContext as ScamGuardianApp).engine.warnings }
     TestMessageScreen(
         state = state,
-        onBack = onBack,
-        onTextChange = viewModel::onTextChange,
-        onCheck = viewModel::check,
+        resultRows = state.result?.let { CheckResultFormatter.rows(it, warnings, language) },
+        actions = TestMessageActions(onBack, viewModel::onTextChange, viewModel::check),
         modifier = modifier,
     )
 }
@@ -67,12 +70,18 @@ private fun testMessageViewModel(): TestMessageViewModel {
     return viewModel { TestMessageViewModel(engine) }
 }
 
+/** What the user can do on the test screen. */
+internal data class TestMessageActions(
+    val onBack: () -> Unit = {},
+    val onTextChange: (String) -> Unit = {},
+    val onCheck: () -> Unit = {},
+)
+
 @Composable
 internal fun TestMessageScreen(
     state: TestMessageState,
-    onBack: () -> Unit,
-    onTextChange: (String) -> Unit,
-    onCheck: () -> Unit,
+    resultRows: List<ResultRow>?,
+    actions: TestMessageActions,
     modifier: Modifier = Modifier,
 ) {
     val textColor = MaterialTheme.colorScheme.onBackground
@@ -86,12 +95,12 @@ internal fun TestMessageScreen(
                 .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Header(onBack = onBack, textColor = textColor)
-        QuickFillRow(onPick = onTextChange, textColor = textColor)
-        MessageField(text = state.text, onTextChange = onTextChange, textColor = textColor)
+        Header(onBack = actions.onBack, textColor = textColor)
+        QuickFillRow(onPick = actions.onTextChange, textColor = textColor)
+        MessageField(text = state.text, onTextChange = actions.onTextChange, textColor = textColor)
         FlatButton(
             label = stringResource(R.string.test_message_check),
-            onClick = onCheck,
+            onClick = actions.onCheck,
             textColor = Color.White,
             modifier =
                 Modifier
@@ -101,7 +110,7 @@ internal fun TestMessageScreen(
             enabled = state.canCheck,
         )
         Status(state = state, textColor = textColor)
-        state.result?.let { result -> ResultRows(rows = CheckResultFormatter.rows(result), textColor = textColor) }
+        resultRows?.let { rows -> ResultRows(rows = rows, textColor = textColor) }
     }
 }
 
@@ -220,21 +229,13 @@ private fun ResultRows(
 @Preview(showBackground = true)
 @Composable
 private fun TestMessageLoadingPreview() {
-    ScamGuardianTheme { TestMessageScreen(TestMessageState(), onBack = {}, onTextChange = {}, onCheck = {}) }
+    ScamGuardianTheme { TestMessageScreen(TestMessageState(), resultRows = null, TestMessageActions()) }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun TestMessageResultPreview() {
-    val report =
-        PipelineReport(
-            warning = null,
-            rule = null,
-            gate = GateResult(false, listOf("no link, money or keywords")),
-            aiScore = null,
-            aiThreshold = 0.6f,
-            modelCalls = 0,
-        )
-    val state = TestMessageState(text = "Kain na tayo", loading = false, result = CheckResult(report, totalMs = 3))
-    ScamGuardianTheme { TestMessageScreen(state, onBack = {}, onTextChange = {}, onCheck = {}) }
+    val state = TestMessageState(text = "Kain na tayo", loading = false)
+    val rows = listOf(ResultRow("Rule result", "none"), ResultRow("Final result", CheckResultFormatter.NO_WARNING))
+    ScamGuardianTheme { TestMessageScreen(state, resultRows = rows, TestMessageActions()) }
 }

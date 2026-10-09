@@ -6,3 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable data object Main : NavKey
 
 @Serializable data object TestMessage : NavKey
+
+@Serializable data object History : NavKey

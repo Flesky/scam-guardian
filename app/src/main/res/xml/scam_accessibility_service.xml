@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The package list must match MonitoredApps.kt: chat apps first, then feed and browser apps. -->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:accessibilityEventTypes="typeWindowContentChanged|typeWindowStateChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:canRetrieveWindowContent="true"
+    android:description="@string/accessibility_service_description"
+    android:isAccessibilityTool="false"
+    android:packageNames="com.facebook.orca,com.facebook.mlite,com.whatsapp,com.whatsapp.w4b,com.viber.voip,org.telegram.messenger,com.google.android.apps.messaging,com.samsung.android.messaging,com.facebook.katana,com.facebook.lite,com.instagram.android,com.discord,com.zhiliaoapp.musically,com.ss.android.ugc.trill,com.twitter.android,com.google.android.gm,com.android.chrome,com.sec.android.app.sbrowser,org.mozilla.firefox"
+    tools:targetApi="s" />

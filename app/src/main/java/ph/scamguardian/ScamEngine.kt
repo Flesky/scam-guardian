@@ -3,6 +3,7 @@ package ph.scamguardian
 import android.content.Context
 import android.os.SystemClock
 import android.util.Log
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Deferred
@@ -14,6 +15,8 @@ import ph.scamguardian.core.Embedder
 import ph.scamguardian.core.PipelineJson
 import ph.scamguardian.core.PipelineReport
 import ph.scamguardian.core.ScamPipeline
+import ph.scamguardian.core.WarningCatalog
+import ph.scamguardian.core.parseWarnings
 import ph.scamguardian.embedding.LiteRtEmbedder
 import java.io.File
 import java.io.IOException
@@ -31,6 +34,17 @@ class ScamEngine(
     private val embedder = LiteRtEmbedder(File(appContext.getExternalFilesDir(null), MODEL_PATH).path)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val loading: Deferred<ScamPipeline> = scope.async(start = CoroutineStart.LAZY) { load() }
+
+    /** The pipeline once it is loaded, or null while it is loading or if loading failed. Never waits. */
+    @Volatile
+    var loadedPipeline: ScamPipeline? = null
+        private set
+
+    /** The warning texts. Read from assets on first use, without waiting for the model. */
+    val warnings: WarningCatalog by lazy { parseWarnings(asset(WARNINGS_FILE)) }
+
+    /** The single thread every model call runs on. */
+    val modelDispatcher: CoroutineDispatcher get() = embedder.dispatcher
 
     /** Starts loading in the background, if it has not started yet. */
     fun start() {
@@ -52,6 +66,7 @@ class ScamEngine(
             val timed = TimedEmbedder(embedder)
             val pipeline = ScamPipeline(readData(), timed)
             if (BuildConfig.DEBUG) logTimings(loadMs, anchorsMs = timed.totalMs, anchors = timed.calls)
+            loadedPipeline = pipeline
             pipeline
         } catch (e: IllegalStateException) {
             Log.e(TAG, "Could not load the scam engine", e)
@@ -67,7 +82,7 @@ class ScamEngine(
             keywords = asset("keywords.json"),
             shortcuts = asset("shortcuts.json"),
             urlRules = asset("url_rules.json"),
-            warnings = asset("warnings.json"),
+            warnings = asset(WARNINGS_FILE),
             anchors = asset("anchors.json"),
         ).parse()
 
@@ -118,5 +133,6 @@ class ScamEngine(
         const val TAG = "SG"
         const val MODEL_PATH = "models/embeddinggemma-2-740m.litertlm"
         const val DEBUG_TEXT = "Hello world"
+        const val WARNINGS_FILE = "warnings.json"
     }
 }

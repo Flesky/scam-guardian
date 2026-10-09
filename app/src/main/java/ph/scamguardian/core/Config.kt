@@ -29,12 +29,6 @@ data class UrlRules(
 )
 
 @Serializable
-data class WarningText(
-    val title: String,
-    val message: String,
-)
-
-@Serializable
 data class Anchors(
     val scam: List<String> = emptyList(),
     val safe: List<String> = emptyList(),
@@ -55,7 +49,7 @@ data class PipelineJson(
             keywords = json.decodeFromString(keywords),
             shortcuts = parseShortcuts(shortcuts),
             urlRules = json.decodeFromString(urlRules),
-            warnings = json.decodeFromString(warnings),
+            warnings = parseWarnings(warnings),
             anchors = json.decodeFromString(anchors),
         )
 }
@@ -65,10 +59,12 @@ data class PipelineData(
     val keywords: Keywords,
     val shortcuts: Map<String, String>,
     val urlRules: UrlRules,
-    val warnings: Map<String, WarningText>,
+    val warnings: WarningCatalog,
     val anchors: Anchors,
 )
 
 fun parseBrands(text: String): List<Brand> = json.decodeFromString(text)
 
 fun parseShortcuts(text: String): Map<String, String> = json.decodeFromString(text)
+
+fun parseWarnings(text: String): WarningCatalog = WarningCatalog(json.decodeFromString<Map<String, WarningText>>(text))

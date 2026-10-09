@@ -10,14 +10,14 @@ class ScamPipelineTest {
     private val anchors: Anchors = Fixtures.json.decodeFromString(anchorsJson)
 
     @Test
-    fun check_ruleWarning_fillsTheBrandAndGivesEvidence() {
+    fun check_ruleWarning_givesTheTypeSeverityBrandAndEvidence() {
         val warning = Fixtures.rulesOnlyPipeline().check("[BDO] Last chance to redeem. Click now:https://bdo-bd0.cc/ph")
 
         assertEquals(
             ScamWarning(
                 type = WarningType.FAKE_LINK,
-                title = "Scam detected",
-                message = "Hindi ito tunay na link ng BDO. Huwag maglagay ng OTP o personal na impormasyon.",
+                severity = Severity.RED,
+                brand = "BDO",
                 evidence = "BDO mentioned; link goes to bdo-bd0.cc",
             ),
             warning,
@@ -238,7 +238,8 @@ class ScamPipelineTest {
         val warning = pipeline.check(anchors.scam.first())
 
         assertEquals(WarningType.AI_SCAM, warning?.type)
-        assertEquals("Mukhang scam", warning?.title)
+        assertEquals(Severity.AMBER, warning?.severity)
+        assertNull(warning?.brand)
         assertEquals("Similar to known scam messages (score 1.00)", warning?.evidence)
     }
 

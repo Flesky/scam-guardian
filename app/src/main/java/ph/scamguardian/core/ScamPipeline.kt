@@ -2,10 +2,15 @@ package ph.scamguardian.core
 
 import java.security.MessageDigest
 
+/**
+ * A warning without its text: the UI takes the title and the message in the selected language from the
+ * [WarningCatalog], using [type] and [brand].
+ */
 data class ScamWarning(
     val type: WarningType,
-    val title: String,
-    val message: String,
+    val severity: Severity,
+    /** The brand a fake link imitates, or null for the other warning types. */
+    val brand: String?,
     val evidence: String,
 )
 
@@ -33,10 +38,7 @@ class ScamPipeline(
     aiThreshold: Float = AiCheck.DEFAULT_THRESHOLD,
     private val prefilter: Prefilter = Prefilter(),
 ) {
-    private val warnings =
-        WarningType.entries.associateWith { type ->
-            requireNotNull(data.warnings[type.key]) { "No warning text for ${type.key}" }
-        }
+    private val warnings = data.warnings
     private val confusables = Confusables()
     private val normalizer = Normalizer(data.shortcuts, confusables)
     private val matcher = KeywordMatcher(normalizer)
@@ -85,15 +87,13 @@ class ScamPipeline(
     private fun aiMatch(score: AiScore): RuleMatch =
         RuleMatch(WarningType.AI_SCAM, "Similar to known scam messages (score %.2f)".format(score.scam))
 
-    private fun toWarning(match: RuleMatch): ScamWarning {
-        val text = warnings.getValue(match.type)
-        return ScamWarning(
+    private fun toWarning(match: RuleMatch): ScamWarning =
+        ScamWarning(
             type = match.type,
-            title = text.title,
-            message = text.message.replace(BRAND_PLACEHOLDER, match.brand.orEmpty()),
+            severity = warnings.severity(match.type),
+            brand = match.brand,
             evidence = match.evidence,
         )
-    }
 
     private fun hash(text: String): String =
         MessageDigest.getInstance("SHA-256").digest(text.toByteArray()).joinToString("") { "%02x".format(it) }
@@ -101,6 +101,5 @@ class ScamPipeline(
     private companion object {
         const val CACHE_SIZE = 256
         const val LOAD_FACTOR = 0.75f
-        const val BRAND_PLACEHOLDER = "{brand}"
     }
 }
