@@ -59,8 +59,8 @@ object ScreenBlocks {
             .filter { isWorthChecking(it.text) }
             .distinctBy { it.text }
 
-    /** Feed and browser apps: text nodes in the same container are joined, so a post and its link stay together. */
-    fun feed(nodes: List<ScreenNode>): List<ScreenBlock> =
+    /** Browsers: text nodes in the same container are joined, so a paragraph and its link stay together. */
+    fun page(nodes: List<ScreenNode>): List<ScreenBlock> =
         nodes
             .filterNot { isUiText(it.text) }
             .groupBy { it.containerId }

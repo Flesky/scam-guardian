@@ -46,4 +46,16 @@ class SentBlocksTest {
         assertTrue(sent.add("app", "first message here"))
         assertFalse(sent.add("app", "third message here"))
     }
+
+    @Test
+    fun clear_makesEveryBlockNewAgain() {
+        val sent = SentBlocks()
+        sent.add("com.whatsapp", "first message here")
+        sent.add("com.viber.voip", "second message here")
+
+        sent.clear()
+
+        assertTrue(sent.add("com.whatsapp", "first message here"))
+        assertTrue(sent.add("com.viber.voip", "second message here"))
+    }
 }

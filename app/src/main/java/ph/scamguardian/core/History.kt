@@ -51,6 +51,15 @@ object HistoryLog {
         id: String,
     ): List<HistoryEntry> = entries.map { if (it.id == id) it.copy(markedNotScam = true) else it }
 
+    /**
+     * True when exactly this [text] already caused a warning in [entries]. Such a message does not warn
+     * again, until the history is cleared.
+     */
+    fun hasText(
+        entries: List<HistoryEntry>,
+        text: String,
+    ): Boolean = text.isNotBlank() && entries.any { it.text == text }
+
     fun encode(entries: List<HistoryEntry>): String = json.encodeToString(entries)
 
     /** The entries in [text]. Empty or damaged text gives an empty list. */

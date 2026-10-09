@@ -23,8 +23,8 @@ import ph.scamguardian.core.ScreenBlock
 import ph.scamguardian.core.ScreenBlocks
 
 /**
- * Reads on-screen text in the monitored apps, sends it to the scam pipeline, and shows a warning banner
- * with a history entry when the pipeline warns.
+ * Reads incoming messages in chat apps and the page text in browsers, sends them to the scam
+ * pipeline, and shows a warning banner with a history entry when the pipeline warns.
  *
  * It works only while the main button is ON. Text is read once the screen has been still for 1.5 s, or
  * for 3 s after scrolling, and each
@@ -36,12 +36,16 @@ class ScamAccessibilityService : AccessibilityService() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val preferences by lazy { GuardPreferences(this) }
     private val engine by lazy { (application as ScamGuardianApp).engine }
+    private val history by lazy { (application as ScamGuardianApp).history }
     private val notifier by lazy { WarningNotifier(this, scope) }
     private val log = ScanLog()
 
     // Blocks already sent, so the same text is not sent to the model thread on every screen change. Main thread only.
     private val sent = SentBlocks()
     private val timing = ScanTiming()
+
+    // The history clear count when the service last looked. Main thread only.
+    private var historyClears = 0
 
     private val processWindow = Runnable { guarded("read the screen") { processActiveWindow() } }
     private val logTotals =
@@ -93,8 +97,8 @@ class ScamAccessibilityService : AccessibilityService() {
                     ScreenBlocks.chat(nodes, windowLeft = window.left, windowWidth = window.width())
                 }
 
-                AppKind.FEED -> {
-                    ScreenBlocks.feed(nodes)
+                AppKind.BROWSER -> {
+                    ScreenBlocks.page(nodes)
                 }
             }
         send(packageName, blocks)
@@ -109,6 +113,7 @@ class ScamAccessibilityService : AccessibilityService() {
             // Until the model is loaded, blocks are dropped, not queued. They are read again on a later change.
             engine.start()
         } else if (notifier.mayShow(packageName)) {
+            forgetIfHistoryWasCleared(pipeline)
             blocks.filter { sent.add(packageName, it.text) }.forEach { check(packageName, it, pipeline) }
         }
         // Otherwise this app had a banner less than 30 seconds ago. Its blocks are left for a later
@@ -124,7 +129,9 @@ class ScamAccessibilityService : AccessibilityService() {
         scope.launch(engine.modelDispatcher) {
             guarded("check a block") {
                 // Protection may have been switched OFF while this block waited for the model thread.
-                val report = if (preferences.enabled) pipeline.inspectNew(block.text) else null
+                // A message that already has a history entry does not warn again.
+                val isNew = preferences.enabled && !history.hasText(block.text)
+                val report = if (isNew) pipeline.inspectNew(block.text) else null
                 if (!preferences.enabled) {
                     // Not checked, or checked too late to act on: forget it so it is read again when ON.
                     handler.post { sent.forget(packageName, block.text) }
@@ -137,6 +144,16 @@ class ScamAccessibilityService : AccessibilityService() {
                     }
                 }
             }
+        }
+    }
+
+    // Clearing the history lets old messages warn again, so what was remembered about them goes too.
+    private fun forgetIfHistoryWasCleared(pipeline: ScamPipeline) {
+        val clears = history.clears
+        if (clears != historyClears) {
+            historyClears = clears
+            sent.clear()
+            scope.launch(engine.modelDispatcher) { guarded("forget checked messages") { pipeline.forgetAll() } }
         }
     }
 

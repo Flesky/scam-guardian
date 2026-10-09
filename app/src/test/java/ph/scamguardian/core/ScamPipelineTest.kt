@@ -288,6 +288,18 @@ class ScamPipelineTest {
     }
 
     @Test
+    fun forgetAll_makesEveryTextNewAgain() {
+        val pipeline = Fixtures.rulesOnlyPipeline()
+        val text = "[BDO] Last chance to redeem. Click now:https://bdo-bd0.cc/ph"
+
+        assertEquals(WarningType.FAKE_LINK, pipeline.inspectNew(text)?.warning?.type)
+        assertNull(pipeline.inspectNew(text))
+        pipeline.forgetAll()
+
+        assertEquals(WarningType.FAKE_LINK, pipeline.inspectNew(text)?.warning?.type)
+    }
+
+    @Test
     fun check_rulesAreTriedInOrder() {
         val pipeline = Fixtures.rulesOnlyPipeline()
         val cases =

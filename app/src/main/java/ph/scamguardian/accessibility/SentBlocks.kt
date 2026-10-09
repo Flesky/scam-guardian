@@ -28,6 +28,9 @@ class SentBlocks(
         keys.remove(key(packageName, block))
     }
 
+    /** Forgets every block. */
+    fun clear() = keys.clear()
+
     private fun key(
         packageName: String,
         block: String,

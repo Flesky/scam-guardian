@@ -5,24 +5,43 @@ import ph.scamguardian.core.HistoryLog
 import java.io.File
 
 /**
- * The past warnings, kept as JSON in [file]. Every call reads or writes the file, so call it off the
- * main thread. Calls can throw [java.io.IOException].
+ * The past warnings, kept as JSON in [file] and in memory after the first read. A call may read or
+ * write the file, so call it off the main thread. Calls can throw [java.io.IOException].
  */
 class HistoryStore(
     file: File,
 ) {
     private val file = TextFile(file)
+    private var cached: List<HistoryEntry>? = null
+
+    /** How many times the history was cleared since the app started. */
+    @Volatile
+    var clears = 0
+        private set
 
     /** Newest first. */
     @Synchronized
-    fun entries(): List<HistoryEntry> = HistoryLog.decode(file.read())
+    fun entries(): List<HistoryEntry> = cached ?: HistoryLog.decode(file.read()).also { cached = it }
+
+    /** True when exactly this [text] already has an entry, so it should not warn again. */
+    @Synchronized
+    fun hasText(text: String): Boolean = HistoryLog.hasText(entries(), text)
 
     @Synchronized
-    fun add(entry: HistoryEntry) = file.write(HistoryLog.encode(HistoryLog.add(entries(), entry)))
+    fun add(entry: HistoryEntry) = save(HistoryLog.add(entries(), entry))
 
     @Synchronized
-    fun markNotScam(id: String) = file.write(HistoryLog.encode(HistoryLog.markNotScam(entries(), id)))
+    fun markNotScam(id: String) = save(HistoryLog.markNotScam(entries(), id))
 
+    /** Removes every entry. Messages that warned before may then warn again. */
     @Synchronized
-    fun clear() = file.write(HistoryLog.encode(emptyList()))
+    fun clear() {
+        save(emptyList())
+        clears++
+    }
+
+    private fun save(entries: List<HistoryEntry>) {
+        file.write(HistoryLog.encode(entries))
+        cached = entries
+    }
 }

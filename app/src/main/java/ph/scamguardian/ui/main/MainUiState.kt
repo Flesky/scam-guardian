@@ -9,6 +9,8 @@ data class MainUiState(
     /** Whether the accessibility service is switched on in the system settings. */
     val serviceEnabled: Boolean,
     val language: Language = Language.DEFAULT,
+    /** Demo mode: every warning shows its banner at once, with no wait between banners. */
+    val demoMode: Boolean = false,
 ) {
     /** Messages are only read when the button is ON and the service is running. */
     val secured: Boolean get() = isOn && serviceEnabled

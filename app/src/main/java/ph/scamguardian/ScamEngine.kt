@@ -13,7 +13,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import ph.scamguardian.core.Embedder
 import ph.scamguardian.core.PipelineJson
-import ph.scamguardian.core.PipelineReport
 import ph.scamguardian.core.ScamPipeline
 import ph.scamguardian.core.WarningCatalog
 import ph.scamguardian.core.parseWarnings
@@ -58,12 +57,6 @@ class ScamEngine(
 
     /** The loaded pipeline. Suspends until loading is done; throws if the model or data could not be loaded. */
     suspend fun pipeline(): ScamPipeline = loading.await()
-
-    /** Checks [text] on the model thread, without the cache, and reports each step. */
-    suspend fun inspect(text: String): PipelineReport {
-        val pipeline = pipeline()
-        return withContext(embedder.dispatcher) { pipeline.inspect(text) }
-    }
 
     /**
      * "Not a scam": saves [text] in app storage, then makes it a safe anchor on the model thread. From

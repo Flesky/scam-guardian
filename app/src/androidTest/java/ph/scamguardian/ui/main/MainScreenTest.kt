@@ -33,6 +33,7 @@ class MainScreenTest {
                         onToggle = { state = state.copy(isOn = !state.isOn) },
                         onTurnOnProtection = { state = state.copy(isOn = true, serviceEnabled = true) },
                         onLanguageChange = { state = state.copy(language = it) },
+                        onDemoModeChange = { state = state.copy(demoMode = it) },
                     ),
             )
         }
@@ -69,9 +70,14 @@ class MainScreenTest {
     }
 
     @Test
-    fun screen_showsThePrivacyLineAndTheLinks() {
+    fun screen_showsThePrivacyLineAndTheHistoryLink() {
         composeTestRule.onNodeWithText("Uses local engine only. Not connected to the internet.").assertExists()
-        composeTestRule.onNodeWithText("Test a message").assertExists()
         composeTestRule.onNodeWithText("History").assertExists()
+    }
+
+    @Test
+    fun demoSwitch_isInTheHeaderAndCanBeTapped() {
+        composeTestRule.onNodeWithText("Demo").assertExists().performClick()
+        composeTestRule.onNodeWithText("Demo").assertExists()
     }
 }

@@ -79,6 +79,18 @@ class HistoryTest {
     }
 
     @Test
+    fun hasText_isTrueOnlyForExactlyTheSameMessage() {
+        val entries = listOf(entry("1").copy(text = "Paki-send naman po ng code"), entry("2"))
+
+        assertTrue(HistoryLog.hasText(entries, "Paki-send naman po ng code"))
+        assertFalse(HistoryLog.hasText(entries, "Paki-send naman po ng code."))
+        assertFalse(HistoryLog.hasText(entries, "paki-send naman po ng code"))
+        // Entries saved without their message match nothing.
+        assertFalse(HistoryLog.hasText(entries, ""))
+        assertFalse(HistoryLog.hasText(emptyList(), "Paki-send naman po ng code"))
+    }
+
+    @Test
     fun decode_emptyOrDamagedText_givesNoEntries() {
         assertEquals(emptyList<HistoryEntry>(), HistoryLog.decode(""))
         assertEquals(emptyList<HistoryEntry>(), HistoryLog.decode("[{\"id\":"))

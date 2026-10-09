@@ -11,6 +11,7 @@ import ph.scamguardian.core.BannerLimiter
 import ph.scamguardian.core.HistoryEntry
 import ph.scamguardian.core.ScamWarning
 import ph.scamguardian.core.ScreenBlock
+import ph.scamguardian.settings.DemoPreferences
 import ph.scamguardian.settings.LanguagePreferences
 import ph.scamguardian.theme.color
 import java.util.UUID
@@ -30,12 +31,14 @@ internal class WarningNotifier(
     // The outline goes away with the banner.
     private val banner = WarningBanner(service, onDismiss = { guarded("remove the outline") { highlight.dismiss() } })
     private val limiter = BannerLimiter()
+    private val demo = DemoPreferences(service)
 
     // History writes run one at a time and in order, off the main thread.
     private val files = Dispatchers.IO.limitedParallelism(1)
 
-    /** False while [packageName] had a banner less than 30 seconds ago. */
-    fun mayShow(packageName: String): Boolean = limiter.isOpen(packageName, SystemClock.elapsedRealtime())
+    /** False while [packageName] had a banner less than 30 seconds ago. Demo mode has no such wait. */
+    fun mayShow(packageName: String): Boolean =
+        limiter.isOpen(packageName, SystemClock.elapsedRealtime(), unlimited = demo.enabled)
 
     /**
      * Shows the banner for [warning], found in the text [block] of the app [packageName], and adds the
@@ -46,7 +49,7 @@ internal class WarningNotifier(
         block: ScreenBlock,
         warning: ScamWarning,
     ): Boolean {
-        if (!limiter.tryShow(packageName, SystemClock.elapsedRealtime())) return false
+        if (!limiter.tryShow(packageName, SystemClock.elapsedRealtime(), unlimited = demo.enabled)) return false
         // Read each time: the user may have changed the language since the last banner.
         val language = languages.language
         val catalog = app.engine.warnings

@@ -6,17 +6,19 @@ class BannerLimiter(
 ) {
     private val lastShown = HashMap<String, Long>()
 
-    /** True when [app] may show a banner at [nowMs]. */
+    /** True when [app] may show a banner at [nowMs]. With [unlimited] (demo mode) it always may. */
     fun isOpen(
         app: String,
         nowMs: Long,
-    ): Boolean = lastShown[app]?.let { nowMs - it >= intervalMs } ?: true
+        unlimited: Boolean = false,
+    ): Boolean = unlimited || lastShown[app]?.let { nowMs - it >= intervalMs } ?: true
 
     /** True when [app] may show a banner at [nowMs]; the next one is then allowed [intervalMs] later. */
     fun tryShow(
         app: String,
         nowMs: Long,
-    ): Boolean = isOpen(app, nowMs).also { open -> if (open) lastShown[app] = nowMs }
+        unlimited: Boolean = false,
+    ): Boolean = isOpen(app, nowMs, unlimited).also { open -> if (open) lastShown[app] = nowMs }
 
     companion object {
         const val DEFAULT_INTERVAL_MS = 30_000L

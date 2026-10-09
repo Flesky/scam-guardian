@@ -55,13 +55,14 @@ import ph.scamguardian.R
 import ph.scamguardian.accessibility.GuardPreferences
 import ph.scamguardian.accessibility.ScamAccessibilityService
 import ph.scamguardian.core.Language
+import ph.scamguardian.settings.DemoPreferences
 import ph.scamguardian.settings.LanguagePreferences
 import ph.scamguardian.theme.ScamGuardianTheme
 import ph.scamguardian.theme.SecuredGreen
 import ph.scamguardian.theme.WarningRed
 import ph.scamguardian.theme.securedColor
 import ph.scamguardian.theme.unsecuredColor
-import ph.scamguardian.ui.testmessage.FlatButton
+import ph.scamguardian.ui.FlatButton
 
 private val OnColor = SecuredGreen
 private val OffColor = WarningRed
@@ -75,21 +76,23 @@ internal data class MainActions(
     val onToggle: () -> Unit = {},
     val onTurnOnProtection: () -> Unit = {},
     val onLanguageChange: (Language) -> Unit = {},
-    val onTestMessageClick: () -> Unit = {},
+    val onDemoModeChange: (Boolean) -> Unit = {},
     val onHistoryClick: () -> Unit = {},
 )
 
 @Composable
 fun MainScreen(
-    onTestMessageClick: () -> Unit,
     onHistoryClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val guard = remember { GuardPreferences(context) }
     val languages = remember { LanguagePreferences(context) }
+    val demo = remember { DemoPreferences(context) }
     var state by remember {
-        mutableStateOf(MainUiState(guard.enabled, ScamAccessibilityService.isEnabled(context), languages.language))
+        mutableStateOf(
+            MainUiState(guard.enabled, ScamAccessibilityService.isEnabled(context), languages.language, demo.enabled),
+        )
     }
     // The user may have switched the service on or off in Settings while the app was in the background.
     LifecycleResumeEffect(Unit) {
@@ -111,7 +114,10 @@ fun MainScreen(
                 languages.language = language
                 state = state.copy(language = language)
             },
-            onTestMessageClick = onTestMessageClick,
+            onDemoModeChange = { enabled ->
+                demo.enabled = enabled
+                state = state.copy(demoMode = enabled)
+            },
             onHistoryClick = onHistoryClick,
         )
     MainScreen(state = state, actions = actions, modifier = modifier)
@@ -129,17 +135,25 @@ internal fun MainScreen(
 ) {
     val textColor = MaterialTheme.colorScheme.onBackground
     Column(modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
-        BasicText(
-            text = stringResource(R.string.app_name),
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            style =
-                TextStyle(
-                    color = textColor,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.Center,
-                ),
-        )
+        Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
+            BasicText(
+                text = stringResource(R.string.app_name),
+                modifier = Modifier.align(Alignment.Center),
+                style =
+                    TextStyle(
+                        color = textColor,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.Center,
+                    ),
+            )
+            DemoSwitch(
+                enabled = state.demoMode,
+                onChange = actions.onDemoModeChange,
+                textColor = textColor,
+                modifier = Modifier.align(Alignment.CenterEnd),
+            )
+        }
         // Scrolls on small screens and with large fonts; the privacy line stays at the bottom.
         Column(
             modifier =
@@ -154,18 +168,11 @@ internal fun MainScreen(
             PowerToggle(isOn = state.isOn, onToggle = actions.onToggle)
             ProtectionStatus(secured = state.secured, onTurnOnProtection = actions.onTurnOnProtection)
             LanguageToggle(selected = state.language, onSelect = actions.onLanguageChange, textColor = textColor)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FlatButton(
-                    label = stringResource(R.string.test_message_title),
-                    onClick = actions.onTestMessageClick,
-                    textColor = textColor,
-                )
-                FlatButton(
-                    label = stringResource(R.string.history_title),
-                    onClick = actions.onHistoryClick,
-                    textColor = textColor,
-                )
-            }
+            FlatButton(
+                label = stringResource(R.string.history_title),
+                onClick = actions.onHistoryClick,
+                textColor = textColor,
+            )
         }
         PrivacyLine(textColor = textColor, modifier = Modifier.fillMaxWidth().padding(16.dp))
     }

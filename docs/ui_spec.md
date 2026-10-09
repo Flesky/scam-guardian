@@ -33,14 +33,14 @@ warnings.json format becomes: `{ "<type>": { "severity": "red" | "amber", "title
 
 ## Main screen
 
-- Header: "Scam Guardian" (unchanged).
+- Header: "Scam Guardian", with a small "Demo" switch at the top right. In demo mode every warning shows its banner at once, with no 30-second wait between banners in the same app.
 - The big on/off button (unchanged).
 - Status line under the button:
   - ON and service enabled: "You are secured" (green).
   - Otherwise: "You are not secured" (red), plus a button "Turn on protection" that opens the setup steps / Accessibility settings.
 - Language toggle "EN | FIL".
 - Privacy line at the bottom, English only, with a shield icon: "Uses local engine only. Not connected to the internet."
-- Small text links: "Test a message" and "History".
+- Small text link: "History".
 
 ## History screen
 
@@ -52,6 +52,7 @@ warnings.json format becomes: `{ "<type>": { "severity": "red" | "amber", "title
   - App name where it was seen (for example Messenger) and timestamp (for example "Oct 9, 10:24 PM").
 - If the language setting changes, existing entries show the new language (store the type and brand, not the final text).
 - Empty state: "No warnings yet."
+- A message that already has a history entry does not warn again. Clearing the history resets this.
 - A "Clear history" text button at the bottom.
 
 ## Warning banner

@@ -48,7 +48,7 @@ import ph.scamguardian.settings.LanguagePreferences
 import ph.scamguardian.storage.HistoryStore
 import ph.scamguardian.theme.color
 import ph.scamguardian.theme.icon
-import ph.scamguardian.ui.testmessage.FlatButton
+import ph.scamguardian.ui.FlatButton
 import java.io.IOException
 
 // Large text for older users.
@@ -118,7 +118,7 @@ internal fun HistoryScreen(
                 style = TextStyle(color = textColor, fontSize = 20.sp, fontWeight = FontWeight.Medium),
             )
             FlatButton(
-                label = stringResource(R.string.test_message_back),
+                label = stringResource(R.string.back),
                 onClick = onBack,
                 textColor = textColor,
                 modifier = Modifier.align(Alignment.CenterStart),

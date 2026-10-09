@@ -43,4 +43,15 @@ class BannerLimiterTest {
         assertFalse(limiter.isOpen("app", 50))
         assertTrue(limiter.isOpen("app", 100))
     }
+
+    @Test
+    fun unlimited_alwaysAllowsABanner() {
+        val limiter = BannerLimiter(intervalMs = 30_000)
+
+        assertTrue(limiter.tryShow("com.whatsapp", nowMs = 1_000, unlimited = true))
+        assertTrue(limiter.tryShow("com.whatsapp", nowMs = 1_001, unlimited = true))
+        assertTrue(limiter.isOpen("com.whatsapp", nowMs = 1_002, unlimited = true))
+        // Back in normal mode the last demo banner still counts.
+        assertFalse(limiter.tryShow("com.whatsapp", nowMs = 2_000))
+    }
 }

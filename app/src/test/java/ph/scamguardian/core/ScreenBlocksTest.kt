@@ -68,7 +68,7 @@ class ScreenBlocksTest {
     }
 
     @Test
-    fun feed_joinsTextInTheSameContainer() {
+    fun page_joinsTextInTheSameContainer() {
         val nodes =
             listOf(
                 ScreenNode("Congratulations! You won a prize.", centerX = 500, containerId = 7),
@@ -84,28 +84,28 @@ class ScreenBlocksTest {
                 "Congratulations! You won a prize.\nClaim here: https://bit.ly/abc",
                 "Another post about the weather today",
             ),
-            ScreenBlocks.feed(nodes).map { it.text },
+            ScreenBlocks.page(nodes).map { it.text },
         )
     }
 
     @Test
-    fun feed_splitsAContainerIntoBlocksOfAboutAThousandCharacters() {
+    fun page_splitsAContainerIntoBlocksOfAboutAThousandCharacters() {
         val line = "word ".repeat(60).trim()
         val nodes = List(8) { ScreenNode(line, centerX = 500, containerId = 1) }
 
-        val blocks = ScreenBlocks.feed(List(8) { index -> nodes[index].copy(text = "$index $line") }).map { it.text }
+        val blocks = ScreenBlocks.page(List(8) { index -> nodes[index].copy(text = "$index $line") }).map { it.text }
 
         assertEquals(3, blocks.size)
         assertTrue(blocks.all { it.length <= 1000 })
     }
 
     @Test
-    fun feed_keepsOneLongTextWhole() {
+    fun page_keepsOneLongTextWhole() {
         val long = "word ".repeat(400).trim()
 
         assertEquals(
             listOf(ScreenBlock(long)),
-            ScreenBlocks.feed(listOf(ScreenNode(long, centerX = 500, containerId = 1))),
+            ScreenBlocks.page(listOf(ScreenNode(long, centerX = 500, containerId = 1))),
         )
     }
 
@@ -119,8 +119,8 @@ class ScreenBlocksTest {
             listOf(ScreenBlock("Pahiram muna ng 5,000", ScreenRect(40, 900, 560, 1000))),
             ScreenBlocks.chat(listOf(message), windowLeft = 0, windowWidth = 1000),
         )
-        // A joined feed block covers all of its parts.
-        assertEquals(ScreenRect(20, 300, 1000, 460), ScreenBlocks.feed(listOf(post, link)).single().bounds)
+        // A joined block covers all of its parts.
+        assertEquals(ScreenRect(20, 300, 1000, 460), ScreenBlocks.page(listOf(post, link)).single().bounds)
     }
 
     @Test

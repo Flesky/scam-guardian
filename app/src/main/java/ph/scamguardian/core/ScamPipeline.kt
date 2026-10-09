@@ -84,6 +84,12 @@ class ScamPipeline(
         cache.remove(keyOf(text))
     }
 
+    /** Empties the cache, so every text is new to [inspectNew] again. Texts marked safe stay safe. */
+    @Synchronized
+    fun forgetAll() {
+        cache.clear()
+    }
+
     /**
      * The user said [text] is not a scam: it never gives a warning again, and it becomes a safe anchor
      * so similar messages score as safe in the AI check. This calls the model once.
