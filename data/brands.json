@@ -1,0 +1,2131 @@
+[
+  {
+    "name": "BDO",
+    "aliases": [
+      "bdo",
+      "bdo unibank",
+      "banco de oro"
+    ],
+    "domains": [
+      "bdo.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "BPI",
+    "aliases": [
+      "bpi",
+      "bank of the philippine islands",
+      "bpi express online"
+    ],
+    "domains": [
+      "bpi.com.ph",
+      "bpiexpressonline.com",
+      "bpimc.gift",
+      "bpitrade.com",
+      "bpivisa.gift"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Metrobank",
+    "aliases": [
+      "metrobank",
+      "metro bank",
+      "metropolitan bank"
+    ],
+    "domains": [
+      "metrobank.com.ph",
+      "metrobankcard.com",
+      "mbcpc.co"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Landbank",
+    "aliases": [
+      "landbank",
+      "land bank",
+      "lbp",
+      "land bank of the philippines"
+    ],
+    "domains": [
+      "landbank.com",
+      "lbpiaccess.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PNB",
+    "aliases": [
+      "pnb",
+      "philippine national bank"
+    ],
+    "domains": [
+      "pnb.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Security Bank",
+    "aliases": [
+      "security bank",
+      "securitybank",
+      "secb"
+    ],
+    "domains": [
+      "securitybank.com",
+      "securitybank.com.ph",
+      "bettercards.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "UnionBank",
+    "aliases": [
+      "unionbank",
+      "union bank",
+      "ubp",
+      "unionbank of the philippines",
+      "ub"
+    ],
+    "domains": [
+      "unionbankph.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "RCBC",
+    "aliases": [
+      "rcbc",
+      "rizal commercial banking corporation",
+      "rcbc bankard",
+      "rcbc pulz"
+    ],
+    "domains": [
+      "rcbc.com",
+      "rcbccredit.com",
+      "rcbcbankard.com",
+      "rcbc.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "China Bank",
+    "aliases": [
+      "china bank",
+      "chinabank",
+      "china banking corporation",
+      "cbc"
+    ],
+    "domains": [
+      "chinabank.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "EastWest",
+    "aliases": [
+      "eastwest",
+      "east west",
+      "eastwest bank",
+      "ewb"
+      "ew"
+    ],
+    "domains": [
+      "eastwestbanker.com",
+      "eastwestcorporate.com.ph",
+      "ewbconsumerlending.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "AUB",
+    "aliases": [
+      "aub",
+      "asia united bank"
+    ],
+    "domains": [
+      "aub.com.ph",
+      "aub.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PSBank",
+    "aliases": [
+      "psbank",
+      "ps bank",
+      "philippine savings bank"
+    ],
+    "domains": [
+      "psbank.com.ph",
+      "psbankonline.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "DBP",
+    "aliases": [
+      "dbp",
+      "development bank of the philippines"
+    ],
+    "domains": [
+      "dbp.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Maybank PH",
+    "aliases": [
+      "maybank",
+      "maybank ph",
+      "maybank philippines",
+      "maybank2u"
+    ],
+    "domains": [
+      "maybank.com.ph",
+      "maybank2u.com.ph",
+      "maybank.com",
+      "maybankpremierwealth.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "HSBC PH",
+    "aliases": [
+      "hsbc",
+      "hsbc ph",
+      "hsbc philippines"
+    ],
+    "domains": [
+      "hsbc.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "CIMB PH",
+    "aliases": [
+      "cimb",
+      "cimb ph",
+      "cimb bank",
+      "cimb philippines"
+    ],
+    "domains": [
+      "cimbbank.com.ph",
+      "cimb.com",
+      "cimbbank.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "GoTyme",
+    "aliases": [
+      "gotyme",
+      "go tyme",
+      "gotyme bank"
+    ],
+    "domains": [
+      "gotyme.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Maya Bank",
+    "aliases": [
+      "maya bank",
+      "mayabank"
+    ],
+    "domains": [
+      "mayabank.ph",
+      "maya.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Tonik",
+    "aliases": [
+      "tonik",
+      "tonik bank",
+      "tonik digital bank"
+    ],
+    "domains": [
+      "tonikbank.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "UNOBank",
+    "aliases": [
+      "unobank",
+      "uno bank",
+      "uno digital bank"
+    ],
+    "domains": [
+      "uno.bank"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "UnionDigital",
+    "aliases": [
+      "uniondigital",
+      "union digital",
+      "uniondigital bank",
+      "union digital bank"
+    ],
+    "domains": [
+      "uniondigitalbank.io"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Overseas Filipino Bank",
+    "aliases": [
+      "overseas filipino bank",
+      "ofbank",
+      "of bank",
+      "ofw bank"
+    ],
+    "domains": [
+      "ofbank.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "MariBank (SeaBank PH)",
+    "aliases": [
+      "maribank",
+      "mari bank",
+      "seabank",
+      "sea bank",
+      "seabank ph",
+      "seabank philippines"
+    ],
+    "domains": [
+      "maribank.ph",
+      "seabank.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Bank of Commerce",
+    "aliases": [
+      "bank of commerce",
+      "bankcom"
+    ],
+    "domains": [
+      "bankcom.com.ph",
+      "bankcomonline.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PBCOM",
+    "aliases": [
+      "pbcom",
+      "philippine bank of communications"
+    ],
+    "domains": [
+      "pbcom.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "GCash",
+    "aliases": [
+      "gcash",
+      "g cash",
+      "g-cash"
+    ],
+    "domains": [
+      "gcash.com",
+      "mynt.com.ph",
+      "mynt.xyz"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Maya",
+    "aliases": [
+      "maya",
+      "paymaya",
+      "pay maya",
+      "maya wallet"
+    ],
+    "domains": [
+      "maya.ph",
+      "mayabank.ph",
+      "paymaya.com"
+    ],
+    "contextWords": [
+      "wallet",
+      "cash",
+      "bank",
+      "savings",
+      "loan",
+      "credit",
+      "card",
+      "payment",
+      "promo",
+      "rewards",
+      "otp"
+    ]
+  },
+  {
+    "name": "ShopeePay",
+    "aliases": [
+      "shopeepay",
+      "shopee pay"
+    ],
+    "domains": [
+      "shopee.ph",
+      "shopee.com",
+      "shopeepay.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "GrabPay",
+    "aliases": [
+      "grabpay",
+      "grab pay"
+    ],
+    "domains": [
+      "grab.com",
+      "grb.to"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Coins.ph",
+    "aliases": [
+      "coins.ph",
+      "coins ph",
+      "coins"
+    ],
+    "domains": [
+      "coins.ph",
+      "coins.asia"
+    ],
+    "contextWords": [
+      "wallet",
+      "crypto",
+      "bitcoin",
+      "account",
+      "cash",
+      "payment",
+      "otp",
+      "verification"
+    ]
+  },
+  {
+    "name": "PayPal",
+    "aliases": [
+      "paypal",
+      "pay pal"
+    ],
+    "domains": [
+      "paypal.com",
+      "paypal.me",
+      "paypalobjects.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PalawanPay",
+    "aliases": [
+      "palawanpay",
+      "palawan pay"
+    ],
+    "domains": [
+      "palawanpay.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "DiskarTech",
+    "aliases": [
+      "diskartech",
+      "diskar tech",
+      "rcbc diskartech"
+    ],
+    "domains": [
+      "diskartech.ph",
+      "rcbc.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "HelloMoney",
+    "aliases": [
+      "hellomoney",
+      "hello money",
+      "aub hellomoney"
+    ],
+    "domains": [
+      "aub.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "VYBE by BPI",
+    "aliases": [
+      "vybe",
+      "vybe by bpi",
+      "bpi vybe"
+    ],
+    "domains": [
+      "bpi.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Western Union",
+    "aliases": [
+      "western union",
+      "wu",
+      "my wu",
+      "mywu"
+    ],
+    "domains": [
+      "westernunion.com",
+      "wu.com",
+      "mywu.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Wise",
+    "aliases": [
+      "wise",
+      "transferwise",
+      "transfer wise"
+    ],
+    "domains": [
+      "wise.com",
+      "transferwise.com"
+    ],
+    "contextWords": [
+      "money",
+      "transfer",
+      "remittance",
+      "account",
+      "payment",
+      "card",
+      "exchange",
+      "receive",
+      "send"
+    ]
+  },
+  {
+    "name": "Remitly",
+    "aliases": [
+      "remitly"
+    ],
+    "domains": [
+      "remitly.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "MoneyGram",
+    "aliases": [
+      "moneygram",
+      "money gram"
+    ],
+    "domains": [
+      "moneygram.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Cebuana Lhuillier",
+    "aliases": [
+      "cebuana lhuillier",
+      "cebuana",
+      "cebuana pera padala",
+      "ecebuana",
+      "e-cebuana",
+      "cebuana quikz",
+      "quikz",
+      "cebuana 24k"
+    ],
+    "domains": [
+      "cebuanalhuillier.com",
+      "cebuanalhuillierbank.com",
+      "cebuanalhuillierjewelry.com",
+      "justjewels.com.ph",
+      "pjlhuillier.com",
+      "quikz.com"
+    ],
+    "contextWords": [
+      "padala",
+      "pawnshop",
+      "sangla",
+      "remittance",
+      "savings",
+      "rewards",
+      "24k",
+      "loan",
+      "jewelry",
+      "account"
+    ]
+  },
+  {
+    "name": "M Lhuillier",
+    "aliases": [
+      "m lhuillier",
+      "m. lhuillier",
+      "mlhuillier",
+      "ml wallet",
+      "mcash",
+      "ml kwarta padala",
+      "kwarta padala",
+      "ml express"
+    ],
+    "domains": [
+      "mlhuillier.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Palawan Express",
+    "aliases": [
+      "palawan express",
+      "palawan express pera padala",
+      "palawan pawnshop",
+      "palawan",
+      "pepp"
+    ],
+    "domains": [
+      "palawanpawnshop.com",
+      "palawanpay.com"
+    ],
+    "contextWords": [
+      "padala",
+      "pawnshop",
+      "sangla",
+      "remittance",
+      "pera",
+      "payment",
+      "wallet",
+      "cash",
+      "loan"
+    ]
+  },
+  {
+    "name": "Villarica",
+    "aliases": [
+      "villarica",
+      "villarica pawnshop",
+      "villarica cash padala"
+    ],
+    "domains": [
+      "villarica.net"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "RD Pawnshop",
+    "aliases": [
+      "rd pawnshop",
+      "rd cash padala"
+    ],
+    "domains": [
+      "rdpawnshop.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Tambunting",
+    "aliases": [
+      "tambunting",
+      "tambunting pawnshop"
+    ],
+    "domains": [
+      "tambunting.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PERA HUB",
+    "aliases": [
+      "pera hub",
+      "perahub",
+      "petnet"
+    ],
+    "domains": [
+      "petnet.com.ph",
+      "perahub.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "USSC",
+    "aliases": [
+      "ussc",
+      "universal storefront services",
+      "u cash",
+      "u mobile",
+      "ussc money services",
+      "umsi"
+    ],
+    "domains": [
+      "ussc.com.ph",
+      "umsi.ph",
+      "umsi.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "J&T Express",
+    "aliases": [
+      "j&t express",
+      "j&t",
+      "jnt",
+      "jt express"
+    ],
+    "domains": [
+      "jtexpress.ph",
+      "jtexpress.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "LBC",
+    "aliases": [
+      "lbc",
+      "lbc express",
+      "hari ng padala"
+    ],
+    "domains": [
+      "lbcexpress.com",
+      "lbcexpressholdings.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "2GO",
+    "aliases": [
+      "2go",
+      "2go express",
+      "2 go"
+    ],
+    "domains": [
+      "2go.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Ninja Van",
+    "aliases": [
+      "ninja van",
+      "ninjavan"
+    ],
+    "domains": [
+      "ninjavan.co"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Flash Express",
+    "aliases": [
+      "flash express",
+      "flashexpress",
+      "flash"
+    ],
+    "domains": [
+      "flashexpress.ph",
+      "flashexpress.com"
+    ],
+    "contextWords": [
+      "parcel",
+      "delivery",
+      "courier",
+      "tracking",
+      "shipment",
+      "pickup",
+      "cod"
+    ]
+  },
+  {
+    "name": "JRS Express",
+    "aliases": [
+      "jrs express",
+      "jrs"
+    ],
+    "domains": [
+      "jrs-express.com",
+      "jrs-express.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Lalamove",
+    "aliases": [
+      "lalamove",
+      "lala move"
+    ],
+    "domains": [
+      "lalamove.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PHLPost",
+    "aliases": [
+      "phlpost",
+      "philpost",
+      "phl post",
+      "philippine postal corporation",
+      "philippine post office"
+    ],
+    "domains": [
+      "phlpost.gov.ph",
+      "philpost.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "SPX Express",
+    "aliases": [
+      "spx express",
+      "spx",
+      "shopee express"
+    ],
+    "domains": [
+      "spx.ph",
+      "spxexpress.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Philippine Airlines",
+    "aliases": [
+      "philippine airlines",
+      "pal",
+      "pal express",
+      "mabuhay miles"
+    ],
+    "domains": [
+      "philippineairlines.com",
+      "pal.com.ph",
+      "flypal.com"
+    ],
+    "contextWords": [
+      "flight",
+      "airline",
+      "ticket",
+      "booking",
+      "miles",
+      "travel",
+      "baggage"
+    ]
+  },
+  {
+    "name": "Cebu Pacific",
+    "aliases": [
+      "cebu pacific",
+      "cebu pac",
+      "cebupac",
+      "ceb",
+      "cebgo",
+      "mycebupacific"
+    ],
+    "domains": [
+      "cebupacificair.com",
+      "gorewards.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "AirAsia Philippines",
+    "aliases": [
+      "airasia",
+      "air asia",
+      "airasia philippines",
+      "philippines airasia",
+      "airasia move",
+      "move"
+    ],
+    "domains": [
+      "airasia.com",
+      "air.asia"
+    ],
+    "contextWords": [
+      "airasia",
+      "flight",
+      "airline",
+      "ticket",
+      "booking",
+      "travel",
+      "rewards"
+    ]
+  },
+  {
+    "name": "Sunlight Air",
+    "aliases": [
+      "sunlight air",
+      "sunlight express airways"
+    ],
+    "domains": [
+      "sunlightair.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Globe",
+    "aliases": [
+      "globe",
+      "globe telecom",
+      "globeone",
+      "globe one",
+      "globe at home",
+      "globe rewards",
+      "gfiber"
+    ],
+    "domains": [
+      "globe.com.ph",
+      "glbe.co",
+      "globelabs.com.ph"
+    ],
+    "contextWords": [
+      "load",
+      "sim",
+      "promo",
+      "points",
+      "rewards",
+      "prepaid",
+      "postpaid",
+      "broadband",
+      "fiber",
+      "bill"
+    ]
+  },
+  {
+    "name": "TM",
+    "aliases": [
+      "tm",
+      "tm tambayan",
+      "touch mobile",
+      "tm rewards"
+    ],
+    "domains": [
+      "tmtambayan.ph",
+      "globe.com.ph",
+      "glbe.co"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Smart",
+    "aliases": [
+      "smart",
+      "smart communications",
+      "smart bro",
+      "smart signature",
+      "gigalife",
+      "giga life"
+    ],
+    "domains": [
+      "smart.com.ph",
+      "smart.ph",
+      "smrt.ph"
+    ],
+    "contextWords": [
+      "load",
+      "sim",
+      "promo",
+      "points",
+      "rewards",
+      "prepaid",
+      "postpaid",
+      "gigapoints",
+      "bill"
+    ]
+  },
+  {
+    "name": "TNT",
+    "aliases": [
+      "tnt",
+      "talk n text",
+      "talk 'n text",
+      "talk and text"
+    ],
+    "domains": [
+      "tntph.com",
+      "smart.com.ph",
+      "smart.ph",
+      "smrt.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "DITO",
+    "aliases": [
+      "dito",
+      "dito telecommunity",
+      "dito rewards"
+    ],
+    "domains": [
+      "dito.ph",
+      "ditobizbayan.ph",
+      "ditobusiness.ph"
+    ],
+    "contextWords": [
+      "load",
+      "sim",
+      "promo",
+      "points",
+      "rewards",
+      "prepaid",
+      "postpaid",
+      "telecommunity",
+      "wifi",
+      "bill"
+    ]
+  },
+  {
+    "name": "Converge",
+    "aliases": [
+      "converge",
+      "converge ict",
+      "fiberx",
+      "gofiber",
+      "bida fiber",
+      "bidafiber",
+      "surf2sawa",
+      "s2s"
+    ],
+    "domains": [
+      "convergeict.com",
+      "gofiber.ph",
+      "bidafiber.ph",
+      "surf2sawa.com"
+    ],
+    "contextWords": [
+      "fiber",
+      "fiberx",
+      "internet",
+      "broadband",
+      "wifi",
+      "bill",
+      "account",
+      "plan"
+    ]
+  },
+  {
+    "name": "PLDT",
+    "aliases": [
+      "pldt",
+      "pldt home",
+      "pldt enterprise",
+      "mypldt",
+      "pldt rewards"
+    ],
+    "domains": [
+      "pldthome.com",
+      "pldthome.info",
+      "pldt.com",
+      "pldt.com.ph",
+      "pldtenterprise.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "GOMO",
+    "aliases": [
+      "gomo",
+      "gomo ph"
+    ],
+    "domains": [
+      "gomo.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "SKY",
+    "aliases": [
+      "sky",
+      "sky cable",
+      "skycable",
+      "sky fiber",
+      "skyfiber",
+      "sky trufiber",
+      "mysky"
+    ],
+    "domains": [
+      "mysky.com.ph"
+    ],
+    "contextWords": [
+      "cable",
+      "fiber",
+      "internet",
+      "broadband",
+      "wifi",
+      "bill",
+      "account",
+      "subscription"
+    ]
+  },
+  {
+    "name": "Shopee",
+    "aliases": [
+      "shopee",
+      "shoppee",
+      "shopee philippines"
+    ],
+    "domains": [
+      "shopee.ph",
+      "shopee.com",
+      "shope.ee"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Lazada",
+    "aliases": [
+      "lazada",
+      "lazmall",
+      "lazada philippines"
+    ],
+    "domains": [
+      "lazada.com.ph",
+      "lazada.com",
+      "lzd.co"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "TikTok Shop",
+    "aliases": [
+      "tiktok shop",
+      "tik tok shop",
+      "tiktokshop"
+    ],
+    "domains": [
+      "tiktok.com",
+      "tiktokshop.com",
+      "tiktokshopglobalselling.com",
+      "tiktokglobalshop.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Zalora",
+    "aliases": [
+      "zalora",
+      "zalora philippines"
+    ],
+    "domains": [
+      "zalora.com.ph",
+      "zalora.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Grab",
+    "aliases": [
+      "grab",
+      "grabcar",
+      "grab car",
+      "grabfood",
+      "grab food",
+      "grabexpress",
+      "grabmart"
+    ],
+    "domains": [
+      "grab.com",
+      "grabtaxi.com",
+      "grb.to",
+      "grab.careers"
+    ],
+    "contextWords": [
+      "ride",
+      "rider",
+      "driver",
+      "booking",
+      "fare",
+      "food",
+      "delivery",
+      "voucher",
+      "promo",
+      "rewards",
+      "points",
+      "wallet"
+    ]
+  },
+  {
+    "name": "foodpanda",
+    "aliases": [
+      "foodpanda",
+      "food panda",
+      "pandamart",
+      "pandapro"
+    ],
+    "domains": [
+      "foodpanda.ph",
+      "foodpanda.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Angkas",
+    "aliases": [
+      "angkas",
+      "angkas padala"
+    ],
+    "domains": [
+      "angkas.com"
+    ],
+    "contextWords": [
+      "ride",
+      "rider",
+      "biker",
+      "booking",
+      "fare",
+      "motorcycle",
+      "taxi",
+      "voucher",
+      "promo",
+      "padala"
+    ]
+  },
+  {
+    "name": "JoyRide",
+    "aliases": [
+      "joyride",
+      "joy ride",
+      "joyride ph"
+    ],
+    "domains": [
+      "joyride.com.ph"
+    ],
+    "contextWords": [
+      "ride",
+      "rider",
+      "driver",
+      "booking",
+      "fare",
+      "motorcycle",
+      "taxi",
+      "voucher",
+      "promo",
+      "delivery"
+    ]
+  },
+  {
+    "name": "MOVE IT",
+    "aliases": [
+      "move it",
+      "moveit"
+    ],
+    "domains": [
+      "moveit.com.ph"
+    ],
+    "contextWords": [
+      "ride",
+      "rider",
+      "booking",
+      "fare",
+      "motorcycle",
+      "taxi",
+      "voucher",
+      "promo",
+      "delivery"
+    ]
+  },
+  {
+    "name": "Transportify",
+    "aliases": [
+      "transportify"
+    ],
+    "domains": [
+      "transportify.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Meralco",
+    "aliases": [
+      "meralco",
+      "my meralco",
+      "mymeralco",
+      "manila electric company"
+    ],
+    "domains": [
+      "meralco.com.ph",
+      "mymeralco.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Maynilad",
+    "aliases": [
+      "maynilad",
+      "maynilad water"
+    ],
+    "domains": [
+      "mayniladwater.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Manila Water",
+    "aliases": [
+      "manila water"
+    ],
+    "domains": [
+      "manilawater.com",
+      "manilawater.app"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Bayad",
+    "aliases": [
+      "bayad",
+      "bayad center",
+      "bayadcenter"
+    ],
+    "domains": [
+      "bayad.com",
+      "bayadcenter.com"
+    ],
+    "contextWords": [
+      "bill",
+      "bills",
+      "payment",
+      "center",
+      "wallet",
+      "app",
+      "load"
+    ]
+  },
+  {
+    "name": "ECPay",
+    "aliases": [
+      "ecpay",
+      "ec pay"
+    ],
+    "domains": [
+      "ecpay.com.ph",
+      "ectransact.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Visayan Electric",
+    "aliases": [
+      "visayan electric",
+      "veco"
+    ],
+    "domains": [
+      "visayanelectric.com",
+      "veco.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Davao Light",
+    "aliases": [
+      "davao light",
+      "dlpc"
+    ],
+    "domains": [
+      "davaolight.com",
+      "aboitizpower.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "SSS",
+    "aliases": [
+      "sss",
+      "social security system",
+      "mysss",
+      "my.sss"
+    ],
+    "domains": [
+      "sss.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "GSIS",
+    "aliases": [
+      "gsis",
+      "government service insurance system",
+      "gsis touch"
+    ],
+    "domains": [
+      "gsis.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Pag-IBIG",
+    "aliases": [
+      "pag-ibig",
+      "pagibig",
+      "pag ibig",
+      "pag-ibig fund",
+      "hdmf",
+      "virtual pag-ibig"
+    ],
+    "domains": [
+      "pagibigfund.gov.ph",
+      "pagibigfundservices.com"
+    ],
+    "contextWords": [
+      "fund",
+      "housing",
+      "loan",
+      "savings",
+      "mp2",
+      "contribution",
+      "loyalty",
+      "mid"
+    ]
+  },
+  {
+    "name": "PhilHealth",
+    "aliases": [
+      "philhealth",
+      "phil health",
+      "philippine health insurance corporation"
+    ],
+    "domains": [
+      "philhealth.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "BIR",
+    "aliases": [
+      "bir",
+      "bureau of internal revenue"
+    ],
+    "domains": [
+      "bir.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "BSP",
+    "aliases": [
+      "bsp",
+      "bangko sentral",
+      "bangko sentral ng pilipinas"
+    ],
+    "domains": [
+      "bsp.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "LTO",
+    "aliases": [
+      "lto",
+      "land transportation office",
+      "ltms"
+    ],
+    "domains": [
+      "lto.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "LTFRB",
+    "aliases": [
+      "ltfrb",
+      "land transportation franchising and regulatory board"
+    ],
+    "domains": [
+      "ltfrb.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "DFA",
+    "aliases": [
+      "dfa",
+      "department of foreign affairs"
+    ],
+    "domains": [
+      "dfa.gov.ph",
+      "passport.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PSA",
+    "aliases": [
+      "psa",
+      "philippine statistics authority",
+      "nso",
+      "psa serbilis",
+      "psa helpline",
+      "psahelpline"
+    ],
+    "domains": [
+      "psa.gov.ph",
+      "psahelpline.ph",
+      "psaserbilis.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "DSWD",
+    "aliases": [
+      "dswd",
+      "department of social welfare and development"
+    ],
+    "domains": [
+      "dswd.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "DOLE",
+    "aliases": [
+      "dole",
+      "department of labor and employment"
+    ],
+    "domains": [
+      "dole.gov.ph"
+    ],
+    "contextWords": [
+      "labor",
+      "employment",
+      "worker",
+      "salary",
+      "wage",
+      "tupad",
+      "job",
+      "complaint"
+    ]
+  },
+  {
+    "name": "DMW",
+    "aliases": [
+      "dmw",
+      "department of migrant workers",
+      "poea"
+    ],
+    "domains": [
+      "dmw.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "OWWA",
+    "aliases": [
+      "owwa",
+      "overseas workers welfare administration"
+    ],
+    "domains": [
+      "owwa.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "DICT",
+    "aliases": [
+      "dict",
+      "department of information and communications technology"
+    ],
+    "domains": [
+      "dict.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "CICC",
+    "aliases": [
+      "cicc",
+      "cybercrime investigation and coordinating center"
+    ],
+    "domains": [
+      "cicc.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "NBI",
+    "aliases": [
+      "nbi",
+      "national bureau of investigation"
+    ],
+    "domains": [
+      "nbi.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PNP",
+    "aliases": [
+      "pnp",
+      "philippine national police",
+      "pnp clearance",
+      "national police clearance"
+    ],
+    "domains": [
+      "pnp.gov.ph",
+      "pnpclearance.ph",
+      "pnp-csg.org"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "COMELEC",
+    "aliases": [
+      "comelec",
+      "commission on elections"
+    ],
+    "domains": [
+      "comelec.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "NTC",
+    "aliases": [
+      "ntc",
+      "national telecommunications commission"
+    ],
+    "domains": [
+      "ntc.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "DTI",
+    "aliases": [
+      "dti",
+      "department of trade and industry"
+    ],
+    "domains": [
+      "dti.gov.ph",
+      "pntr.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "SEC",
+    "aliases": [
+      "sec",
+      "securities and exchange commission",
+      "sec philippines"
+    ],
+    "domains": [
+      "sec.gov.ph"
+    ],
+    "contextWords": [
+      "registration",
+      "company",
+      "corporation",
+      "securities",
+      "investment",
+      "license",
+      "filing",
+      "esparc"
+    ]
+  },
+  {
+    "name": "eGovPH",
+    "aliases": [
+      "egovph",
+      "egov ph",
+      "egov",
+      "egovph app"
+    ],
+    "domains": [
+      "e.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PhilSys",
+    "aliases": [
+      "philsys",
+      "philippine identification system",
+      "national id",
+      "digital national id",
+      "philid",
+      "ephilid"
+    ],
+    "domains": [
+      "philsys.gov.ph",
+      "national-id.gov.ph",
+      "everify.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PAGCOR",
+    "aliases": [
+      "pagcor",
+      "philippine amusement and gaming corporation"
+    ],
+    "domains": [
+      "pagcor.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Bureau of Immigration",
+    "aliases": [
+      "bureau of immigration",
+      "immigration bureau",
+      "bi philippines",
+      "etravel",
+      "e-travel"
+    ],
+    "domains": [
+      "immigration.gov.ph",
+      "etravel.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Bureau of Customs",
+    "aliases": [
+      "bureau of customs",
+      "boc",
+      "philippine customs"
+    ],
+    "domains": [
+      "customs.gov.ph",
+      "etravel.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PRC",
+    "aliases": [
+      "prc",
+      "professional regulation commission",
+      "leris"
+    ],
+    "domains": [
+      "prc.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PCSO",
+    "aliases": [
+      "pcso",
+      "philippine charity sweepstakes office"
+    ],
+    "domains": [
+      "pcso.gov.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Sun Life PH",
+    "aliases": [
+      "sun life",
+      "sunlife",
+      "sun life philippines",
+      "sun"
+    ],
+    "domains": [
+      "sunlife.com.ph",
+      "sunlife.com",
+      "sunlife.co",
+      "sunlifefunds.com"
+    ],
+    "contextWords": [
+      "insurance",
+      "policy",
+      "premium",
+      "claim",
+      "advisor",
+      "investment",
+      "fund"
+    ]
+  },
+  {
+    "name": "Pru Life UK",
+    "aliases": [
+      "pru life uk",
+      "prulife",
+      "pru life",
+      "pru"
+    ],
+    "domains": [
+      "prulifeuk.com.ph",
+      "pru.ph",
+      "prudentialplc.com",
+      "prudentialcorporation-asia.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "AXA PH",
+    "aliases": [
+      "axa",
+      "axa philippines",
+      "axa ph",
+      "emma by axa"
+    ],
+    "domains": [
+      "axa.com.ph",
+      "axa.com",
+      "myaxabiz.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Manulife PH",
+    "aliases": [
+      "manulife",
+      "manulife philippines",
+      "manulife ph"
+    ],
+    "domains": [
+      "manulife.com",
+      "manulife.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "AIA Philam",
+    "aliases": [
+      "aia philam",
+      "aia philippines",
+      "aia",
+      "philam",
+      "philam life",
+      "philamlife"
+    ],
+    "domains": [
+      "aia.com.ph",
+      "aia.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "PDAX",
+    "aliases": [
+      "pdax",
+      "philippine digital asset exchange"
+    ],
+    "domains": [
+      "pdax.ph",
+      "mintoo.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "COL Financial",
+    "aliases": [
+      "col financial",
+      "colfinancial",
+      "col",
+      "citisec",
+      "citiseconline"
+    ],
+    "domains": [
+      "colfinancial.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "FWD PH",
+    "aliases": [
+      "fwd",
+      "fwd philippines",
+      "fwd life",
+      "fwd omne",
+      "omne by fwd"
+    ],
+    "domains": [
+      "fwd.com.ph",
+      "fwd.com",
+      "omne.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "BPI AIA",
+    "aliases": [
+      "bpi aia",
+      "bpi-aia",
+      "bpi philam",
+      "bpi-philam"
+    ],
+    "domains": [
+      "bpi-aia.com.ph",
+      "aia.com.ph",
+      "aia.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "FirstMetroSec",
+    "aliases": [
+      "firstmetrosec",
+      "first metro sec",
+      "first metro securities",
+      "firstmetrosec go"
+    ],
+    "domains": [
+      "firstmetrosec.com.ph"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Facebook",
+    "aliases": [
+      "facebook",
+      "fb"
+    ],
+    "domains": [
+      "facebook.com",
+      "fb.com",
+      "fb.me",
+      "meta.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Messenger",
+    "aliases": [
+      "messenger",
+      "facebook messenger"
+    ],
+    "domains": [
+      "messenger.com",
+      "facebook.com",
+      "m.me"
+    ],
+    "contextWords": [
+      "facebook",
+      "meta",
+      "chat",
+      "account",
+      "login",
+      "verification"
+    ]
+  },
+  {
+    "name": "WhatsApp",
+    "aliases": [
+      "whatsapp",
+      "whats app"
+    ],
+    "domains": [
+      "whatsapp.com",
+      "wa.me"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Instagram",
+    "aliases": [
+      "instagram",
+      "insta",
+      "ig"
+    ],
+    "domains": [
+      "instagram.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "TikTok",
+    "aliases": [
+      "tiktok",
+      "tik tok"
+    ],
+    "domains": [
+      "tiktok.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Google",
+    "aliases": [
+      "google",
+      "gmail",
+      "google play"
+    ],
+    "domains": [
+      "google.com",
+      "google.com.ph",
+      "about.google",
+      "blog.google",
+      "g.co",
+      "goo.gl",
+      "gmail.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Apple",
+    "aliases": [
+      "apple",
+      "icloud",
+      "apple id",
+      "apple account"
+    ],
+    "domains": [
+      "apple.com",
+      "icloud.com",
+      "apple.co"
+    ],
+    "contextWords": [
+      "iphone",
+      "ipad",
+      "icloud",
+      "itunes",
+      "account",
+      "apple id",
+      "app store",
+      "mac",
+      "subscription"
+    ]
+  },
+  {
+    "name": "Microsoft",
+    "aliases": [
+      "microsoft",
+      "microsoft 365",
+      "outlook",
+      "hotmail"
+    ],
+    "domains": [
+      "microsoft.com",
+      "aka.ms",
+      "live.com",
+      "outlook.com",
+      "hotmail.com",
+      "office.com",
+      "msn.com"
+    ],
+    "contextWords": [
+      "email",
+      "account",
+      "login",
+      "password",
+      "subscription",
+      "office",
+      "microsoft"
+    ]
+  },
+  {
+    "name": "Netflix",
+    "aliases": [
+      "netflix"
+    ],
+    "domains": [
+      "netflix.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Spotify",
+    "aliases": [
+      "spotify"
+    ],
+    "domains": [
+      "spotify.com",
+      "spotify.link"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Amazon",
+    "aliases": [
+      "amazon",
+      "amazon prime"
+    ],
+    "domains": [
+      "amazon.com",
+      "amazonsellerservices.com",
+      "aboutamazon.com",
+      "amzn.to",
+      "a.co"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "DHL",
+    "aliases": [
+      "dhl",
+      "dhl express"
+    ],
+    "domains": [
+      "dhl.com",
+      "dpdhl.com",
+      "dhl-news.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "FedEx",
+    "aliases": [
+      "fedex",
+      "federal express"
+    ],
+    "domains": [
+      "fedex.com"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "UPS",
+    "aliases": [
+      "ups",
+      "united parcel service"
+    ],
+    "domains": [
+      "ups.com"
+    ],
+    "contextWords": [
+      "parcel",
+      "package",
+      "delivery",
+      "tracking",
+      "shipment",
+      "customs"
+    ]
+  },
+  {
+    "name": "YouTube",
+    "aliases": [
+      "youtube",
+      "you tube"
+    ],
+    "domains": [
+      "youtube.com",
+      "youtu.be",
+      "blog.youtube"
+    ],
+    "contextWords": []
+  },
+  {
+    "name": "Telegram",
+    "aliases": [
+      "telegram"
+    ],
+    "domains": [
+      "telegram.org",
+      "t.me"
+    ],
+    "contextWords": [
+      "app",
+      "chat",
+      "account",
+      "login",
+      "code",
+      "channel",
+      "premium"
+    ]
+  }
+]
