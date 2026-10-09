@@ -21,3 +21,4 @@ models/
 
 # Node (Lefthook)
 node_modules/
+lefthook-local.yml

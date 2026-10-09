@@ -32,6 +32,26 @@ Gradle needs a JDK to start. If `java` is not on your PATH, use the one bundled 
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 ```
 
+If Git hooks report “Unable to locate a Java Runtime” (for example, when pushing
+from a GUI), create an ignored `lefthook-local.yml` so both hooks can find your JDK:
+
+```yaml
+pre-commit:
+  commands:
+    check:
+      env:
+        JAVA_HOME: /Applications/Android Studio.app/Contents/jbr/Contents/Home
+
+pre-push:
+  commands:
+    check:
+      env:
+        JAVA_HOME: /Applications/Android Studio.app/Contents/jbr/Contents/Home
+```
+
+Use your installed JDK's path if it differs from this macOS example. Lefthook
+merges this local configuration with the shared checks; all checks still run.
+
 ## Commands
 
 | Task | Command |
