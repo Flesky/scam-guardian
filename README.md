@@ -2,6 +2,22 @@
 
 Android app with on-device AI (no INTERNET permission).
 
+## How it works
+
+```mermaid
+flowchart TD
+    A["Message on screen<br/>(messaging app or browser)"] --> B["Accessibility service<br/>reads incoming text"]
+    B --> C{"Rules<br/>fake link, OTP request, risky link,<br/>scam claim, refund request, money request"}
+    C -- match --> W["Warning banner<br/>+ History entry"]
+    C -- no match --> D{"6+ words and a link,<br/>amount or keyword?"}
+    D -- no --> N["No warning"]
+    D -- yes --> E["AI check on the phone<br/>(EmbeddingGemma 2, LiteRT-LM)"]
+    E -- closer to scam examples --> W
+    E -- otherwise --> N
+```
+
+Nothing leaves the phone: the app has no INTERNET permission.
+
 ## Stack
 
 - Kotlin 2.4.21, Jetpack Compose (BOM 2026.09.00)
