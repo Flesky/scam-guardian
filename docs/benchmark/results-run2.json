@@ -1,0 +1,1519 @@
+{
+  "modelLoadMs": 1355.722135,
+  "anchorsMs": 2405.111614,
+  "embedMs": [
+    71.745729,
+    69.411302,
+    71.023281,
+    72.314584,
+    73.495469,
+    70.542291,
+    69.467865,
+    66.646875,
+    74.168645,
+    68.338698,
+    63.431614,
+    66.322187,
+    67.899688,
+    68.984843,
+    68.790573,
+    70.764948,
+    67.64375,
+    69.817343,
+    68.948855,
+    68.056771
+  ],
+  "results": [
+    {
+      "label": "scam",
+      "category": "phishing_link",
+      "text": "Metrobank Advisory: Your online account has been temporarily locked due to unusual activity. Verify your identity within 24 hours at https:\/\/metrobank-secure.top\/verify to avoid suspension.",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: metrobank-secure.top",
+        "keywords: verify, account"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 198.393386
+    },
+    {
+      "label": "scam",
+      "category": "phishing_link",
+      "text": "GCash: Na-hold ang iyong account dahil sa hindi kumpletong verification. I-update ang iyong impormasyon dito para hindi ma-block: https:\/\/gcash-verify.xyz\/update",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: gcash-verify.xyz",
+        "keywords: verification, account, update"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 79.776458
+    },
+    {
+      "label": "scam",
+      "category": "phishing_link",
+      "text": "Maya: We detected a login from a new device. If this was not you, secure your wallet now at http:\/\/maya-ph.help\/secure",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: maya-ph.help",
+        "keywords: login"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 70.558229
+    },
+    {
+      "label": "scam",
+      "category": "phishing_link",
+      "text": "UnionBank: Your card ending 4421 was charged PHP 12,499.00 at LAZADA. Not you? Cancel the transaction here: https:\/\/unionbank-dispute.cc",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: unionbank-dispute.cc",
+        "money: php 12,499.00"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 59.201406
+    },
+    {
+      "label": "scam",
+      "category": "phishing_link",
+      "text": "Landbank: Kailangan i-update ang inyong iAccess account bago mag Oct 15 para tuloy ang serbisyo. Mag-login dito https:\/\/lbp-iaccess.online",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: lbp-iaccess.online",
+        "keywords: login, mag-login, account, update, kailangan"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 57.832656
+    },
+    {
+      "label": "scam",
+      "category": "phishing_link",
+      "text": "Security Bank: your account will be deactivated today because of a failed KYC update. Complete it now: https:\/\/securitybank.kyc-portal.info",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: securitybank.kyc-portal.info",
+        "keywords: account, update"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 61.427343
+    },
+    {
+      "label": "scam",
+      "category": "phishing_link",
+      "text": "SSS: Your salary loan of P20,000 has been approved and is ready for release. Confirm your disbursement account at https:\/\/sss-gov.loan-release.site",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: sss-gov.loan-release.site",
+        "money: p20,000",
+        "keywords: account, loan"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 55.041615
+    },
+    {
+      "label": "scam",
+      "category": "phishing_link",
+      "text": "PhilHealth: May unclaimed benefit ka na P8,500. I-claim bago mag-expire sa link na ito: https:\/\/bit.ly\/philhealth-claim25",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: bit.ly",
+        "money: p8,500",
+        "keywords: expire, claim"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 40.214584
+    },
+    {
+      "label": "scam",
+      "category": "fee_link",
+      "text": "Easytrip: Your RFID account has an unpaid toll balance of P250.00. Settle today to avoid a P3,000 penalty: https:\/\/easytrip-ph.vip\/pay",
+      "warning": "risky_link",
+      "rule": "risky_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: easytrip-ph.vip",
+        "money: p250.00, p3,000",
+        "keywords: balance, account"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 40.108021
+    },
+    {
+      "label": "scam",
+      "category": "fee_link",
+      "text": "AutoSweep RFID: May hindi nabayarang toll fee ang iyong sasakyan. Bayaran agad para iwas multa at suspension ng account: https:\/\/autosweep.rfid-pay.top",
+      "warning": "risky_link",
+      "rule": "risky_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: autosweep.rfid-pay.top",
+        "keywords: fee, account, agad"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 45.934531
+    },
+    {
+      "label": "scam",
+      "category": "fee_link",
+      "text": "PHLPost: Your parcel could not be delivered because of an incomplete address. Please update your details and pay the P45 redelivery fee at https:\/\/phlpost-track.cc\/ph",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: phlpost-track.cc",
+        "money: p45",
+        "keywords: fee, update"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 37.675625
+    },
+    {
+      "label": "scam",
+      "category": "fee_link",
+      "text": "J&T Express: Hindi namin ma-deliver ang parcel mo. I-confirm ang address at bayaran ang P38 handling fee dito: http:\/\/jtexpress-ph.icu",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: jtexpress-ph.icu",
+        "money: p38",
+        "keywords: fee"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 36.435729
+    },
+    {
+      "label": "scam",
+      "category": "fee_link",
+      "text": "LTO: You have an unsettled traffic violation recorded on 10\/03. Pay the fine within 48 hours to avoid license suspension: https:\/\/lto-gov.fines-ph.top",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: lto-gov.fines-ph.top"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 44.582969
+    },
+    {
+      "label": "scam",
+      "category": "fee_link",
+      "text": "Smart: Mag-e-expire na ang SIM registration mo ngayong araw. I-register ulit para hindi ma-deactivate ang number mo: https:\/\/smart-simreg.xyz",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: smart-simreg.xyz",
+        "keywords: expire"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 45.290364
+    },
+    {
+      "label": "scam",
+      "category": "fee_link",
+      "text": "DSWD: Kwalipikado ka sa P5,000 ayuda. I-fill out ang form at ilagay ang GCash number at MPIN para ma-release: https:\/\/dswd-ayuda.site\/form",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: dswd-ayuda.site",
+        "money: p5,000"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 36.000781
+    },
+    {
+      "label": "scam",
+      "category": "prize",
+      "text": "Congratulations! Your mobile number won P750,000 in the GCash Anniversary Raffle. To claim, send your full name, address and a P1,500 processing fee to 0917 555 0142.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p750,000, p1,500",
+        "keywords: send, fee, congratulations, claim"
+      ],
+      "aiScam": 0.8294767141342163,
+      "aiSafe": 0.884471595287323,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 117.008489
+    },
+    {
+      "label": "scam",
+      "category": "prize",
+      "text": "Nanalo ka ng brand new iPhone 17 sa aming raffle! Para ma-claim, bayaran lang ang shipping fee na P499 sa GCash number na ito 09285550117.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p499",
+        "keywords: fee, claim, nanalo"
+      ],
+      "aiScam": 0.8201770782470703,
+      "aiSafe": 0.8741046786308289,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 111.098542
+    },
+    {
+      "label": "scam",
+      "category": "prize",
+      "text": "Wowowin: Ikaw ang napili ni Kuya Wil na manalo ng P100,000! Mag-reply ng buong pangalan at magpadala ng P800 para sa tax at release.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p100,000, p800",
+        "keywords: nanalo"
+      ],
+      "aiScam": 0.8185104131698608,
+      "aiSafe": 0.8238062262535095,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 104.760625
+    },
+    {
+      "label": "scam",
+      "category": "casino",
+      "text": "Welcome bonus P999 free sa bagong member! Mag-register at mag-deposit ng P100 para ma-withdraw agad ang panalo: https:\/\/jiliwin88.vip\/reg",
+      "warning": "risky_link",
+      "rule": "risky_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: jiliwin88.vip",
+        "money: p999, p100",
+        "keywords: deposit, agad, nanalo, bonus, withdraw"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 52.39099
+    },
+    {
+      "label": "scam",
+      "category": "casino",
+      "text": "Boss, pasok ka na sa slot namin, 300% bonus sa first cash-in hanggang mamayang 12mn lang. Withdraw via GCash in 1 minute. luckyph777.cc",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: luckyph777.cc",
+        "keywords: bonus, withdraw"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 32.468125
+    },
+    {
+      "label": "scam",
+      "category": "job",
+      "text": "Hello, I'm Anna from Shopee HR. We are hiring part-time staff, work from home, 15-30 minutes a day, earn P800 to P3,000 daily. Message me on WhatsApp +63 966 555 0193 to start.",
+      "warning": "ai_scam",
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p800, p3,000",
+        "keywords: hiring, earn"
+      ],
+      "aiScam": 0.7902501821517944,
+      "aiSafe": 0.7807533144950867,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 115.596354
+    },
+    {
+      "label": "scam",
+      "category": "job",
+      "text": "Hi! Nakita namin ang resume mo sa JobStreet. May online part-time job kami, mag-like lang ng videos sa YouTube, P150 kada task, bayad agad sa GCash. Interesado ka ba?",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p150",
+        "keywords: bayad, agad"
+      ],
+      "aiScam": 0.810414731502533,
+      "aiSafe": 0.8213045001029968,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 99.241563
+    },
+    {
+      "label": "scam",
+      "category": "job",
+      "text": "Magandang araw! Naghahanap kami ng 50 tao para sa online data entry. P2,500 kada araw, walang experience na kailangan. I-add ako sa Telegram @hr_lazada_ph para sa detalye.",
+      "warning": "ai_scam",
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p2,500",
+        "keywords: kailangan"
+      ],
+      "aiScam": 0.8263874053955078,
+      "aiSafe": 0.8166940808296204,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 116.621458
+    },
+    {
+      "label": "scam",
+      "category": "job",
+      "text": "Your application is approved. To activate your work account and receive your first salary, please pay the P500 training kit fee today. Refundable after your first task.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p500",
+        "keywords: fee, account"
+      ],
+      "aiScam": 0.8300937414169312,
+      "aiSafe": 0.868334174156189,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 120.509791
+    },
+    {
+      "label": "scam",
+      "category": "job",
+      "text": "Natapos mo na ang 3 tasks, congrats! Para ma-withdraw ang P4,200 commission mo, kailangan mo munang mag-recharge ng P2,000 sa account. Ibabalik din yan kasama ng kita.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p4,200, p2,000",
+        "keywords: account, kailangan, withdraw"
+      ],
+      "aiScam": 0.7920070290565491,
+      "aiSafe": 0.8174489736557007,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 105.203489
+    },
+    {
+      "label": "scam",
+      "category": "investment",
+      "text": "Gusto mo bang kumita ng 30% kada linggo? Mag-invest ng minimum P1,000 sa aming crypto trading group, guaranteed ang tubo at walang lugi. PM mo ako para sa slot.",
+      "warning": "scam_claim",
+      "rule": "scam_claim",
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p1,000"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 35.747916
+    },
+    {
+      "label": "scam",
+      "category": "investment",
+      "text": "Sis, legit paluwagan ito, double your money in 7 days. P5,000 magiging P10,000. Limited slots lang, send mo na sa GCash ko para ma-reserve ka.",
+      "warning": "scam_claim",
+      "rule": "scam_claim",
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p5,000, p10,000",
+        "keywords: send, limited"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 18.669114
+    },
+    {
+      "label": "scam",
+      "category": "investment",
+      "text": "I made P85,000 last month with this USDT mining platform. Deposit 100 USDT and the system pays you 5% daily. I can guide you step by step, just send the deposit to my wallet.",
+      "warning": "ai_scam",
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p85,000",
+        "keywords: send, deposit"
+      ],
+      "aiScam": 0.8325671553611755,
+      "aiSafe": 0.8295354247093201,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 116.357917
+    },
+    {
+      "label": "scam",
+      "category": "loan",
+      "text": "Approved na ang P50,000 loan mo sa 0% interest! Para ma-release ngayong araw, magbayad muna ng P1,200 insurance fee sa GCash 0939 555 0166.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p50,000, p1,200",
+        "keywords: fee, loan"
+      ],
+      "aiScam": 0.8114481568336487,
+      "aiSafe": 0.8625909686088562,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 105.23026
+    },
+    {
+      "label": "scam",
+      "category": "loan",
+      "text": "Good day! This is Home Credit. Your cash loan of P80,000 is pre-approved. Send a photo of your valid ID, your ATM card front and back, and the OTP you will receive.",
+      "warning": "otp_request",
+      "rule": "otp_request",
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p80,000",
+        "keywords: send, otp, loan"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 22.681927
+    },
+    {
+      "label": "scam",
+      "category": "otp",
+      "text": "Hello po, GCash customer service ito. May nag-attempt na mag-login sa account ninyo. Paki-bigay po ang 6-digit code na natanggap ninyo para ma-block namin.",
+      "warning": "otp_request",
+      "rule": "otp_request",
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: code, login, mag-login, account"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 16.229271
+    },
+    {
+      "label": "scam",
+      "category": "otp",
+      "text": "Ma'am\/Sir, BDO fraud department here. We need to reverse an unauthorized transaction. Kindly read to me the OTP sent to your phone and your card CVV.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: otp"
+      ],
+      "aiScam": 0.7946971654891968,
+      "aiSafe": 0.8412951827049255,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 91.521562
+    },
+    {
+      "label": "scam",
+      "category": "otp",
+      "text": "Pre, na-send ko by mistake yung verification code ng Facebook ko sa number mo. Pa-forward naman dito agad, salamat.",
+      "warning": "otp_request",
+      "rule": "otp_request",
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: send, code, verification, agad, verification code"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 12.587188
+    },
+    {
+      "label": "scam",
+      "category": "otp",
+      "text": "Maya Support: para ma-upgrade ang wallet limit mo sa P500,000, ibigay ang iyong MPIN at ang OTP na ipapadala namin.",
+      "warning": "otp_request",
+      "rule": "otp_request",
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p500,000",
+        "keywords: otp"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 13.349687
+    },
+    {
+      "label": "scam",
+      "category": "impersonation",
+      "text": "Hi ma, ito na bago kong number, nasira phone ko. Pwede mo ba akong padalhan ng 8,000 sa GCash ng kaibigan ko? Kailangan ko ngayon pambayad sa tuition.",
+      "warning": "money_request",
+      "rule": "money_request",
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: kailangan, padalhan"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 20.237812
+    },
+    {
+      "label": "scam",
+      "category": "impersonation",
+      "text": "Tita, si Carlo ito. Naaksidente ako at nasa presinto ako ngayon. Kailangan ko ng 15,000 pang-areglo, huwag mo munang sabihin kay mama. Padala mo sa number na ito.",
+      "warning": "money_request",
+      "rule": "money_request",
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: padala, regalo, kailangan"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 20.178438
+    },
+    {
+      "label": "scam",
+      "category": "impersonation",
+      "text": "Kuya, naholdap ako dito sa Cubao, wala akong pamasahe pauwi. Pa-send naman kahit 2,000 sa GCash 09175550188, bayaran ko pagdating ko.",
+      "warning": "money_request",
+      "rule": "money_request",
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: send"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 16.778593
+    },
+    {
+      "label": "scam",
+      "category": "impersonation",
+      "text": "Good pm, this is your boss. I am in a meeting and cannot call. Please buy 5 pcs of P1,000 Google Play cards now and send me the codes. I will reimburse you later.",
+      "warning": "ai_scam",
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p1,000",
+        "keywords: send, play"
+      ],
+      "aiScam": 0.7818215489387512,
+      "aiSafe": 0.7798386812210083,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 104.169792
+    },
+    {
+      "label": "scam",
+      "category": "wrong_send",
+      "text": "Hello po, napadalhan ko po kayo ng P3,500 sa GCash nang hindi sinasadya. Pwede po bang ibalik sa 09665550121? Pambili po yun ng gamot ng anak ko.",
+      "warning": "refund_request",
+      "rule": "refund_request",
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p3,500",
+        "keywords: padalhan"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 32.362187
+    },
+    {
+      "label": "scam",
+      "category": "wrong_send",
+      "text": "Sir mali po ang na-load ko, P1,000 napunta sa number nyo. Paki pasa load naman po pabalik dito sa number ko, maawa na po kayo.",
+      "warning": "ai_scam",
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p1,000"
+      ],
+      "aiScam": 0.8452728986740112,
+      "aiSafe": 0.8329286575317383,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 90.784531
+    },
+    {
+      "label": "scam",
+      "category": "charity",
+      "text": "Humihingi po kami ng tulong para sa operasyon ng 3-year-old na si Baby Mikay. Kahit magkano po, ipadala sa GCash 0956 555 0109. Ibahagi po natin, God bless.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: padala"
+      ],
+      "aiScam": 0.7839118242263794,
+      "aiSafe": 0.806850790977478,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 126.487135
+    },
+    {
+      "label": "scam",
+      "category": "romance",
+      "text": "Hi dear, I am Dr. James, a US Army surgeon in Syria. I sent you a package with gifts and $20,000 cash. Customs needs a clearance fee of P15,000 before delivery. Please pay so we can finally meet.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p15,000",
+        "keywords: fee"
+      ],
+      "aiScam": 0.8247687816619873,
+      "aiSafe": 0.8333292007446289,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 108.313698
+    },
+    {
+      "label": "scam",
+      "category": "extortion",
+      "text": "We have recorded you through your camera while you were browsing adult websites. Pay P25,000 in Bitcoin within 48 hours or we send the video to all your contacts.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p25,000",
+        "keywords: send"
+      ],
+      "aiScam": 0.7761090993881226,
+      "aiSafe": 0.7823694348335266,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 103.939166
+    },
+    {
+      "label": "scam",
+      "category": "refund",
+      "text": "Meralco: You are entitled to a refund of P2,318.40 for overbilling. Enter your debit card number and PIN here to receive it within the day: https:\/\/meralco-refund.top",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: meralco-refund.top",
+        "money: p2,318.40",
+        "keywords: pin"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 67.206406
+    },
+    {
+      "label": "scam",
+      "category": "phishing_link",
+      "text": "Netflix: Your payment failed and your subscription is on hold. Update your card details to continue watching: https:\/\/netflix-billing.help\/ph",
+      "warning": "fake_link",
+      "rule": "fake_link",
+      "gatePasses": true,
+      "gateReasons": [
+        "link: netflix-billing.help",
+        "keywords: update"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 33.970052
+    },
+    {
+      "label": "legit",
+      "category": "otp",
+      "text": "Your GCash verification code is 714902. Never share this code with anyone, even if they claim to be from GCash.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: code, verification, claim, verification code"
+      ],
+      "aiScam": 0.7984104156494141,
+      "aiSafe": 0.8611986041069031,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 97.2125
+    },
+    {
+      "label": "legit",
+      "category": "otp",
+      "text": "BPI: Do not share your One-Time PIN 359104 with anyone. BPI will never ask for it. Valid for 5 minutes.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: pin, one time pin"
+      ],
+      "aiScam": 0.8112996816635132,
+      "aiSafe": 0.8641733527183533,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 88.369896
+    },
+    {
+      "label": "legit",
+      "category": "otp",
+      "text": "Shopee: 482019 ang verification code mo. Huwag itong ibahagi kahit kanino, kasama na ang mga taga-Shopee.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: utang, code, verification, verification code"
+      ],
+      "aiScam": 0.8202005624771118,
+      "aiSafe": 0.8604217171669006,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 104.851354
+    },
+    {
+      "label": "legit",
+      "category": "otp",
+      "text": "UnionBank: Use OTP 660213 to log in. If you did not request this, call our hotline at (02) 8841-8600.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: otp, log in"
+      ],
+      "aiScam": 0.7856101393699646,
+      "aiSafe": 0.8755156993865967,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 91.707187
+    },
+    {
+      "label": "legit",
+      "category": "otp",
+      "text": "Ang iyong Landbank OTP ay 204871. Huwag ibigay ito kahit kanino. Kung hindi ikaw ang gumawa nito, tumawag sa aming hotline.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: otp"
+      ],
+      "aiScam": 0.8023022413253784,
+      "aiSafe": 0.8302727937698364,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 95.530729
+    },
+    {
+      "label": "legit",
+      "category": "transaction",
+      "text": "BDO: You withdrew PHP 5,000.00 from your account ending 8812 on 10\/08 at 6:42 PM. If this was not you, call 8631-8000.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: php 5,000.00",
+        "keywords: account, withdraw"
+      ],
+      "aiScam": 0.7909844517707825,
+      "aiSafe": 0.7983396053314209,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 97.517396
+    },
+    {
+      "label": "legit",
+      "category": "transaction",
+      "text": "You have sent PHP 1,250.00 of GCash to MA****A D. on 10-08-2026 09:14 AM. Your new balance is PHP 3,402.15. Ref. No. 9012345678901.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: php 1,250.00, php 3,402.15",
+        "keywords: balance"
+      ],
+      "aiScam": 0.8453289270401001,
+      "aiSafe": 0.8687010407447815,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 102.020208
+    },
+    {
+      "label": "legit",
+      "category": "transaction",
+      "text": "Maya: You paid P349.00 to FOODPANDA on Oct 7. Available balance P2,110.55. Ref 7A91K2.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p349.00, p2,110.55",
+        "keywords: balance"
+      ],
+      "aiScam": 0.8352532982826233,
+      "aiSafe": 0.8731389045715332,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 105.092136
+    },
+    {
+      "label": "legit",
+      "category": "transaction",
+      "text": "Metrobank: A purchase of PHP 2,899.00 was made on your card ending 1190 at SM STORE MAKATI. Available credit limit: PHP 61,204.10.",
+      "warning": "ai_scam",
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: php 2,899.00, php 61,204.10"
+      ],
+      "aiScam": 0.8294699788093567,
+      "aiSafe": 0.8244112730026245,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 101.165781
+    },
+    {
+      "label": "legit",
+      "category": "transaction",
+      "text": "Your Meralco bill for September is P3,418.27, due on Oct 18. Pay through the Meralco app or any accredited payment center.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p3,418.27"
+      ],
+      "aiScam": 0.7908375263214111,
+      "aiSafe": 0.7961058616638184,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 94.275782
+    },
+    {
+      "label": "legit",
+      "category": "transaction",
+      "text": "Maynilad: Naitala na namin ang bayad mong P612.50 noong Oct 6. Salamat sa maagap na pagbabayad!",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p612.50",
+        "keywords: bayad"
+      ],
+      "aiScam": 0.823954701423645,
+      "aiSafe": 0.8710505962371826,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 88.331041
+    },
+    {
+      "label": "legit",
+      "category": "transaction",
+      "text": "Home Credit: Your monthly installment of P1,499 is due on Oct 15. Pay via the My Home Credit app, GCash or any partner outlet.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p1,499"
+      ],
+      "aiScam": 0.8116814494132996,
+      "aiSafe": 0.8262023329734802,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 111.006823
+    },
+    {
+      "label": "legit",
+      "category": "transaction",
+      "text": "Converge: Your payment of P1,500.00 has been posted to your account. Thank you for paying on time.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p1,500.00",
+        "keywords: account"
+      ],
+      "aiScam": 0.819317102432251,
+      "aiSafe": 0.886776328086853,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 104.640989
+    },
+    {
+      "label": "legit",
+      "category": "delivery",
+      "text": "Lazada: Your order 3829104752 is out for delivery today. Please prepare the exact amount of P568 for cash on delivery.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p568"
+      ],
+      "aiScam": 0.8086212277412415,
+      "aiSafe": 0.8342501521110535,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 92.333125
+    },
+    {
+      "label": "legit",
+      "category": "delivery",
+      "text": "Hi, si kuya rider ng Shopee ito. Nasa labas na po ako ng gate nyo, may parcel po kayo, COD P1,240.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p1,240"
+      ],
+      "aiScam": 0.8188831210136414,
+      "aiSafe": 0.8455765843391418,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 88.642761
+    },
+    {
+      "label": "legit",
+      "category": "delivery",
+      "text": "J&T Express: Your parcel 820193847561 has arrived at the Makati hub and will be delivered within 1-2 days.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 36.333073
+    },
+    {
+      "label": "legit",
+      "category": "delivery",
+      "text": "Grab: Your food order from Jollibee has been picked up. Your rider Ramon is on the way.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 17.559114
+    },
+    {
+      "label": "legit",
+      "category": "delivery",
+      "text": "Ma'am, LBC po ito. Pwede na pong i-pickup ang padala sa branch namin sa Guadalupe hanggang 7pm. Magdala lang po ng valid ID.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: padala"
+      ],
+      "aiScam": 0.8145591616630554,
+      "aiSafe": 0.8580307364463806,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 95.471198
+    },
+    {
+      "label": "legit",
+      "category": "promo",
+      "text": "Globe: Enjoy 20GB for all sites for only P99, valid for 7 days. Register in the GlobeOne app or dial *143#.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: p99"
+      ],
+      "aiScam": 0.8118518590927124,
+      "aiSafe": 0.8662522435188293,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 92.633073
+    },
+    {
+      "label": "legit",
+      "category": "promo",
+      "text": "Smart: Salamat sa pag-load! May 500 free texts ka to all networks hanggang bukas. I-check ang balance sa Smart App.",
+      "warning": "ai_scam",
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: balance"
+      ],
+      "aiScam": 0.8487749695777893,
+      "aiSafe": 0.8290637135505676,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 110.250677
+    },
+    {
+      "label": "legit",
+      "category": "promo",
+      "text": "SM Store: 3-Day Sale this weekend! Up to 70% off on selected items from Oct 16 to 18. See you at SM Makati.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 38.164166
+    },
+    {
+      "label": "legit",
+      "category": "promo",
+      "text": "Shopee 10.10 Brands Festival is here! Get up to 50% off and free shipping with no minimum spend. Open the app now.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 18.911823
+    },
+    {
+      "label": "legit",
+      "category": "promo",
+      "text": "Mercury Drug: Your Suki Card earned 42 points today. You now have 1,318 points. Thank you for shopping with us.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: 42 points, 1,318 points",
+        "keywords: points"
+      ],
+      "aiScam": 0.8192844390869141,
+      "aiSafe": 0.8693053722381592,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 94.049635
+    },
+    {
+      "label": "legit",
+      "category": "promo",
+      "text": "Jollibee: Get a free Peach Mango Pie when you order a Chickenjoy bucket through the Jollibee app this week.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 20.484844
+    },
+    {
+      "label": "legit",
+      "category": "advisory",
+      "text": "NTC: Mag-ingat sa mga text na humihingi ng OTP o personal na impormasyon. Huwag i-click ang mga link mula sa hindi kilalang numero.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: otp"
+      ],
+      "aiScam": 0.7984809279441833,
+      "aiSafe": 0.8218095302581787,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 93.564636
+    },
+    {
+      "label": "legit",
+      "category": "advisory",
+      "text": "BSP reminder: Banks will never ask for your password, PIN or OTP through text, call or email. Report suspicious messages to your bank.",
+      "warning": "ai_scam",
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: otp, pin"
+      ],
+      "aiScam": 0.8139396905899048,
+      "aiSafe": 0.8124558925628662,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 95.10599
+    },
+    {
+      "label": "legit",
+      "category": "advisory",
+      "text": "NDRRMC: Orange Rainfall Warning sa Metro Manila. Inaasahan ang pagbaha sa mabababang lugar. Mag-ingat at manatiling alerto.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 20.790989
+    },
+    {
+      "label": "legit",
+      "category": "advisory",
+      "text": "GCash Advisory: We will have scheduled maintenance on Oct 12 from 1:00 AM to 4:00 AM. Some services may be unavailable.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 18.807083
+    },
+    {
+      "label": "legit",
+      "category": "advisory",
+      "text": "Makati City Health: Your appointment for flu vaccination is confirmed for Oct 14, 9:00 AM at the Poblacion health center.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 15.486823
+    },
+    {
+      "label": "legit",
+      "category": "advisory",
+      "text": "PAL: Your flight PR 1845 from Manila to Cebu on Oct 20 departs at 6:15 AM from NAIA Terminal 2. Check in online 24 hours before.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 23.691511
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "Nay, nakapagpadala na po ako ng 5,000 sa GCash nyo kanina, pang-grocery po yan ngayong linggo. Pa-confirm na lang po kung pumasok.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 18.917709
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "Pre, bayad na ako sa utang ko ha, pinadala ko na yung 2k sa GCash mo kagabi. Salamat ulit sa pagpapahiram.",
+      "warning": "ai_scam",
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: 2k",
+        "keywords: utang, bayad"
+      ],
+      "aiScam": 0.8479558825492859,
+      "aiSafe": 0.8419328331947327,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 86.465938
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "Guys, ambagan tayo sa regalo ni Ma'am Santos, 200 each. Kay Liza nyo na lang iabot bukas sa office.",
+      "warning": "ai_scam",
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: regalo"
+      ],
+      "aiScam": 0.8063914775848389,
+      "aiSafe": 0.7998194098472595,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 99.856458
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "Anak, anong oras ka uuwi mamaya? Nagluto ako ng sinigang, hintayin ka namin bago kumain.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 14.461355
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "Magkano yung hati natin sa kuryente this month? Send mo sakin yung bill para makapag-transfer na ako mamayang gabi.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: send, transfer"
+      ],
+      "aiScam": 0.7950505018234253,
+      "aiSafe": 0.8277170062065125,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 79.788073
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "Happy birthday bes! Libre kita ng milk tea bukas pagkatapos ng klase, wag kang tatanggi.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 27.349115
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "Sir, na-send ko na po sa email yung report. Paki-check na lang po kung may kailangang baguhin bago mag-meeting bukas.",
+      "warning": "money_request",
+      "rule": "money_request",
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: send, kailangan"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 22.056302
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "May nag-text sakin na nanalo daw ako ng 100k tapos kailangan magbayad ng fee. Obvious na scam, binlock ko na agad.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "money: 100k",
+        "keywords: fee, agad, nanalo, kailangan"
+      ],
+      "aiScam": 0.8191513419151306,
+      "aiSafe": 0.866644024848938,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 87.750625
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "Tol, may pasok ba bukas? Sabi sa balita suspended daw ang klase sa NCR dahil sa bagyo.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 31.804531
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "Love, pakibili naman ng gamot ni baby pag-uwi mo, yung paracetamol drops. Babayaran kita pagdating mo, salamat!",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 15.376146
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "Reminder sa team: deadline ng submission bukas 10am. I-push nyo na lahat ng changes ngayong gabi para hindi tayo magahol.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 14.211614
+    },
+    {
+      "label": "legit",
+      "category": "personal",
+      "text": "Ate, na-receive ko na yung padala mo sa Palawan Express. Maraming salamat, ibibili ko na ng school supplies ng mga bata.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: padala"
+      ],
+      "aiScam": 0.7821480631828308,
+      "aiSafe": 0.811716616153717,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 94.291615
+    },
+    {
+      "label": "legit",
+      "category": "work",
+      "text": "Hi Baron, this is Carla from Accenture recruitment. Thank you for applying. Your interview is scheduled on Oct 15, 2:00 PM at our BGC office. Please bring a valid ID.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": false,
+      "gateReasons": [
+        "no link, money or keywords"
+      ],
+      "aiScam": null,
+      "aiSafe": null,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 0,
+      "ms": 28.699323
+    },
+    {
+      "label": "legit",
+      "category": "work",
+      "text": "Payroll advisory: Your salary for Oct 1-15 has been credited to your payroll account. Payslips are available in the HR portal.",
+      "warning": null,
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "keywords: account"
+      ],
+      "aiScam": 0.7835697531700134,
+      "aiSafe": 0.8239002823829651,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 87.032135
+    },
+    {
+      "label": "legit",
+      "category": "official_link",
+      "text": "BPI: View your statement of account anytime in the new BPI app. Learn more at https:\/\/www.bpi.com.ph\/statements",
+      "warning": "ai_scam",
+      "rule": null,
+      "gatePasses": true,
+      "gateReasons": [
+        "link: www.bpi.com.ph",
+        "keywords: account"
+      ],
+      "aiScam": 0.8291565179824829,
+      "aiSafe": 0.8142776489257812,
+      "aiThreshold": 0.6000000238418579,
+      "modelCalls": 1,
+      "ms": 105.066302
+    }
+  ]
+}
